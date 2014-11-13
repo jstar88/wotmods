@@ -15,7 +15,7 @@ from gui.WindowsManager import g_windowsManager
 from messenger import MessengerEntry
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_CLASS_NAME
-from modsOOP.spotMessanger.IngameMessanger import getIngameMessanger
+from modsOOP.spotMessanger.IngameMessanger import IngameMessanger
 
 class SpotMessanger:
     isActive = True
@@ -171,45 +171,45 @@ class SpotMessanger:
         if battleType == constants.ARENA_GUI_TYPE.RANDOM:
             battleTypeName = 'Random'
             if SpotMessanger.myconfig['TryPlatoonMes']:
-                if getIngameMessanger().hasSquadChannelController():
-                    controller = getIngameMessanger().getSquadChannelController()
+                if IngameMessanger().hasSquadChannelController():
+                    controller = IngameMessanger().getSquadChannelController()
                 elif SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                     return None
                 else:
-                    controller = getIngameMessanger().getTeamChannelController()
+                    controller = IngameMessanger().getTeamChannelController()
             elif SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                 return None
             else:
-                controller = getIngameMessanger().getTeamChannelController()
+                controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.TRAINING:
             battleTypeName = 'Training'
             if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                 return None
-            controller = getIngameMessanger().getTeamChannelController()
+            controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.COMPANY:
             battleTypeName = 'Company'
             if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                 return None
-            controller = getIngameMessanger().getTeamChannelController()
+            controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.CYBERSPORT:
             battleTypeName = 'CyberSport'
             if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                 return None
-            controller = getIngameMessanger().getTeamChannelController()
+            controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.HISTORICAL:
             battleTypeName = 'Historical'
             if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                 return None
-            controller = getIngameMessanger().getTeamChannelController()
+            controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.SORTIE:
             battleTypeName = 'Fortifications'
             if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
                 return None
-            controller = getIngameMessanger().getTeamChannelController()
+            controller = IngameMessanger().getTeamChannelController()
         else:
             battleTypeName = 'ClanWar'
             if not SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
-                controller = getIngameMessanger().getTeamChannelController()
+                controller = IngameMessanger().getTeamChannelController()
             else:
                 return None
         
@@ -236,17 +236,17 @@ class SpotMessanger:
     @staticmethod
     def myDoPing(controller,position):
         if controller and SpotMessanger.myconfig['DoPing']:
-            getIngameMessanger().doPing(controller,SpotMessanger.name2cell(position))
+            IngameMessanger().doPing(controller,SpotMessanger.name2cell(position))
             
     @staticmethod
     def myCallHelp(controller):
         if controller and SpotMessanger.myconfig['CallHelp']:
-            getIngameMessanger().callHelp(controller)
+            IngameMessanger().callHelp(controller)
     
     @staticmethod
     def mySendMessage(controller,text):
         if text != "None" and text:
-            getIngameMessanger().sendText(controller,text)
+            IngameMessanger().sendText(controller,text)
     
     #------ injected methods --------
     @staticmethod

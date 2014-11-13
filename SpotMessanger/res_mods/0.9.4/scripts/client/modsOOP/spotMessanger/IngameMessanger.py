@@ -15,6 +15,7 @@ class IngameMessanger:
         self.squadChannelController = None
         self.initied = False
     
+    # retrive channel controllers only when in battle!
     def checkInit(self):
         if self.initied:
             return
@@ -59,10 +60,3 @@ class IngameMessanger:
     def callHelp(self,controller):
         command = self.commandFactory.createByName(CHAT_COMMANDS.HELPME.name())
         self.sendCommand(controller,command) 
-
-def getIngameMessanger():
-    global g_ingameMessanger
-    if g_ingameMessanger is None:
-        g_ingameMessanger = IngameMessanger()
-    return g_ingameMessanger
-g_ingameMessanger = None
