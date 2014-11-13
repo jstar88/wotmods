@@ -1,4 +1,4 @@
 wotmods
 =======
 
-World of Thanks Modifications
+World of Tanks Modifications
