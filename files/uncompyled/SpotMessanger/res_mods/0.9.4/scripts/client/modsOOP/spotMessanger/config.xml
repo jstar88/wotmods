@@ -1,0 +1,45 @@
+  
+<!-- SpotMessanger by Pleiadi -->
+<!-- Configuration by Kaeptn -->
+  
+<config.xml>
+  
+  <!-- Activation options -->
+  <ActiveByDefault>true</ActiveByDefault> <!-- Activate Mod at the beginning of the battle - true/false. -->
+  <ActivationHotkey>KEY_F11</ActivationHotkey> <!-- Set the hotkey to enable/disable the Mod during battle. -->
+    
+  <!-- Message options -->
+  <DoPing>false</DoPing> <!-- Ping the minimap square you are in when the perk activates - true/false. -->
+  <CallHelp>false</CallHelp> <!-- Send "Help!" quick command (F7) when the perk activates - true/false. -->
+  <ImSpotted>An enemy has spotted me at {pos}.</ImSpotted> <!-- Message that will be sent to chat when the perk activates. Accepts the macro {pos} to include minimap location (i.e. "D7"). Leave blank or "None" for no message. -->
+  <DisableSystemMsg>Sixth Sense Message disabled</DisableSystemMsg> <!-- System message you see when you disable the mod via hotkey. -->
+  <EnableSystemMsg>Sixth Sense Message enabled</EnableSystemMsg> <!-- System message you see when you enable the mod via hotkey. -->
+    
+  <!-- Special options -->
+  <TryPlatoonMes>true</TryPlatoonMes> <!-- Try to send the message to platoon chat. If a platoon is found message will go to platoon chat instead team chat. If no platoon is found message will be send to the team if allowed via filters. -->
+  
+  <MaxTeamAmountOnRandom>0</MaxTeamAmountOnRandom> <!-- (also for platoon chat)Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+  <MaxTeamAmountOnTraining>0</MaxTeamAmountOnTraining> <!-- Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+  <MaxTeamAmountOnCompany>0</MaxTeamAmountOnCompany> <!-- Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+  <MaxTeamAmountOnCyberSport>0</MaxTeamAmountOnCyberSport> <!-- Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+  <MaxTeamAmountOnHistorical>0</MaxTeamAmountOnHistorical> <!-- Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+  <MaxTeamAmountOnFortifications>0</MaxTeamAmountOnFortifications> <!-- Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+  <MaxTeamAmountOnClanWar>0</MaxTeamAmountOnClanWar> <!-- Send the message only if your team amount is less than this number. If 0 this feature is disabled -->
+       
+  <!-- Match filters -->
+  <AvoidRandomMes>true</AvoidRandomMes> <!-- Avoid send message in random battles - true/false. !! Use with caution, you might get reported for spamming, especially when combined with ping or help !!-->
+  <AvoidTrainingMes>false</AvoidTrainingMes> <!-- Avoid send message in training battles - true/false. -->
+  <AvoidCompanyMes>false</AvoidCompanyMes> <!-- Avoid send message in company battles - true/false. -->
+  <AvoidCyberSportMes>false</AvoidCyberSportMes> <!-- Avoid send message in team battles - true/false. -->
+  <AvoidHistoricalMes>false</AvoidHistoricalMes> <!-- Avoid send message in historical battles - true/false. -->
+  <AvoidFortificationsMes>false</AvoidFortificationsMes> <!-- Avoid send message in fortifications battles - true/false. -->
+  <AvoidClanWarMes>false</AvoidClanWarMes> <!-- Avoid send message in special (clan war) battles - true/false. -->
+    
+  <!-- Tank filters -->
+  <OnTD>true</OnTD> <!-- Send message when driving a tank destroyer - true/false. -->
+  <OnMD>true</OnMD> <!-- Send message when driving a medium tank - true/false. -->
+  <OnHT>true</OnHT> <!-- Send message when driving a heavy tank - true/false. -->
+  <OnLT>true</OnLT> <!-- Send message when driving a light tank - true/false. -->
+  <OnSPG>true</OnSPG> <!-- Send message when driving artillery - true/false. -->
+    
+</config.xml>
