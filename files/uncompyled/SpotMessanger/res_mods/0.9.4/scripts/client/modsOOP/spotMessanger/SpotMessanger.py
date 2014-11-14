@@ -245,7 +245,7 @@ class SpotMessanger:
     
     @staticmethod
     def mySendMessage(controller,text):
-        if text != "None" and text:
+        if text != "None" and text and controller:
             IngameMessanger().sendText(controller,text)
     
     #------ injected methods --------
