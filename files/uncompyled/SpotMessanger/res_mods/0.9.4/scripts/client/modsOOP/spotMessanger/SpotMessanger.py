@@ -284,7 +284,7 @@ class SpotMessanger:
         injectNewFuncs()
         
 def saveOldFuncs():
-    global oldApple,oldSome
+    global oldShowSixthSenseIndicatorFromSpotMessanger,oldHandleKeyEventFromSpotMessanger
     if 'oldShowSixthSenseIndicatorFromSpotMessanger' in globals() or 'oldHandleKeyEventFromSpotMessanger' in globals():
         raise Exception( 'global vars already definied' )
     oldShowSixthSenseIndicatorFromSpotMessanger = Battle.showSixthSenseIndicator
