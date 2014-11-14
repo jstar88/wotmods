@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 # @author: BirrettaMalefica EU
 from game import *
@@ -259,7 +259,7 @@ class SpotMessanger:
             SpotMessanger.mySendMessage(controller,text.replace("{pos}", position+""))
             SpotMessanger.myDoPing(controller,position)
             SpotMessanger.myCallHelp(controller)                
-        return Battle.oldShowSixthSenseIndicator(self,isShow)
+        return oldShowSixthSenseIndicatorFromSpotMessanger(self,isShow)
     
     
     @staticmethod
@@ -276,12 +276,20 @@ class SpotMessanger:
         except Exception as e:
             LOG_CURRENT_EXCEPTION()
         finally:
-            return game.oldHandleKeyEvent(event)
+            return oldHandleKeyEventFromSpotMessanger(event)
         
     #--------- end ---------
     def inject(self):
-        Battle.oldShowSixthSenseIndicator = Battle.showSixthSenseIndicator
-        Battle.showSixthSenseIndicator = SpotMessanger.showSixthSenseIndicator
+        saveOldFuncs()
+        injectNewFuncs()
         
-        game.oldHandleKeyEvent = game.handleKeyEvent
-        game.handleKeyEvent = SpotMessanger.handleKeyEvent
+def saveOldFuncs():
+    global oldApple,oldSome
+    if 'oldShowSixthSenseIndicatorFromSpotMessanger' in globals() or 'oldHandleKeyEventFromSpotMessanger' in globals():
+        raise Exception( 'global vars already definied' )
+    oldShowSixthSenseIndicatorFromSpotMessanger = Battle.showSixthSenseIndicator
+    oldHandleKeyEventFromSpotMessanger = game.handleKeyEvent
+    
+def injectNewFuncs():
+    Battle.showSixthSenseIndicator = SpotMessanger.showSixthSenseIndicator
+    game.handleKeyEvent = SpotMessanger.handleKeyEvent

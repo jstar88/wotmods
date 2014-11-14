@@ -1,0 +1,2 @@
+def apple():
+    return 'apple'
