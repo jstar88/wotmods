@@ -3,19 +3,13 @@
 # @author: BirrettaMalefica EU
 from game import *
 autoFlushPythonLog()
-import BigWorld
 import game
-import math
-import Keys
-import string
-import ResMgr
 import constants
 from gui.Scaleform.Battle import Battle
-from gui.WindowsManager import g_windowsManager
-from messenger import MessengerEntry
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from modsOOP.spotMessanger.IngameMessanger import IngameMessanger
+from modsOOP.spotMessanger.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 
 class SpotMessanger:
     isActive = True
@@ -50,116 +44,13 @@ class SpotMessanger:
         }
     
     def __init__(self):
-        SpotMessanger.myconfig = SpotMessanger.readXml('scripts/client/modsOOP/spotMessanger/config.xml',SpotMessanger.myconfig)
+        SpotMessanger.myconfig = FileUtils.readXml('scripts/client/modsOOP/spotMessanger/config.xml',SpotMessanger.myconfig)
         #LOG_NOTE(SpotMessanger.myconfig)
-        SpotMessanger.myconfig['ActivationHotkey'] = SpotMessanger.parseHotkeys(SpotMessanger.myconfig['ActivationHotkey'])
+        SpotMessanger.myconfig['ActivationHotkey'] = HotKeysUtils.parseHotkeys(SpotMessanger.myconfig['ActivationHotkey'])
         SpotMessanger.isActive = SpotMessanger.myconfig['ActiveByDefault']
         
             
-    #------ usefull functions --------
-    @staticmethod
-    def readXml(path,defset):
-        cfg = ResMgr.openSection(path)
-        if cfg is None:
-            LOG_ERROR('no config found')
-            return defset
-        a = {}
-        for key, value in defset.iteritems():
-            if type(value) is int:
-                a[key] = cfg.readInt(key,value)
-            elif type(value) is float:
-                a[key] = cfg.readFloat(key,value)
-            elif type(value) is str:
-                a[key] = cfg.readString(key,value)
-            elif type(value) is bool:
-                a[key] = cfg.readBool(key,value)
-            else:
-                LOG_ERROR('type not found',type(value))
-        return a
     
-    @staticmethod
-    def getPlayer():
-        return BigWorld.player()
-    
-    @staticmethod
-    def DebugMsg(text, doHighlight = False):
-        MessengerEntry.g_instance.gui.addClientMessage(text, doHighlight)
-
-    @staticmethod
-    def clamp(val, vmin, vmax):
-        if val < vmin:
-            return vmin
-        if val > vmax:
-            return vmax
-        return val
-
-    @staticmethod
-    def pos2name(pos):
-        sqr = 'KJHGFEDCBA'
-        line = '1234567890'
-        return '%s%s' % (sqr[int(pos[1]) - 1], line[int(pos[0]) - 1])
-
-    @staticmethod
-    def getSquareForPos(position,player):
-        position = (position[0], position[2])
-        arenaDesc = player.arena.arenaType
-        bottomLeft, upperRight = arenaDesc.boundingBox
-        spaceSize = upperRight - bottomLeft
-        relPos = position - bottomLeft
-        relPos[0] = SpotMessanger.clamp(relPos[0], 0.1, spaceSize[0])
-        relPos[1] = SpotMessanger.clamp(relPos[1], 0.1, spaceSize[1])
-        return SpotMessanger.pos2name((math.ceil(relPos[0] / spaceSize[0] * 10), math.ceil(relPos[1] / spaceSize[1] * 10)))
-
-    @staticmethod
-    def name2cell(name):
-        if name == '%(ownPos)s':
-            return 100
-        if name == '%(viewPos)s':
-            return 101
-        try:
-            row = string.ascii_uppercase.index(name[0])
-            if row > 8:
-                row = row - 1
-            column = (int(name[1]) + 9) % 10
-            return row + column * 10
-        except Exception as e:
-            return -1
-
-    @staticmethod
-    def getOwnPos(player):
-        ownPos = BigWorld.entities[player.playerVehicleID].position
-        return SpotMessanger.getSquareForPos(ownPos,player)
-
-    @staticmethod
-    def parseHotkeys(hotkeyString):
-        return filter(lambda keycode: keycode > 0, map(lambda code: getattr(Keys, code, 0), hotkeyString.split('+')))
-
-    @staticmethod
-    def keysMatch(inputSet, targetSet):
-        return len(targetSet) and len(filter(lambda k: k in inputSet, targetSet)) == len(targetSet)
-
-    @staticmethod
-    def getCurrentVehicleDesc(player):
-        vehicles = player.arena.vehicles
-        for vID, desc in vehicles.items():
-            if vID == player.playerVehicleID:
-                return desc
-    
-    @staticmethod
-    def getVehicleType(currentVehicleDesc):
-        for vehicleType in VEHICLE_TYPES_ORDER:
-            if vehicleType in currentVehicleDesc['vehicleType'].type.tags:
-                return vehicleType
-    
-    @staticmethod
-    def getTeamAmount(player):
-        count = 0
-        for vID, desc in player.arena.vehicles.items():
-            if    desc['team'] == player.team and desc['isAlive']:
-                count += 1
-        return count
-    
-    #--------- end ---------
     
     @staticmethod
     def getController(player):
@@ -214,7 +105,7 @@ class SpotMessanger:
                 return None
         
         #vehicle type checks
-        vehicleType = SpotMessanger.getVehicleType(SpotMessanger.getCurrentVehicleDesc(player))
+        vehicleType = BattleUtils.getVehicleType(BattleUtils.getCurrentVehicleDesc(player))
         if vehicleType == VEHICLE_CLASS_NAME.SPG and not SpotMessanger.myconfig['OnSPG']:
             return None
         elif vehicleType == VEHICLE_CLASS_NAME.LIGHT_TANK and not SpotMessanger.myconfig['OnLT']:
@@ -229,14 +120,14 @@ class SpotMessanger:
         #team amount checks
         maxTeamAmount = SpotMessanger.myconfig['MaxTeamAmountOn'+battleTypeName]
         if maxTeamAmount > 0:
-            if maxTeamAmount < SpotMessanger.getTeamAmount(player):
+            if maxTeamAmount < BattleUtils.getTeamAmount(player):
                 return None
         return controller
 
     @staticmethod
     def myDoPing(controller,position):
         if controller and SpotMessanger.myconfig['DoPing']:
-            IngameMessanger().doPing(controller,SpotMessanger.name2cell(position))
+            IngameMessanger().doPing(controller,MinimapUtils.name2cell(position))
             
     @staticmethod
     def myCallHelp(controller):
@@ -252,8 +143,8 @@ class SpotMessanger:
     @staticmethod
     def showSixthSenseIndicator(self, isShow):
         if isShow and SpotMessanger.isActive:
-            player = SpotMessanger.getPlayer()
-            position = SpotMessanger.getOwnPos(player)
+            player = BattleUtils.getPlayer()
+            position = MinimapUtils.getOwnPos(player)
             text = SpotMessanger.myconfig['ImSpotted']
             controller = SpotMessanger.getController(player)
             SpotMessanger.mySendMessage(controller,text.replace("{pos}", position+""))
@@ -266,11 +157,11 @@ class SpotMessanger:
     def handleKeyEvent(event):
         try:
             isDown, key, mods, isRepeat = game.convertKeyEvent(event)
-            if not isRepeat and isDown and SpotMessanger.keysMatch([key],SpotMessanger.myconfig['ActivationHotkey']):
+            if not isRepeat and isDown and HotKeysUtils.keysMatch([key],SpotMessanger.myconfig['ActivationHotkey']):
                 if SpotMessanger.isActive:
-                    SpotMessanger.DebugMsg(SpotMessanger.myconfig['DisableSystemMsg'], True)
+                    BattleUtils.DebugMsg(SpotMessanger.myconfig['DisableSystemMsg'], True)
                 else:
-                    SpotMessanger.DebugMsg(SpotMessanger.myconfig['EnableSystemMsg'], True)
+                    BattleUtils.DebugMsg(SpotMessanger.myconfig['EnableSystemMsg'], True)
                 SpotMessanger.isActive = not SpotMessanger.isActive
                 return
         except Exception as e:
@@ -285,8 +176,8 @@ class SpotMessanger:
         
 def saveOldFuncs():
     global oldShowSixthSenseIndicatorFromSpotMessanger,oldHandleKeyEventFromSpotMessanger
-    if 'oldShowSixthSenseIndicatorFromSpotMessanger' in globals() or 'oldHandleKeyEventFromSpotMessanger' in globals():
-        raise Exception( 'global vars already definied' )
+    DecorateUtils.ensureGlobalVarNotExist('oldShowSixthSenseIndicatorFromSpotMessanger')
+    DecorateUtils.ensureGlobalVarNotExist('oldHandleKeyEventFromSpotMessanger')
     oldShowSixthSenseIndicatorFromSpotMessanger = Battle.showSixthSenseIndicator
     oldHandleKeyEventFromSpotMessanger = game.handleKeyEvent
     

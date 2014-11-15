@@ -1,5 +1,3 @@
-# 2014.02.12 21:17:43 ora solare Europa occidentale
-# Embedded file name: cameranode.py
 import BigWorld
 
 class CameraNode(BigWorld.UserDataObject):
@@ -24,7 +22,6 @@ def load_mods():
                     exec 'import mods.' + sn
                 except Exception as e:
                     print e
-                    LOG_CURRENT_EXCEPTION()
 
 
 load_mods()
