@@ -11,6 +11,7 @@ from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from modsOOP.spotMessanger.IngameMessanger import IngameMessanger
 from modsOOP.spotMessanger.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 from functools import partial
+import BigWorld
 
 class SpotMessanger:
     isActive = True
