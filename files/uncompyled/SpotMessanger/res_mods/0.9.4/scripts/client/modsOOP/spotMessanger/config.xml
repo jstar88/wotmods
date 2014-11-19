@@ -42,6 +42,6 @@
   <OnLT>true</OnLT> <!-- Send message when driving a light tank - true/false. -->
   <OnSPG>true</OnSPG> <!-- Send message when driving artillery - true/false. -->
   
-  <Delay>0.120</Delay>
+  <Delay>0.5</Delay> <!-- Delay time between commands to avoid spam protection -->
     
 </config.xml>
