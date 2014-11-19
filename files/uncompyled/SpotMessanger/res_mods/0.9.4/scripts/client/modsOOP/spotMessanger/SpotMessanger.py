@@ -10,6 +10,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from modsOOP.spotMessanger.IngameMessanger import IngameMessanger
 from modsOOP.spotMessanger.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+from functools import partial
 
 class SpotMessanger:
     isActive = True
@@ -40,7 +41,8 @@ class SpotMessanger:
         'MaxTeamAmountOnCyberSport':0,
         'MaxTeamAmountOnHistorical':0,
         'MaxTeamAmountOnFortifications':0,
-        'MaxTeamAmountOnClanWar':0
+        'MaxTeamAmountOnClanWar':0,
+        'Delay': 0.120
         }
     
     def __init__(self):
@@ -148,8 +150,8 @@ class SpotMessanger:
             text = SpotMessanger.myconfig['ImSpotted']
             controller = SpotMessanger.getController(player)
             SpotMessanger.mySendMessage(controller,text.replace("{pos}", position+""))
-            SpotMessanger.myDoPing(controller,position)
-            SpotMessanger.myCallHelp(controller)                
+            BigWorld.callback(SpotMessanger.myconfig['Delay'],partial(SpotMessanger.myDoPing,controller,position))
+            BigWorld.callback(SpotMessanger.myconfig['Delay'],partial(SpotMessanger.myCallHelp,controller))                
         return oldShowSixthSenseIndicatorFromSpotMessanger(self,isShow)
     
     
