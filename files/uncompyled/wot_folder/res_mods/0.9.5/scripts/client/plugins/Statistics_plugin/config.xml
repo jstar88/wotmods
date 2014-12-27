@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config.xml>
+  
+  <pluginEnable>true</pluginEnable>
+  
+  <!-- ********************************************
+       ***********  general settings ************** 
+       ******************************************** -->
+  <!-- wot server region -->
+  <region>eu</region> <!--com, ru, eu -->   
+  <pr_index>global_rating</pr_index>
+  <lang_index>client_language</lang_index>
+  <wr_index>statistics.all.wins</wr_index>
+  <battles_index>statistics.all.battles</battles_index>
+  <application_id>demo</application_id> 
+  <url><![CDATA[http://api.worldoftanks.{region}/wot/account/info/?application_id={application_id}&fields={pr_index},{lang_index},{wr_index},{battles_index}&account_id={id}]]></url>
+  
+  <!-- minimum time between each stat request -->
+  <delay>1</delay> 
+  
+  <!-- maxinum entries updated each stat request -->
+  <maxentries>3</maxentries>  
+  
+  <!-- enable the mod for cw -->
+  <cw>false</cw> <!-- true or false --> 
+  
+  
+  <!-- ********************************************
+       ******  left and right playerspanel ******** 
+       ******************************************** -->
+  <panels_enable>true</panels_enable>
+  <!-- html for left panel --> 
+  <left><![CDATA[<font color='#{color}'>{lang}</font>  {player_name}<br/>]]></left><!-- {lang} {color} {player_name} {tank_name} {rating} {win_rate} {battle_amount}-->  
+  
+  <!-- html for right panel -->   
+  <right><![CDATA[<font color='#{color}'>{lang}</font>  {player_name}<br/>]]></right><!-- {lang} {color} {player_name} {tank_name} {rating} {win_rate} {battle_amount}-->  
+  
+  <!-- html for left panel in case of compatriot -->   
+  <left_c><![CDATA[<font size='17' color='#{color}'>«</font><font color='#{color}'>{lang}</font><font size='17' color='#{color}'>»</font>  {player_name}<br/>]]></left_c><!-- {lang} {color} {player_name} {tank_name} {rating} {win_rate} {battle_amount} --> 
+  
+  <!-- html for right panel in case of compatriot -->  
+  <right_c><![CDATA[<font size='17' color='#{color}'>«</font><font color='#{color}'>{lang}</font><font size='17' color='#{color}'>»</font>  {player_name}<br/>]]></right_c><!-- {lang} {color} {player_name} {tank_name} {rating} {win_rate} {battle_amount} -->  
+  
+  
+  <!-- ********************************************
+       *********  rating on chat name ************* 
+       ******************************************** -->
+  <chat_enable>true</chat_enable>
+  
+  
+  <!-- ********************************************
+       *********  marker on every tank ************ 
+       ******************************************** -->
+  <marker_enable>true</marker_enable> 
+  <!-- html for marker --> 
+  <marker><![CDATA[ {rating}]]></marker> <!-- {lang} {rating} {win_rate} {battle_amount} {color}-->
+  
+   
+  <!-- ********************************************
+       ********  info on battle loading *********** 
+       ******************************************** -->
+  <battle_loading_enable>true</battle_loading_enable>
+  <battle_loading_string_right><![CDATA[  {lang}|{win_rate}%|{rating}]]></battle_loading_string_right> <!-- {lang} {rating} {win_rate} {battle_amount} {color} -->
+  <battle_loading_string_left><![CDATA[{lang}|{win_rate}%|{rating}  ]]></battle_loading_string_left> <!-- {lang} {rating} {win_rate} {battle_amount} {color}  -->
+    
+  
+  <!-- ********************************************
+       *********  marker on every tank ************ 
+       ******************************************** -->
+  <tab_enable>true</tab_enable>
+  
+  <!-- html for left tab panel --> 
+  <tab_left><![CDATA[{lang}|{win_rate}%|{rating}  ]]></tab_left><!-- {lang} {color} {rating} {win_rate} {battle_amount} --> 
+  
+  <!-- html for right tab panel -->   
+  <tab_right><![CDATA[  {lang}|{win_rate}%|{rating}]]></tab_right><!-- {lang} {color} {rating} {win_rate} {battle_amount} --> 
+  
+  <!-- html for left tab panel in case of compatriot -->   
+  <tab_left_c><![CDATA[«{lang}»|{win_rate}%|{rating}  ]]></tab_left_c><!-- {lang} {color} {rating} {win_rate} {battle_amount} -->  
+  
+  <!-- html for right tab panel in case of compatriot -->  
+  <tab_right_c><![CDATA[  «{lang}»|{win_rate}%|{rating}]]></tab_right_c><!-- {lang} {color} {rating} {win_rate} {battle_amount} -->  
+  
+    
+  <!-- ********************************************
+       *****  win changes on battle loading ******* 
+       ******************************************** -->
+  <win_chance_enable>true</win_chance_enable>
+  <win_chance_text><![CDATA[( Chance for win: <font color='{color}'>{win_chance}%</font> )]]></win_chance_text><!-- {color} {win_chance} -->
+  
+  
+  
+  <!-- ********************************************
+       ******  personal rating color scale ******** 
+       ******************************************** -->
+  <!-- add entries(levels) as you wish -->
+  <colors>
+     <level>
+         <min>0</min>
+         <color>FE0E00</color>
+     </level>
+	  <level>
+         <min>2020</min>
+         <color>FE7903</color>
+     </level>
+     <level>
+         <min>4185</min>
+         <color>F8F400</color>
+     </level>
+     <level>
+         <min>6340</min>
+         <color>60FF00</color>
+     </level>
+     <level>
+         <min>8525</min>
+         <color>02C9B3</color>
+     </level>
+     <level>
+         <min>9930</min>
+         <color>D042F3</color>
+     </level>
+     <level>
+         <min>11000</min>
+         <color>490A59</color>
+     </level>
+  </colors>
+</config.xml>

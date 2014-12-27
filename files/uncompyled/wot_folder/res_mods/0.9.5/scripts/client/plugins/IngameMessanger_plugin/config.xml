@@ -1,0 +1,4 @@
+<config.xml>
+   <TextDelay>0.5</TextDelay>
+   <CommandDelay>5</CommandDelay>
+</config.xml>

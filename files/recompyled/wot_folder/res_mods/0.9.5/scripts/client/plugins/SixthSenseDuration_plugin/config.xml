@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<config.xml>
+
+  <pluginEnable>true</pluginEnable>
+
+  <!--  ------------------- AudioPath ------------------------
+      This entry represent the sound path.
+      Sound paths can be found in different files as 
+      res/packages/gui/gui_sounds.xml
+      or
+      res/packages/gui/sound_notification.xml
+      and more.
+      Example:
+      * "Dlink" : /GUI/notifications_FX/gun_intuition
+      * "Clock" : /GUI/notifications_FX/cybersport_timer  -->
+  <AudioPath>/GUI/notifications_FX/cybersport_timer</AudioPath>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- AudioRange ------------------------
+      This entry represent the sound system duration in milliseconds 
+      after the spot.      
+      Example:
+      * "9000" : 9 seconds  
+      * "0" : no audio      -->
+  <AudioRange>9000</AudioRange>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- AudioTick ------------------------
+      This entry represent time between sound repetition in milliseconds.
+      Generally this is usefull to repeat sounds that are smaller than 
+      the AudioRange value. If setted to 1000, it represent a clock.      
+      Example:
+      * "1000" : the sound repeat each 1 second for AudioRange/AudioTick = 9 times  -->
+  <AudioTick>1000</AudioTick>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- IconRangenge ------------------------
+      This entry represent the icon duration in milliseconds.      
+      Example:
+      * "2000" : The spot Icon stay for 2 seconds  -->
+  <IconRange>2000</IconRange>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- Volume ------------------------
+      This entry represent the sound volume.
+      Min = 0.0, Max = 1.0      
+      Example:
+      * "0.8" : The volume is 80%  -->
+  <Volume>0.8</Volume>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- VolumeType ------------------------
+      This entry represent the type of sound in milliseconds.
+      You must set this because sounds in WOT are placed in groups.
+      You can increase volume of specific groups.
+      Generally if the sound's path start with "GUI" then set it to "gui"      
+      Example:
+      * "gui" : volume of sounds in group "gui" will be temporarily 
+      setted to above Volume   -->
+  <VolumeType>gui</VolumeType>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerRange ------------------------
+      This entry represent the countdown timer duration in milliseconds.
+      You must set an integer.    
+      Example:
+      * "9000" : 9 seconds   -->
+  <TimerRange>9000</TimerRange>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerTick ------------------------
+      This entry represent the time between timer number's change.
+      You must set an integer.    
+      Example:
+      * "1000" : each 1 second   -->
+  <TimerTick>1000</TimerTick>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerZeroDelay ------------------------
+      This entry represent the time in milliseconds after that 
+      the "0" disappear.
+      Example:
+      * "200" : after 0.2 seconds   -->
+  <TimerZeroDelay>0.2</TimerZeroDelay>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerColor ------------------------
+      This entry represent the HEX color of the timer.
+      You can find codes here:
+      http://www.w3schools.com/tags/ref_colorpicker.asp  
+      Example:
+      * "#FF8000" : orange   -->
+  <TimerColor>#FF0000</TimerColor>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerFont ------------------------
+      This entry represent the font of the timer.     
+      Example:
+      * "verdana_medium.font" verdana, size medium
+      setted to above Volume   -->
+  <TimerFont>verdana_medium.font</TimerFont>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerPosition ------------------------
+      This entry represent the timer position on the screen.
+      X is your screen's width
+      Y is your screen's height
+      Example:
+      * "(round(x / 2) + 120, round(y / 6) + 20, 0.7)" : (x,y,z)   -->
+  <TimerPosition>(round(x / 2) + 120, round(y / 6) + 20, 0.7)</TimerPosition>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  <!-- ------------------- TimerText ------------------------
+      This entry represent the timer text on the screen.
+      %s is the countdown time
+      Example:
+      * "Spotted for %s seconds":  Spotted for 9 seconds 
+      * "%s":  9      -->
+  <TimerText>Spotted for %s seconds</TimerText>
+  <!-- ----------------------------------------------------- -->
+  
+</config.xml>

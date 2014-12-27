@@ -1,0 +1,32 @@
+import BigWorld
+import weakref
+
+class VehicleMarkers():
+    def __init__(self, vehicleID, minimap, period, dIndicator = None):
+        self.__vehicleID = vehicleID
+        self.__minimapRef = weakref.ref(minimap)
+        self.__period = period
+        self.__nextTime = BigWorld.time()
+        self.__dIndicator = dIndicator
+
+    def update(self):
+        vehicle = BigWorld.entities.get(self.__vehicleID)
+        if vehicle is not None and vehicle.isStarted and not vehicle.isPlayer:
+            if self.__dIndicator is not None:
+                vPosition = vehicle.position
+                vector = vPosition - _player.getOwnVehiclePosition()
+                self.__dIndicator.update(vector.length, vPosition)
+            #minimap marker adding
+            #if self.__nextTime <= BigWorld.time():
+            #    minimap = self.__minimapRef()
+            #    if minimap is not None:
+            #        minimap.showActionMarker(self.__vehicleID, 'attack')
+            #    self.__nextTime = BigWorld.time() + self.__period
+
+    def clear(self):
+        if self.__dIndicator is not None:
+            self.__dIndicator.clear()
+        self.__dIndicator = None
+        self.__vehicleID = -1
+        self.__minimapRef = None
+        self.__period = -1
