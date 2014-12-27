@@ -9,13 +9,15 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 
 class Focus:
 
-    lastCallback = None 
+    lastCallback = None
+    myconfig = {"pluginEnable":False} 
     
     def __init__(self):
         self.pluginEnable = False
         
     def readConfig(self):
-        self.pluginEnable = True
+        Focus.myconfig = FileUtils.readXml('scripts/client/plugins/Focus_plugin/config.xml',Focus.myconfig)
+        self.pluginEnable = Focus.myconfig["pluginEnable"]
         
     def run(self):
         saveOldFuncs()
