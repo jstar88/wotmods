@@ -41,7 +41,6 @@ class SpotMessanger:
         'MaxTeamAmountOnHistorical':0,
         'MaxTeamAmountOnFortifications':0,
         'MaxTeamAmountOnClanWar':0,
-        'Delay': 0.120,
         'pluginEnable' : True
         }
     
