@@ -150,9 +150,9 @@ class FileUtils:
             try:
                 value = value.asBool
             except Exception:
-                if value == "True":
+                if value.asString == "True":
                     value = True
-                elif value == "False":
+                elif value.asString == "False":
                     value = False
                 else:
                     LOG_WARNING(filename+": wrong value type",value.asString)
@@ -173,11 +173,11 @@ class FileUtils:
         return FileUtils.readElement(cfg, defset, filename)
     
     @staticmethod
-    def readConfig(path,defset,fromfile = ''):
-        fileName, fileExtension = os.path.splitext
-        if fileExtension == "json":
+    def readConfig(path, defset, fromfile = ''):
+        fileName, fileExtension = os.path.splitext(path)
+        if fileExtension == ".json":
             return FileUtils.readJson(path,defset,fromfile)
-        if fileExtension == "xml":
+        if fileExtension == ".xml":
             return FileUtils.readXml(path, defset, fromfile)
         LOG_WARNING(path+" can't be read, unknow format")
         return defset

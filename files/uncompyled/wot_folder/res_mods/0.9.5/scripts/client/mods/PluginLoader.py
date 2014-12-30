@@ -23,12 +23,12 @@ def getPlugins():
     return plugins
 
 def loadPlugin(i):
-    print "---> Loading "+i
     module = __import__(i)
     my_class = getattr(module, i.replace("_plugin",""))
     plugin = my_class()
     plugin.readConfig()
     if plugin.pluginEnable:
+        print "---> Loading "+i
         plugin.run()
 
 map(loadPlugin, getPlugins())
