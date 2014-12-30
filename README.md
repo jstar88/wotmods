@@ -24,7 +24,7 @@ Provide performance rating,win chance,client language,battle amount of every pla
 [SpotMessanger_plugin](http://forum.worldoftanks.eu/index.php?/topic/353419-095spotmessanger/)   
 Send message to team or platoon ,eventually with a "help" or "ping" command,if you are spotted and under some conditions.
 
-Focus_plugin (working on) 
+Focus_plugin (working on)    
 Put a red arrow indicating the targetted enemies from your team. 
 Usefull to increase focus fire's efficiency  
 
