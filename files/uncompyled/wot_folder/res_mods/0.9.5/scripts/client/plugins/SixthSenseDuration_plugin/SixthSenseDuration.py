@@ -114,7 +114,7 @@ class SixthSenseDuration:
             BigWorld.callback(SixthSenseDuration.myConf['TimerZeroDelay']/1000,SixthSenseDuration.endGuiCountDown )
 
     def readConfig(self):
-        SixthSenseDuration.myConf = FileUtils.readXml('scripts/client/plugins/SixthSenseDuration_plugin/config.xml',SixthSenseDuration.myConf)
+        SixthSenseDuration.myConf = FileUtils.readConfig('scripts/client/plugins/SixthSenseDuration_plugin/config.xml',SixthSenseDuration.myConf,"SixthSenseDuration")
         self.pluginEnable =  SixthSenseDuration.myConf['pluginEnable']
     
     def run(self):

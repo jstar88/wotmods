@@ -83,7 +83,7 @@ class Statistics(object):
         self.pluginEnable = False
         
     def readConfig(self):
-        Statistics.config = FileUtils.readXml('scripts/client/plugins/Statistics_plugin/config.xml',Statistics.config,'Statistics')
+        Statistics.config = FileUtils.readConfig('scripts/client/plugins/Statistics_plugin/config.xml',Statistics.config,'Statistics')
         self.pluginEnable = Statistics.config['pluginEnable']
         
     @staticmethod

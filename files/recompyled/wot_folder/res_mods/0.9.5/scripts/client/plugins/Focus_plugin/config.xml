@@ -1,5 +1,7 @@
 <config.xml>
 
   <pluginEnable>false</pluginEnable>
+  <maxArrows>3</maxArrows>
+  <maxArrowTime>60</maxArrowTime>
     
 </config.xml>

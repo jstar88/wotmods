@@ -10,13 +10,13 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 class Focus:
 
     lastCallback = None
-    myconfig = {"pluginEnable":False} 
+    myconfig = {"pluginEnable":False,"maxArrows":3,"maxArrowTime":60} 
     
     def __init__(self):
         self.pluginEnable = False
         
     def readConfig(self):
-        Focus.myconfig = FileUtils.readXml('scripts/client/plugins/Focus_plugin/config.xml',Focus.myconfig)
+        Focus.myconfig = FileUtils.readConfig('scripts/client/plugins/Focus_plugin/config.xml',Focus.myconfig,"Focus")
         self.pluginEnable = Focus.myconfig["pluginEnable"]
         
     def run(self):
@@ -40,7 +40,7 @@ class Focus:
         
     @staticmethod
     def check():
-        MarkersStorage.updateMarkers()
+        MarkersStorage.updateMarkers(Focus.myconfig['maxArrowTime'])
         Focus.lastCallback = BigWorld.callback(0.7,Focus.check)
 
     @staticmethod
@@ -50,7 +50,7 @@ class Focus:
         #vehicle = BigWorld.player().arena.vehicles[receiverID]
         #distance = (BigWorld.player().getOwnVehiclePosition() - vehicle.position).length
         if receiverID:
-            showMarker(receiverID)
+            showMarker(receiverID,Focus.myconfig['maxArrows'])
         
 def saveOldFuncs():
     global old_onLeaveWorld,old_onEnterWorld,old_handlePublicCommand

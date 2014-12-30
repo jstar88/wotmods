@@ -170,7 +170,7 @@ class SpotMessanger:
         injectNewFuncs()
         
     def readConfig(self):
-        SpotMessanger.myconfig = FileUtils.readXml('scripts/client/plugins/SpotMessanger_plugin/config.xml',SpotMessanger.myconfig)
+        SpotMessanger.myconfig = FileUtils.readConfig('scripts/client/plugins/SpotMessanger_plugin/config.xml',SpotMessanger.myconfig,"SpotMessanger")
         SpotMessanger.myconfig['ActivationHotkey'] = HotKeysUtils.parseHotkeys(SpotMessanger.myconfig['ActivationHotkey'])
         SpotMessanger.isActive = SpotMessanger.myconfig['ActiveByDefault']
         self.pluginEnable =  SpotMessanger.myconfig['pluginEnable']

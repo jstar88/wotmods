@@ -9,6 +9,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE,LO
 from helpers import VERSION_FILE_PATH
 import json
 import codecs
+import os
 
 class BattleUtils:
 
@@ -123,7 +124,8 @@ class FileUtils:
             for k,v in defaultValue.iteritems():
                 if k not in confkeys:
                     k = str(k)
-                    LOG_WARNING(filename+": wrong dict key",k)
+                    if k in confkeys:
+                        LOG_WARNING(filename+": wrong dict key",k)
                 if k not in confkeys:
                     LOG_WARNING(filename+": missing dict key",k)
                     tmp[k] = v
@@ -148,8 +150,13 @@ class FileUtils:
             try:
                 value = value.asBool
             except Exception:
-                LOG_WARNING(filename+": wrong value type",value.asString)
-                value = defaultValue
+                if value == "True":
+                    value = True
+                elif value == "False":
+                    value = False
+                else:
+                    LOG_WARNING(filename+": wrong value type",value.asString)
+                    value = defaultValue
             return value
         if type(defaultValue) is str:
             return value.asString
@@ -164,6 +171,16 @@ class FileUtils:
             LOG_WARNING('no config found')
             return defset
         return FileUtils.readElement(cfg, defset, filename)
+    
+    @staticmethod
+    def readConfig(path,defset,fromfile = ''):
+        fileName, fileExtension = os.path.splitext
+        if fileExtension == "json":
+            return FileUtils.readJson(path,defset,fromfile)
+        if fileExtension == "xml":
+            return FileUtils.readXml(path, defset, fromfile)
+        LOG_WARNING(path+" can't be read, unknow format")
+        return defset
             
     
     @staticmethod
@@ -172,9 +189,11 @@ class FileUtils:
         return ver[2:7]
     
     @staticmethod
-    def readJson(path):
+    def readJson(path,defset,filename = ''):
         fullPath = os.path.join('res_mods',FileUtils.getWotVersion())
         fullPath = os.path.join(fullPath,path)
+        if not os.path.exists(fullPath):
+            return defset
         json1_file = codecs.open(fullPath, 'r', 'utf-8-sig')
         return json.loads(json1_file.read(),object_hook=_decode_dict)
     

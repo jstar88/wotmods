@@ -1,34 +1,47 @@
+import BigWorld
 class MarkersStorage(object):
-    __markers = {}
+    __markers = []
 
     @classmethod
-    def addMarker(cls, markerID, marker):
-        cls.__markers[markerID] = marker
+    def addMarker(cls, markerID, marker, maxCount = 3):
+        if len(cls.__markers) == maxCount:
+            del cls.__markers[0]
+        cls.__markers.append({"time": BigWorld.time(),"marker":marker,"id":markerID})
 
     @classmethod
     def removeMarker(cls, markerID = None):
         if markerID is None:
-            while len(cls.__markers):
-                _, marker = cls.__markers.popitem()
-                marker.clear()
+            for data in cls.__markers:
+                marker = data['marker']
+                marker.clear() 
+            __markers = []   
         else:
-            marker = cls.__markers.pop(markerID, None)
-            if marker is not None:
-                marker.clear()
+            i = 0
+            for data in cls.__markers:
+                i += 1
+                if data['id'] == markerID:
+                    marker = data['marker']
+                    marker.clear()
+                    del cls.__markers[i]
 
     @classmethod
     def hasMarker(cls, markerID):
-        return markerID in cls.__markers
+        for data in cls.__markers:
+            if data['id'] == markerID:
+                return True
+        return False
 
     @classmethod
     def hasMarkers(cls):
         return len(cls.__markers)
 
     @classmethod
-    def updateMarkers(cls):
-        for id,marker in cls.__markers.iteritems():
+    def updateMarkers(cls,maxTime = 900):
+        for data in cls.__markers:
+            id = data["id"]
             vehicle = BigWorld.entities.get(id)
-            if vehicle is None or not vehicle.isAlive():
+            elapsed = BigWorld.time() - data["time"]
+            if (vehicle is None and not BigWorld.player().arena.positions.has_key(id)) or not vehicle.isAlive() or not vehicle.isStarted or elapsed > maxTime:
                 self.removeMarker(id)
             else:
                 marker.update()

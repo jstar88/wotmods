@@ -83,7 +83,7 @@ class IngameMessanger:
         BigWorld.callback(diff,partial(controller._broadcast,text))
 
     def readConfig(self):
-        IngameMessanger.myconfig = FileUtils.readXml('scripts/client/plugins/IngameMessanger_plugin/config.xml',IngameMessanger.myconfig)     
+        IngameMessanger.myconfig = FileUtils.readConfig('scripts/client/plugins/IngameMessanger_plugin/config.xml',IngameMessanger.myconfig,"IngameMenssanger")     
         
     def run(self):
         pass

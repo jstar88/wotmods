@@ -6,7 +6,7 @@ from gui.WindowsManager import g_windowsManager
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 
-def showMarker(enemyID):
+def showMarker(enemyID,maxCount):
     if enemyID is None or MarkersStorage.hasMarker(enemyID):
         return
     minimap = g_windowsManager.battleWindow.minimap
@@ -23,4 +23,4 @@ def showMarker(enemyID):
     indicatorCtrl = DirectionIndicatorCtrl(indicator, ('red', 'purple'), enemyVehicle.position)
     VehicleMarker = VehicleMarkers(enemyID, minimap, 5, indicatorCtrl)
     if VehicleMarker is not None:
-        MarkersStorage.addMarker(enemyID, VehicleMarker)
+        MarkersStorage.addMarker(enemyID, VehicleMarker, maxCount)
