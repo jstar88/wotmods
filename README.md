@@ -15,13 +15,13 @@ This is not xvm and will never be like xvm.
 
 #### Plugins
 
-[SixthSenseDuration_plugin](http://forum.worldoftanks.eu/index.php?/topic/358159-095sixth-sense-duration-iconaudiocountdown/#topmost)
+[SixthSenseDuration_plugin](http://forum.worldoftanks.eu/index.php?/topic/358159-095sixth-sense-duration-iconaudiocountdown/#topmost)   
 Increase duration of sixth sense lamp,eventually with a sound and a countdown.
 
-[Statisticv_plugin](http://forum.worldoftanks.eu/index.php?/topic/455834-095statisticv2-mod-no-xvm/)
+[Statisticv_plugin](http://forum.worldoftanks.eu/index.php?/topic/455834-095statisticv2-mod-no-xvm/)  
 Provide performance rating,win chance,client language,battle amount of every player in the battle. 
 
-[SpotMessanger_plugin](http://forum.worldoftanks.eu/index.php?/topic/353419-095spotmessanger/)
+[SpotMessanger_plugin](http://forum.worldoftanks.eu/index.php?/topic/353419-095spotmessanger/)   
 Send message to team or platoon ,eventually with a "help" or "ping" command,if you are spotted and under some conditions.
 
 Focus_plugin (working on) 
