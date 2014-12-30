@@ -4,7 +4,7 @@ wotmods
 World of Tanks Modifications 100% python
 
 
-## The new plugin system 
+#### The new plugin system 
 
 The mods are now part of a plugin system.
 Expecially, it's better structured than before recycling common code and managing some behaviors to increase stability,performance and decreasing maintenance time.
@@ -13,7 +13,7 @@ Every plugin can be de/activate from it configuration file, or you can also add 
 This is not xvm and will never be like xvm.
 
 
-## Plugins
+#### Plugins
 
 [SixthSenseDuration_plugin](http://forum.worldoftanks.eu/index.php?/topic/358159-095sixth-sense-duration-iconaudiocountdown/#topmost)
 Increase duration of sixth sense lamp,eventually with a sound and a countdown.
