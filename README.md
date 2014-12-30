@@ -12,6 +12,8 @@ Every plugin can be de/activate from it configuration file, or you can also add 
 
 This is not xvm and will never be like xvm.
 
+Some plugins are usefull to others, i will write a note in case. Anyway "Engine" folder is the core library, don't touch it.
+
 
 #### Plugins
 
@@ -22,7 +24,8 @@ Increase duration of sixth sense lamp,eventually with a sound and a countdown.
 Provide performance rating,win chance,client language,battle amount of every player in the battle. 
 
 [SpotMessanger_plugin](http://forum.worldoftanks.eu/index.php?/topic/353419-095spotmessanger/)   
-Send message to team or platoon ,eventually with a "help" or "ping" command,if you are spotted and under some conditions.
+Send message to team or platoon ,eventually with a "help" or "ping" command,if you are spotted and under some conditions.   
+Note: it use ingame_messanger plugin
 
 Focus_plugin (working on)    
 Put a red arrow indicating the targetted enemies from your team. 
