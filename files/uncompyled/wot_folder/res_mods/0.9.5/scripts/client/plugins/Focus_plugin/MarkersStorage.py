@@ -3,9 +3,9 @@ class MarkersStorage(object):
     __markers = []
 
     @classmethod
-    def addMarker(cls, markerID, marker, maxCount = 3):
+    def addMarker(cls, markerID, marker,maxCount = 3):
         if len(cls.__markers) == maxCount:
-            del cls.__markers[0]
+            MarkersStorage.removeOldest()
         cls.__markers.append({"time": BigWorld.time(),"marker":marker,"id":markerID})
 
     @classmethod
@@ -14,7 +14,7 @@ class MarkersStorage(object):
             for data in cls.__markers:
                 marker = data['marker']
                 marker.clear() 
-            __markers = []   
+            cls.__markers = []   
         else:
             i = 0
             for data in cls.__markers:
@@ -34,6 +34,14 @@ class MarkersStorage(object):
     @classmethod
     def hasMarkers(cls):
         return len(cls.__markers)
+    
+    
+    @classmethod
+    def removeOldest(cls):
+        data = cls.__markers[0]
+        marker = data['marker']
+        marker.clear()
+        del cls.__markers[0]
 
     @classmethod
     def updateMarkers(cls,maxTime = 900):
