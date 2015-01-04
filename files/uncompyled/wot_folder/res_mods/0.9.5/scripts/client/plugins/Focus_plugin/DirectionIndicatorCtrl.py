@@ -1,33 +1,35 @@
-from account_helpers.AccountSettings import AccountSettings
+import BigWorld
 
 class DirectionIndicatorCtrl():
-    def __init__(self, indicator, config, position):
+    def __init__(self, indicator, config, vehicle):
         self.__shapes = config["colors"]
-        shape = self.__shapes[0]
-        if AccountSettings.getSettings('isColorBlind'):
-            shape = self.__shapes[1]
         self.__indicator = indicator
-        self.__indicator.setShape(shape)
-        self.__indicator.track(position)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.__as_onSettingsChanged
+        if self.directionCollid(vehicle):
+            self.__indicator.setShape(self.__shapes[0])
+        else:
+            self.__indicator.setShape(self.__shapes[1])
+        self.__indicator.track(vehicle.position)
 
-    def update(self, distance, position = None):
+    def update(self, distance, position, vehicle):
         self.__indicator.setDistance(distance)
         if position is not None:
             self.__indicator.setPosition(position)
+        if self.directionCollid(vehicle):
+            self.__indicator.setShape(self.__shapes[0])
+        else:
+            self.__indicator.setShape(self.__shapes[1])
 
     def clear(self):
         if self.__indicator is not None:
             self.__indicator.remove()
         self.__indicator = None
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
-
-    def __as_onSettingsChanged(self, diff):
-        if 'isColorBlind' in diff:
-            shape = self.__shapes[0]
-            if diff['isColorBlind']:
-                shape = self.__shapes[1]
-            if self.__indicator is not None:
-                self.__indicator.setShape(shape)
+        
+    def directionCollid(self, vehicle):
+        p = BigWorld.player()
+        spaceId = p.spaceID
+        playerVehicleID = p.playerVehicleID
+        endPos = vehicle.appearance.modelsDesc['gun']['model'].position
+        startPos = BigWorld.entities.get(playerVehicleID).appearance.modelsDesc['gun']['model'].position
+        if BigWorld.wg_collideSegment(spaceId, endPos, startPos, False) != None:
+            return True
+        return False
