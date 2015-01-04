@@ -28,7 +28,7 @@ class MarkersStorage(object):
             id = data["id"]
             vehicle = BigWorld.entities.get(id)
             elapsed = BigWorld.time() - data["time"]
-            if vehicle is None and not BigWorld.player().arena.positions.has_key(id) and config["delIfUnspotted"]:
+            if vehicle is None or not BigWorld.player().arena.positions.has_key(id) and config["delIfUnspotted"]:
                 cls.removeByPosition(i)
             elif not vehicle.isAlive() and config["delIfDeath"]:
                 cls.removeByPosition(i)
