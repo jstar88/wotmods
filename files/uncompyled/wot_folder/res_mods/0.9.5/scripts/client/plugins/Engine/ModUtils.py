@@ -118,6 +118,17 @@ class FileUtils:
                 else:
                     tmp.append(FileUtils.readElement(value[k],v,filename))
             return tmp
+        if type(defaultValue) is tuple:
+            values = filter(None, value.asString.split(" "))
+            tmp = ()
+            for k,v in enumerate(defaultValue[:]):
+                if len(values) <= k:
+                    LOG_WARNING(filename+": missing tuple entry",k+1)
+                    tmp += (v)
+                else:
+                    miniTuple = (FileUtils.readElement(values[k],v,filename),)
+                    tmp += miniTuple
+            return tmp
         if type(defaultValue) is dict:
             confkeys = value.keys()
             tmp = {}
@@ -134,21 +145,30 @@ class FileUtils:
             return tmp
         if type(defaultValue) is int:
             try:
-                value = value.asInt
+                if type(value) is str:
+                    value = int(value)
+                else:
+                    value = value.asInt
             except Exception:
                 LOG_WARNING(filename+": wrong value type",value.asString)
                 value = defaultValue
             return value
         if type(defaultValue) is float:
             try:
-                value = value.asFloat
+                if type(value) is str:
+                    value = float(value)
+                else:
+                    value = value.asFloat
             except Exception:
                 LOG_WARNING(filename+": wrong value type",value.asString)
                 value = defaultValue
             return value
         if type(defaultValue) is bool:
             try:
-                value = value.asBool
+                if type(value) is str:
+                    value = bool(value)
+                else:
+                    value = value.asBool
             except Exception:
                 if value.asString == "True":
                     value = True
@@ -159,6 +179,8 @@ class FileUtils:
                     value = defaultValue
             return value
         if type(defaultValue) is str:
+            if type(value) is str:
+                return value
             return value.asString
         LOG_ERROR(filename+": type not found",type(defaultValue))
         return None

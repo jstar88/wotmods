@@ -3,24 +3,20 @@ from IDirectionIndicator import IDirectionIndicator
 from gui import DEPTH_OF_Aim
 
 class DirectionIndicator(Flash, IDirectionIndicator):
-    __SWF_FILE_NAME = 'DirectionIndicator.swf'
-    __FLASH_CLASS = 'WGDirectionIndicatorFlash'
-    __FLASH_MC_NAME = 'directionalIndicatorMc'
-    __FLASH_SIZE = (680, 680)
 
-    def __init__(self):
-        Flash.__init__(self, self.__SWF_FILE_NAME, self.__FLASH_CLASS, [self.__FLASH_MC_NAME])
+    def __init__(self,config):
+        Flash.__init__(self, config["swf_file_name"], config["flash_class"], [config["flash_mc_name"]])
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_Aim
-        self.movie.backgroundAlpha = 0.0
-        self.movie.scaleMode = 'NoScale'
-        self.component.focus = False
-        self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
-        self.flashSize = self.__FLASH_SIZE
-        self.component.relativeRadius = 0.5
-        self.__dObject = getattr(self.movie, self.__FLASH_MC_NAME, None)
+        self.movie.backgroundAlpha = config["backgroundAlpha"]
+        self.movie.scaleMode = config["scaleMode"]
+        self.component.focus = config["focus"]
+        self.component.moveFocus = config["moveFocus"]
+        self.component.heightMode = config["heightMode"]
+        self.component.widthMode = config["widthMode"]
+        self.flashSize = config["flash_size"]
+        self.component.relativeRadius = config["relativeRadius"]
+        self.__dObject = getattr(self.movie, config["flash_mc_name"], None)
 
     def __del__(self):
         pass

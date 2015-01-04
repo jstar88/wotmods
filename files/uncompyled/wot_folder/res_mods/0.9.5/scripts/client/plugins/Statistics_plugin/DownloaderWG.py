@@ -27,7 +27,10 @@ class DownloaderWG(object):
                     pr = int(getNestedElement(info,self.formatz['pr_index']))
                     bt = int(getNestedElement(info,self.formatz['battles_index']))
                     wr = int(getNestedElement(info,self.formatz['wr_index']))
-                    wr = wr * 100.0 / bt
+                    if not bt:
+                        wr = 0.0
+                    else:
+                        wr = wr * 100.0 / bt
                     id = int(id)
                     lang = getNestedElement(info,self.formatz['lang_index'])
                     entity = Entity(id, pr,lang, wr,bt)

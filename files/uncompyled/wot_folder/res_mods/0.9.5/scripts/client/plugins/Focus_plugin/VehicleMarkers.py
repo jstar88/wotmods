@@ -13,7 +13,7 @@ class VehicleMarkers():
         vehicle = BigWorld.entities.get(self.__vehicleID)
         if self.__dIndicator is not None:
             vPosition = vehicle.position
-            vector = vPosition - _player.getOwnVehiclePosition()
+            vector = vPosition - BigWorld.player().getOwnVehiclePosition()
             self.__dIndicator.update(vector.length, vPosition)
             #minimap marker adding
             #if self.__nextTime <= BigWorld.time():

@@ -1,8 +1,8 @@
 from account_helpers.AccountSettings import AccountSettings
 
 class DirectionIndicatorCtrl():
-    def __init__(self, indicator, shapes, position):
-        self.__shapes = shapes
+    def __init__(self, indicator, config, position):
+        self.__shapes = config["colors"]
         shape = self.__shapes[0]
         if AccountSettings.getSettings('isColorBlind'):
             shape = self.__shapes[1]

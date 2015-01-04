@@ -6,11 +6,33 @@ import BigWorld
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 from warnings import catch_warnings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
+from gui.WindowsManager import g_windowsManager
+from chat_shared import CHAT_COMMANDS
 
 class Focus:
 
     lastCallback = None
-    myconfig = {"pluginEnable":False,"maxArrows":3,"maxArrowTime":60} 
+    inBattle = False
+    myconfig = {
+                "pluginEnable":False,
+                "maxArrows":3,
+                "maxArrowTime":60,
+                "delIfUnspotted":True,
+                "delIfNotVisible":False,
+                "delIfDeath":True,
+                "colors":("red", "purple"),
+                "swf_file_name":"DirectionIndicator.swf",
+                "flash_class":"WGDirectionIndicatorFlash",
+                "flash_mc_name":"directionalIndicatorMc",
+                "flash_size":(680,680),
+                "heightMode":"PIXEL",
+                "widthMode":"PIXEL",
+                "relativeRadius":0.5,
+                "moveFocus":False,
+                "focus":False,
+                "scaleMode":"NoScale",
+                "backgroundAlpha":0.0
+                } 
     
     def __init__(self):
         self.pluginEnable = False
@@ -24,45 +46,38 @@ class Focus:
         injectNewFuncs()
                
     @staticmethod 
-    def new_onLeaveWorld(self):
+    def stopBattle():
+        Focus.inBattle = False
         MarkersStorage.clear()
         if Focus.lastCallback is not None:
             try:
                 BigWorld.cancelCallback(Focus.lastCallback)
             except:
                 pass
-            Focus.lastCallback = None
-        old_onLeaveWorld(self)
-    
-    @staticmethod
-    def new_onEnterWorld(self, prereqs):
-        old_onEnterWorld(self, prereqs)
+            Focus.lastCallback = None   
         
     @staticmethod
     def check():
-        MarkersStorage.updateMarkers(Focus.myconfig['maxArrowTime'])
+        if not Focus.inBattle:
+            return
+        MarkersStorage.updateMarkers(Focus.myconfig)
         Focus.lastCallback = BigWorld.callback(0.7,Focus.check)
 
     @staticmethod
     def new_handlePublicCommand(self, cmd):
         old_handlePublicCommand(self, cmd)
+        if not Focus.inBattle:
+            Focus.inBattle = True
+            Focus.check()
         receiverID = cmd.getFirstTargetID()
-        #vehicle = BigWorld.player().arena.vehicles[receiverID]
-        #distance = (BigWorld.player().getOwnVehiclePosition() - vehicle.position).length
-        if receiverID:
-            showMarker(receiverID,Focus.myconfig['maxArrows'])
+        if receiverID and cmd.showMarkerForReceiver():
+            showMarker(receiverID,Focus.myconfig)
         
 def saveOldFuncs():
-    global old_onLeaveWorld,old_onEnterWorld,old_handlePublicCommand
-    DecorateUtils.ensureGlobalVarNotExist('old_onLeaveWorld')
-    DecorateUtils.ensureGlobalVarNotExist('old_onEnterWorld')
+    global old_handlePublicCommand
     DecorateUtils.ensureGlobalVarNotExist('old_handlePublicCommand')
-
-    old_onLeaveWorld = PlayerAvatar.onLeaveWorld
-    old_onEnterWorld = PlayerAvatar.onEnterWorld
     old_handlePublicCommand = ChatCommandsController._ChatCommandsController__handlePublicCommand
 
 def injectNewFuncs():
-    PlayerAvatar.onLeaveWorld = Focus.new_onLeaveWorld
-    PlayerAvatar.onEnterWorld = Focus.new_onEnterWorld
     ChatCommandsController._ChatCommandsController__handlePublicCommand = Focus.new_handlePublicCommand
+    g_windowsManager.onDestroyBattleGUI += Focus.stopBattle

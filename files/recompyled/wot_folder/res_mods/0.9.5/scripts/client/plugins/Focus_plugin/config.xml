@@ -2,6 +2,23 @@
 
   <pluginEnable>false</pluginEnable>
   <maxArrows>3</maxArrows>
-  <maxArrowTime>60</maxArrowTime>
+  <maxArrowTime>60</maxArrowTime> 
+  <colors>red purple</colors>
+  <delIfUnspotted>true</delIfUnspotted>
+  <delIfNotVisible>false</delIfNotVisible>
+  <delIfDeath>true</delIfDeath>
+  
+  
+  <swf_file_name>DirectionIndicator.swf</swf_file_name>
+  <flash_class>WGDirectionIndicatorFlash</flash_class>
+  <flash_mc_name>directionalIndicatorMc</flash_mc_name>
+  <flash_size>680 680</flash_size>  
+  <heightMode>PIXEL</heightMode>
+  <widthMode>PIXEL</widthMode>
+  <relativeRadius>0.5</relativeRadius>
+  <moveFocus>false</moveFocus>
+  <focus>false</focus>
+  <scaleMode>NoScale</scaleMode>
+  <backgroundAlpha>0.0</backgroundAlpha>
     
 </config.xml>
