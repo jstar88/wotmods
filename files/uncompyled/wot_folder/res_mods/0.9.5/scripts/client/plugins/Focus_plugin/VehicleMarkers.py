@@ -10,11 +10,16 @@ class VehicleMarkers():
         self.__dIndicator = dIndicator
 
     def update(self):
-        vehicle = BigWorld.entities.get(self.__vehicleID)
         if self.__dIndicator is not None:
-            vPosition = vehicle.position
-            vector = vPosition - BigWorld.player().getOwnVehiclePosition()
-            self.__dIndicator.update(vector.length, vPosition, vehicle)
+            vPosition = None
+            vehicle = BigWorld.entities.get(self.__vehicleID)
+            player = BigWorld.player()
+            if vehicle is not None:
+                vPosition = vehicle.position
+            else:
+                vPosition = player.arena.positions[self.__vehicleID]
+            vector = vPosition - player.getOwnVehiclePosition()
+            self.__dIndicator.update(vector.length, vPosition)
             #minimap marker adding
             #if self.__nextTime <= BigWorld.time():
             #    minimap = self.__minimapRef()

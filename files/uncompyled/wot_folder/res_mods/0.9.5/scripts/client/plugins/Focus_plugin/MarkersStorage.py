@@ -26,13 +26,17 @@ class MarkersStorage(object):
         i = 0
         for data in cls.__markers:
             id = data["id"]
-            vehicle = BigWorld.entities.get(id)
             elapsed = BigWorld.time() - data["time"]
-            if vehicle is None or not BigWorld.player().arena.positions.has_key(id) and config["delIfUnspotted"]:
+            vehicle = BigWorld.entities.get(id)
+            visible = vehicle is not None and vehicle.isStarted
+            alive = vehicle is not None and vehicle.isAlive()
+            spotted = visible or BigWorld.player().arena.positions.has_key(id)
+            
+            if not spotted and config["delIfUnspotted"]:
                 cls.removeByPosition(i)
-            elif not vehicle.isAlive() and config["delIfDeath"]:
+            elif not alive and config["delIfDeath"]:
                 cls.removeByPosition(i)
-            elif not vehicle.isStarted and config["delIfNotVisible"]:
+            elif not visible and config["delIfNotVisible"]:
                 cls.removeByPosition(i)
             elif elapsed > config["maxArrowTime"]:
                 cls.removeByPosition(i)
