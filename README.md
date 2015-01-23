@@ -27,7 +27,7 @@ Provide performance rating,win chance,client language,battle amount of every pla
 Send message to team or platoon ,eventually with a "help" or "ping" command,if you are spotted and under some conditions.   
 Note: it use ingame_messanger plugin
 
-Focus_plugin (working on)    
+Focus_plugin(http://forum.worldoftanks.eu/index.php?/topic/463328-095-focus-mod/)    
 Put a red arrow indicating the targetted enemies from your team. 
 Usefull to increase focus fire's efficiency  
 
