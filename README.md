@@ -35,5 +35,5 @@ Usefull to increase focus fire's efficiency
 Download all code from [here](https://github.com/jstar88/wotmods/archive/master.zip)      
 Then extract the content of *files/recompyled/wot_folder* in your game root.   
 
-To enale a plugin,open *game_root/res_mods/0.9.5/scripts/client/plugins/{plugin_name}/config.xml* and set pluginEnable to true.
+To enale a plugin,open *{game_root}/res_mods/0.9.5/scripts/client/plugins/{plugin_name}/config.xml* and set pluginEnable to true.
 
