@@ -196,6 +196,7 @@ class FileUtils:
     
     @staticmethod
     def readConfig(path, defset, fromfile = ''):
+        path = FileUtils.fixPath(path)
         fileName, fileExtension = os.path.splitext(path)
         if fileExtension == ".json":
             return FileUtils.readJson(path,defset,fromfile)
@@ -218,6 +219,18 @@ class FileUtils:
             return defset
         json1_file = codecs.open(fullPath, 'r', 'utf-8-sig')
         return json.loads(json1_file.read(),object_hook=_decode_dict)
+    
+    @staticmethod
+    def fixPath(path):
+        a = path.split("/")
+        restore = False
+        if not a[0]:
+            a[0] = "_"
+            restore = True
+        path = os.path.join(*a)
+        if restore:
+            return path[1:]
+        return path
     
     @staticmethod
     def my_import(module_name,func_names = [],cache = False):
