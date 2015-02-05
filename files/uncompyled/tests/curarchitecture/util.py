@@ -1,4 +1,21 @@
+import types
 import __builtin__
+
+def override(t,name,newFunc):
+    if type(newFunc) != types.FunctionType and type(newFunc) != types.MethodType:
+        raise Exception("third arg must be a function")
+    if not type(name) is str:
+        raise Exception("second arg must be a string func name")
+    tmp = None
+    if hasattr(t, name):
+        tmp = getattr(t, name)
+    if not isinstance(t,type):
+        setattr(t,name, lambda :newFunc(t))
+    else:
+        setattr(t,name, newFunc)
+    return tmp
+    
+    
 def my_import(module_name,func_names = [],cache = False):
     if module_name in globals() and cache:
         return True
@@ -30,12 +47,8 @@ def checkPluginsImports(plugin,modules):
         print plugin +" has errors!: module '"+c+"' not found"
     else:
         __builtin__.modules = globals()
-
-
-def d():
-    checkPluginsImports('demoPlugin',[('test',['x'])])
-    
-
-    
-#d()
-#x()
+        
+def getCodeForImports():
+    return """for k,v in  __builtin__.modules.iteritems():
+    if not k.startswith("_"):
+        globals()[k] = v"""
