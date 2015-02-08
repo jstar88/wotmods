@@ -1,20 +1,3 @@
-import types
-
-def override(t,name,newFunc):
-    if type(newFunc) != types.FunctionType and type(newFunc) != types.MethodType:
-        raise Exception("third arg must be a function")
-    if not type(name) is str:
-        raise Exception("second arg must be a string func name")
-    tmp = None
-    if hasattr(t, name):
-        tmp = getattr(t, name)
-    if not isinstance(t,type):
-        setattr(t,name, lambda :newFunc(t))
-    else:
-        setattr(t,name, newFunc)
-    return tmp
-    
-    
 class ModulesManager(object):
     def __init__(self,modules = {}):
         self.modules = {}
@@ -40,20 +23,15 @@ class ModulesManager(object):
         except ImportError:
             return False
     
-    def loads(self, modules, cache = True):
+    def loads(self,modules,cache = True):
         for module in modules:
             if not self.load(module,cache):
-                self.errfunc(module)
+                print "errors!: module '"+module+"' not found"
                 return
     
     def getGlobals(self):
         return self.modules
+
     
-    def errfunc(self,module):
-        raise ImportError("module '"+str(module)+"' not found")
-    
-        
-def getCodeForImports(modules,errfunc = None):
-    if errfunc is not None:
-        ModulesManager.errfunc = lambda a,b: errfunc(b)
-    return "map(lambda v: globals().__setitem__(v[0],v[1]) , ModulesManager("+str(modules)+").getGlobals().items())"
+#d()
+#x()

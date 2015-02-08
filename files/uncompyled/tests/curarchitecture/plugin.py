@@ -1,10 +1,10 @@
-from util import override,checkPluginsImports,getCodeForImports
-import __builtin__
+from util import *
 
 #dynamic import
 modules = [ ('orig',['Orig']) ]
-checkPluginsImports('demo',modules)
-exec(getCodeForImports())
+def errf(module):
+    print "module '"+str(module)+"' not found"
+exec(getCodeForImports(modules,errf))
 
 
 class A:
