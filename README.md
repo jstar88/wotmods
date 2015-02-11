@@ -20,7 +20,7 @@ Some plugins are used from others, i will write a note in case. Anyway "Engine" 
 [SixthSenseDuration_plugin](http://forum.worldoftanks.eu/index.php?/topic/358159-095sixth-sense-duration-iconaudiocountdown/#topmost)   
 Increase duration of sixth sense lamp,eventually with a sound and a countdown.
 
-[Statisticv_plugin](http://forum.worldoftanks.eu/index.php?/topic/455834-095statisticv2-mod-no-xvm/)  
+[Statistics_plugin](http://forum.worldoftanks.eu/index.php?/topic/455834-095statisticv2-mod-no-xvm/)  
 Provide performance rating,win chance,client language,battle amount of every player in the battle. 
 
 [SpotMessanger_plugin](http://forum.worldoftanks.eu/index.php?/topic/353419-095spotmessanger/)   
@@ -35,5 +35,11 @@ Usefull to increase focus fire's efficiency
 Download all code from [here](https://github.com/jstar88/wotmods/archive/master.zip)      
 Then extract the content of *files/recompyled/wot_folder* in your game root.   
 
-To enale a plugin,open *{game_root}/res_mods/0.9.5/scripts/client/plugins/{plugin_name}/config.xml* and set pluginEnable to true.
+To enale a plugin,open *{game_root}/res_mods/0.9.x/scripts/client/plugins/{plugin_name}/config.xml* and set pluginEnable to true.
+
+where  
+
+* {game_root} is your World of Tank installation directory
+* x is the wot version   
+* {plugin_name} is the name of the plugin
 

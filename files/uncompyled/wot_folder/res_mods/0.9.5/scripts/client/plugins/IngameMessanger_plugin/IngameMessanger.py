@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 # @author: BirrettaMalefica EU
-from messenger.proto import getBattleCommandFactory
+from messenger.proto.migration import getBattleCommandFactory
 from messenger.gui.Scaleform.channels.bw_chat2.factories import BattleControllersFactory
 from messenger.gui.Scaleform.channels.bw_chat2.battle_controllers import *
 from chat_shared import CHAT_COMMANDS
@@ -18,7 +18,7 @@ class IngameMessanger:
     myconfig = {"TextDelay":0.5,"CommandDelay":5}
     cooldDown = 0
     def __init__(self):
-        self.commandFactory = getBattleCommandFactory()
+        self.commandFactory = None
         self.commonChannelController = None
         self.teamChannelController = None
         self.squadChannelController = None
@@ -29,6 +29,7 @@ class IngameMessanger:
     def checkInit(self):
         if self.initied:
             return
+        self.commandFactory = getBattleCommandFactory()
         self.initied = True
         controllers = BattleControllersFactory().init()
         for controller in controllers:
