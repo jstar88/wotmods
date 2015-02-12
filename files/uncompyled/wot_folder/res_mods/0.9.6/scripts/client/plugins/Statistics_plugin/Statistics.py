@@ -25,6 +25,7 @@ from gui.battle_control.arena_info import getClientArena, getArenaTypeID
 from gui.WindowsManager import g_windowsManager
 from EntityManagerOnline import EntityManagerOnline
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+from gui.battle_control.battle_arena_ctrl import _getRoster
 
 class Statistics(object):
     
@@ -268,7 +269,7 @@ class Statistics(object):
         dbID = playerVO.accountDBID
         user = userGetter(dbID)
         if user:
-            roster = user.getRoster()
+            roster = _getRoster(user)
             isMuted = user.isMuted()
         else:
             roster = 0
