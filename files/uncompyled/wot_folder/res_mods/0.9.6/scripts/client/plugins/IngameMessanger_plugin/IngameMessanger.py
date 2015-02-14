@@ -1,7 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 
 # @author: BirrettaMalefica EU
-from messenger.proto.migration import getBattleCommandFactory
+#from messenger.proto.migration import getBattleCommandFactory
+from gui.battle_control import g_sessionProvider
 from messenger.gui.Scaleform.channels.bw_chat2.factories import BattleControllersFactory
 from messenger.gui.Scaleform.channels.bw_chat2.battle_controllers import *
 from chat_shared import CHAT_COMMANDS
@@ -9,16 +10,12 @@ import BigWorld
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 from functools import partial
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
-import time
-
-
 
 
 class IngameMessanger:
     myconfig = {"TextDelay":0.5,"CommandDelay":5}
     cooldDown = 0
     def __init__(self):
-        self.commandFactory = None
         self.commonChannelController = None
         self.teamChannelController = None
         self.squadChannelController = None
@@ -29,7 +26,6 @@ class IngameMessanger:
     def checkInit(self):
         if self.initied:
             return
-        self.commandFactory = getBattleCommandFactory()
         self.initied = True
         controllers = BattleControllersFactory().init()
         for controller in controllers:
@@ -60,12 +56,17 @@ class IngameMessanger:
         self.checkInit()
         return self.squadChannelController
         
-                  
+    def getCommandfactory(self):
+        cmdFc = g_sessionProvider.getChatCommands._ChatCommandsController__cmdFactories
+        if cmdFc is None:
+            LOG_ERROR('Commands factory is not defined')
+        return cmdFc              
+    
     def doPing(self,controller,cellIdx):  
-        command = self.commandFactory.createByCellIdx(cellIdx)
+        command = self.getCommandfactory().createByCellIdx(cellIdx)
         self.sendCommand(controller,command) 
     def callHelp(self,controller):
-        command = self.commandFactory.createByName(CHAT_COMMANDS.HELPME.name())
+        command = self.getCommandfactory().createByName(CHAT_COMMANDS.HELPME.name())
         self.sendCommand(controller,command)
         
     def sendCommand(self,controller,command):
