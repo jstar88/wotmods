@@ -10,6 +10,7 @@ import BigWorld
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 from functools import partial
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
+from gui.battle_control.ChatCommandsController import ChatCommandsController
 
 
 class IngameMessanger:
@@ -57,7 +58,7 @@ class IngameMessanger:
         return self.squadChannelController
         
     def getCommandfactory(self):
-        cmdFc = g_sessionProvider.getChatCommands._ChatCommandsController__cmdFactories
+        cmdFc = g_sessionProvider.getChatCommands()._ChatCommandsController__cmdFactories
         if cmdFc is None:
             LOG_ERROR('Commands factory is not defined')
         return cmdFc              
