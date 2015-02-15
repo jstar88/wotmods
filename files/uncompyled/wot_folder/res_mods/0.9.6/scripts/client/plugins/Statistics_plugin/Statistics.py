@@ -142,6 +142,7 @@ class Statistics(object):
             if PR < level['min']:
                 return last
             last = level['color']
+        return last
     
     @staticmethod        
     def isMyCompatriot(tid):
