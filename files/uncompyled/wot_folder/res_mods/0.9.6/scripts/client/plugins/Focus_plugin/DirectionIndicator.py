@@ -5,7 +5,8 @@ from gui import DEPTH_OF_Aim
 class DirectionIndicator(Flash, IDirectionIndicator):
 
     def __init__(self,config):
-        Flash.__init__(self, config["swf_file_name"], config["flash_class"], [config["flash_mc_name"]])
+        self.config = config
+        Flash.__init__(self, config["swf_file_name"], config["flash_class"], [config["flash_mc_name"]], config["swf_path"])
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = config["backgroundAlpha"]
@@ -40,3 +41,7 @@ class DirectionIndicator(Flash, IDirectionIndicator):
     def remove(self):
         self.__dObject = None
         self.close()
+        
+    def setVName(self,value):
+        if self.__dObject and self.config['setVName']:
+            self.__dObject.setVName(value)

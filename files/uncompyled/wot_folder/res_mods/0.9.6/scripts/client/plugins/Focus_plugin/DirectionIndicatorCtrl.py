@@ -1,14 +1,15 @@
 import BigWorld
 
 class DirectionIndicatorCtrl():
-    def __init__(self, indicator, config, position):
+    def __init__(self, indicator, config, enemyVehicle):
         self.__shapes = config["colors"]
         self.__indicator = indicator
-        if self.directionCollid(position):
+        self.__indicator.setVName(enemyVehicle.typeDescriptor.type.shortUserString)
+        if self.directionCollid(enemyVehicle.position):
             self.__indicator.setShape(self.__shapes[0])
         else:
             self.__indicator.setShape(self.__shapes[1])
-        self.__indicator.track(position)
+        self.__indicator.track(enemyVehicle.position)
 
     def update(self, distance, position):
         self.__indicator.setDistance(distance)

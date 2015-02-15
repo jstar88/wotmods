@@ -13,3 +13,6 @@ class IDirectionIndicator(object):
 
     def remove(self):
         pass
+    
+    def setVName(self,value):
+        pass

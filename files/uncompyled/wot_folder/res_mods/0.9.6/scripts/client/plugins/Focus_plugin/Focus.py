@@ -15,6 +15,8 @@ class Focus:
     inBattle = False
     myconfig = {
                 "pluginEnable":False,
+                "setVName":False,
+                "swf_path":"gui/scaleform",
                 "maxArrows":3,
                 "maxArrowTime":60,
                 "delIfUnspotted":True,

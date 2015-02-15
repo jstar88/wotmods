@@ -2,7 +2,6 @@
 
 # @author: BirrettaMalefica EU
 #from messenger.proto.migration import getBattleCommandFactory
-from gui.battle_control import g_sessionProvider
 from messenger.gui.Scaleform.channels.bw_chat2.factories import BattleControllersFactory
 from messenger.gui.Scaleform.channels.bw_chat2.battle_controllers import *
 from chat_shared import CHAT_COMMANDS
@@ -58,6 +57,7 @@ class IngameMessanger:
         return self.squadChannelController
         
     def getCommandfactory(self):
+        from gui.battle_control import g_sessionProvider
         cmdFc = g_sessionProvider.getChatCommands()._ChatCommandsController__cmdFactories
         if cmdFc is None:
             LOG_ERROR('Commands factory is not defined')

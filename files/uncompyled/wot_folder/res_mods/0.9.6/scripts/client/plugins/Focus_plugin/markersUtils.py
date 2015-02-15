@@ -20,7 +20,7 @@ def showMarker(enemyID,config):
     indicator = DirectionIndicator(config)
     if indicator is None:
         return
-    indicatorCtrl = DirectionIndicatorCtrl(indicator, config, enemyVehicle.position)
+    indicatorCtrl = DirectionIndicatorCtrl(indicator, config, enemyVehicle)
     VehicleMarker = VehicleMarkers(enemyID, minimap, 5, indicatorCtrl)
     if VehicleMarker is not None:
         MarkersStorage.addMarker(enemyID, VehicleMarker, config)
