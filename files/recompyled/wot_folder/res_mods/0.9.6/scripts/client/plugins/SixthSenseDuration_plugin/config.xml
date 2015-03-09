@@ -70,7 +70,9 @@
       This entry represent the countdown timer duration in milliseconds.
       You must set an integer.    
       Example:
-      * "9000" : 9 seconds   -->
+      * "9000" : 9 seconds   
+      * "0" : don't show the countdown 
+      -->
   <TimerRange>9000</TimerRange>
   <!-- ----------------------------------------------------- -->
   
