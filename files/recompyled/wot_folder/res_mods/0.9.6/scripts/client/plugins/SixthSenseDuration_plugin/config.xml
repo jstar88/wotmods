@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <config.xml>
 
   <pluginEnable>false</pluginEnable>
@@ -37,7 +36,7 @@
   <!-- ----------------------------------------------------- -->
   
   
-  <!-- ------------------- IconRangenge ------------------------
+  <!-- ------------------- IconRange ------------------------
       This entry represent the icon duration in milliseconds.      
       Example:
       * "2000" : The spot Icon stay for 2 seconds  -->

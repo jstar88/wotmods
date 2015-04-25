@@ -1,0 +1,79 @@
+import os
+import zipfile
+from glob import glob
+from zipfile import ZipFile
+from plugins.Engine.ModUtils import FileUtils
+
+class PathManager:
+    def __init__(self,zipName= 'res/packages/shared_content.pkg', extPath = None):
+        self.data = {}
+        paths = self.__getModelPaths(zipName, extPath)
+        for path in paths:
+            self.data[os.path.basename(path)] = path 
+        self.basenames = self.data.keys()  
+        self.basenamesPointer = 0
+        
+        
+    def __getModelPaths(self, zipName, extPath):
+        
+        if not os.path.isfile(zipName):
+            raise Exception("Invalid zip models path") 
+        
+        zip=zipfile.ZipFile(zipName)
+        names = zip.namelist()
+        dirname = ''
+        ext = '.model'.lower()
+        paths = []
+
+        for name in names:
+            if name.lower().endswith(ext):
+                paths.append(os.path.join(dirname, name))
+                
+        if extPath is not None:
+            if not os.path.isdir(extPath):
+                raise Exception("Invalid external models path")
+            result = [y for x in os.walk(extPath) for y in glob(os.path.join(x[0], '*.model'))]       
+            paths.extend(result)   
+        return sorted(paths)
+    
+    def getBaseNames(self):
+        return self.basenames
+    
+    def getPathFromBaseName(self,name):
+        return self.data[name]
+    
+    def getNextBaseName(self):
+        if self.basenamesPointer == len(self.basenames):
+            self.basenamesPointer = 0
+        tmp = self.basenames[self.basenamesPointer]
+        self.basenamesPointer += 1
+        return tmp
+    
+    def getPrevBaseName(self):
+        if self.basenamesPointer < 0:
+            self.basenamesPointer = len(self.basenames)-1
+        tmp = self.basenames[self.basenamesPointer]
+        self.basenamesPointer -= 1
+    
+    def getNextPath(self):
+        return self.getPathFromBaseName(self.getNextBaseName())
+    
+    def getPrevPath(self):
+        return self.getPathFromBaseName(self.getPrevBaseName())
+    
+    def resetPointer(self):
+        self.basenamesPointer = 0
+    
+    def extract(self,zip_path = 'res/packages/shared_content.pkg' , path='content/Railway/rw012_MechSemafor/',output = 'models'):
+        temp_dir = os.path.join(FileUtils.getRealPluginPath('Builder_plugin'),output)
+        with ZipFile(zip_path, 'r') as zip_file:
+            members = zip_file.namelist()
+            members_to_extract = [m for m in members if m.startswith(path)]
+            zip_file.extractall(temp_dir, members_to_extract)
+            
+    def clean(self,output):
+        pass
+            
+    
+    
+    

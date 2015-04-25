@@ -264,6 +264,38 @@ class FileUtils:
         c = FileUtils.my_imports(modules)
         if c:
             LOG_ERROR( plugin +" has errors!: module '"+c+"' not found")
+            
+    @staticmethod
+    def getWotPluginsPath():
+        #C:\Games\World_of_Tanks\scripts\client\plugins\Engine\ModUtils.pyc
+        wotFolder = os.path.dirname(os.path.abspath(__file__)) #Engine
+        wotFolder = os.path.dirname(wotFolder) #plugins 
+        return wotFolder
+    
+    @staticmethod
+    def getWotRoot(): 
+        path = FileUtils.getWotPluginsPath() #plugins
+        path = os.path.dirname(path) #client
+        path = os.path.dirname(path) #scripts
+        return os.path.dirname(path) #root
+    
+    @staticmethod
+    def getWotResPath():
+        return os.path.join(FileUtils.getWotRoot(),'res')
+        
+        
+    
+    @staticmethod
+    def getRealPluginsPath():
+        wotFolder = FileUtils.getWotPluginsPath()
+        p = wotFolder.split("scripts")
+        p[0] += os.path.join( os.path.join("res_mods",FileUtils.getWotVersion()),'scripts')
+        return p[0]+p[1]
+    
+    @staticmethod
+    def getRealPluginPath(pluginName):
+        return os.path.join(FileUtils.getRealPluginsPath(),pluginName)
+        
     
 class HotKeysUtils:
     
@@ -274,6 +306,10 @@ class HotKeysUtils:
     @staticmethod
     def keysMatch(inputSet, targetSet):
         return len(targetSet) and len(filter(lambda k: k in inputSet, targetSet)) == len(targetSet)
+    
+    @staticmethod
+    def keyMatch(a, b):
+        return a ==  getattr(Keys, b)
 
 class DecorateUtils:
     

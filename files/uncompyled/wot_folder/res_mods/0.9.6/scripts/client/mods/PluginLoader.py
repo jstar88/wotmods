@@ -6,12 +6,7 @@ import traceback
 from plugins.Engine.ModUtils import FileUtils
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE,LOG_WARNING
 
-wotFolder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-PluginFolder = os.path.join(wotFolder,'res_mods')
-PluginFolder = os.path.join(PluginFolder,FileUtils.getWotVersion())
-PluginFolder = os.path.join(PluginFolder,'scripts')
-PluginFolder = os.path.join(PluginFolder,'client')
-PluginFolder = os.path.join(PluginFolder,'plugins')
+PluginFolder = FileUtils.getRealPluginsPath()
 
 def getPlugins():
     plugins = []
