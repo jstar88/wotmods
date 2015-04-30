@@ -1,10 +1,12 @@
 import BigWorld
+from ProjectileMover import collideEntities
 
 class DirectionIndicatorCtrl():
     def __init__(self, indicator, config, enemyVehicle):
         self.__shapes = config["colors"]
         self.__indicator = indicator
         self.__indicator.setVName(enemyVehicle.typeDescriptor.type.shortUserString)
+        self.curvehicle = enemyVehicle
         if self.directionCollid(enemyVehicle.position):
             self.__indicator.setShape(self.__shapes[0])
         else:
@@ -26,10 +28,11 @@ class DirectionIndicatorCtrl():
         self.__indicator = None
         
     def directionCollid(self, endPos):
+        endPos = self.curvehicle.position
         p = BigWorld.player()
         spaceId = p.spaceID
         playerVehicleID = p.playerVehicleID
         startPos = BigWorld.entities.get(playerVehicleID).appearance.modelsDesc['gun']['model'].position
-        if BigWorld.wg_collideSegment(spaceId, endPos, startPos, False) != None:
+        if collideEntities(startPos, endPos, [self.curvehicle]) is not None:
             return True
         return False

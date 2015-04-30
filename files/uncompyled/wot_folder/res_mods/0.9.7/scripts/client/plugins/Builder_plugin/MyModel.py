@@ -14,19 +14,16 @@ class MyModel:
         self.create()
     
     def create(self):
-        #view = Math.Matrix()
-        #view.setTranslate((0, 0, 0))
-        m = Math.Matrix()
-        #m.setTranslate(Math.Matrix(view).applyPoint(self.pos))
-        
+        m = Math.Matrix()  
         m.setRotateYPR(Math.Vector3(self.yaw,0,0))
         m.translation = self.pos
+        
         self.motor = BigWorld.Servo(m)
         self.model = BigWorld.Model(self.modelPath)
         self.model.addMotor(self.motor)
+        
         BigWorld.addModel(self.model)
         self.model.visible = True
-        #self.rotate(self.yaw)
         return self.model
         
     def move(self, pos):

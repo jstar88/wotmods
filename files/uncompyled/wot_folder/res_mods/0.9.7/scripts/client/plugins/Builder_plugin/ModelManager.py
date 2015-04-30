@@ -1,7 +1,7 @@
 from DBStub import DBStub
 from MyModel import MyModel
 from functools import partial
-from pyCommunicator.FrontEndJsonCallback import FrontEndJsonCallback
+from plugins.Engine.pyCommunicator.FrontEndJsonCallback import FrontEndJsonCallback
 from plugins.Engine.ModUtils import FileUtils
 import os
 from Math import Vector3
@@ -23,8 +23,9 @@ class ModelManager:
         
         path = FileUtils.getRealPluginPath('Builder_plugin')
         path = os.path.join(path, 'maps')
+        if not os.path.exists(path):
+            os.makedirs(path)
         path = os.path.join(path, mapName + '.db')
-        LOG_NOTE('Loading: '+path)
         self.db = DBStub(f, path, 'models', self.__onInited)
     
     def __onInited(self, state):

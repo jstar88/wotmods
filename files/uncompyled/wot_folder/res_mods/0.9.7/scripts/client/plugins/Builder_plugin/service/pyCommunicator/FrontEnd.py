@@ -8,16 +8,16 @@ class FrontEnd(object):
     onRead = EVNT()
     
     def __init__(self, service):
-        # startupinfo = subprocess.STARTUPINFO()
-        # startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        # startupinfo.wShowWindow = subprocess.SW_HIDE
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
         self.process = subprocess.Popen(service,
                         stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         universal_newlines=True,
                         shell=False,
-                        # startupinfo=startupinfo
+                        startupinfo=startupinfo
                         )
         
         self.stdin = self.process.stdin

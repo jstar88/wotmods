@@ -1,6 +1,6 @@
 <config.xml>
 
-  <pluginEnable>true</pluginEnable>
+  <pluginEnable>false</pluginEnable>
   
   <NextModel>KEY_ADD</NextModel>
   

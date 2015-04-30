@@ -1,6 +1,6 @@
 import sys
 import os
-from plugins.Engine.ModUtils import BattleUtils, MinimapUtils, FileUtils, HotKeysUtils, DecorateUtils
+from plugins.Engine.ModUtils import FileUtils, HotKeysUtils, DecorateUtils
 from PathManager import PathManager
 from MyModel import MyModel
 from ModelManager import ModelManager
@@ -69,7 +69,7 @@ class Builder:
                 if HotKeysUtils.keyMatch(key, Builder.myconfig['PrevModel']):
                     Builder.blockMove = False
                     Builder.inBattle = True
-                    Builder.currentPath = Builder.pm.getNextPath()
+                    Builder.currentPath = Builder.pm.getPrevPath()
                     position = BigWorld.player().inputHandler.getDesiredShotPoint()
                     if Builder.currentPreview is not None:
                         Builder.currentPreview.remove()

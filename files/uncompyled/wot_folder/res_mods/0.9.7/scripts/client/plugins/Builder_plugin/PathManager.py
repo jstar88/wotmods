@@ -10,7 +10,7 @@ class PathManager:
         paths = self.__getModelPaths(zipName, extPath)
         for path in paths:
             self.data[os.path.basename(path)] = path 
-        self.basenames = self.data.keys()  
+        self.basenames = self.data.keys()
         self.basenamesPointer = -1
         
         
