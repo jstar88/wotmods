@@ -1,6 +1,28 @@
 <config.xml>
 
   <pluginEnable>false</pluginEnable>
+  
+  <!-- ------------------- IconRange ------------------------
+      This entry represent the icon duration in milliseconds.      
+      Example:
+      * "2000" : The spot Icon stay for 2 seconds  -->
+  <IconRange>2000</IconRange>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ----------------- AudioIsExternal -------------------
+      Set it to true to enable the external audio reader. -->
+  <AudioIsExternal>true</AudioIsExternal>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ----------------- AudioExternal -------------------
+      A list of cmd commands to run the external audio. -->
+  <AudioExternal>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/dlc.exe</item>
+    <item>-p</item>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3</item>
+  </AudioExternal>
+  <!-- ----------------------------------------------------- -->
+  
 
   <!--  ------------------- AudioPath ------------------------
       This entry represent the sound path.
@@ -11,7 +33,8 @@
       and more.
       Example:
       * "Dlink" : /GUI/notifications_FX/gun_intuition
-      * "Clock" : /GUI/notifications_FX/cybersport_timer  -->
+      * "Clock" : /GUI/notifications_FX/cybersport_timer  
+      -->
   <AudioPath>/GUI/notifications_FX/cybersport_timer</AudioPath>
   <!-- ----------------------------------------------------- -->
   
@@ -36,16 +59,8 @@
   <!-- ----------------------------------------------------- -->
   
   
-  <!-- ------------------- IconRange ------------------------
-      This entry represent the icon duration in milliseconds.      
-      Example:
-      * "2000" : The spot Icon stay for 2 seconds  -->
-  <IconRange>2000</IconRange>
-  <!-- ----------------------------------------------------- -->
-  
-  
   <!-- ------------------- Volume ------------------------
-      This entry represent the sound volume.
+      This entry represent the sound volume. Not enabled on external file
       Min = 0.0, Max = 1.0      
       Example:
       * "0.8" : The volume is 80%  -->
@@ -57,12 +72,17 @@
       This entry represent the type of sound in milliseconds.
       You must set this because sounds in WOT are placed in groups.
       You can increase volume of specific groups.
-      Generally if the sound's path start with "GUI" then set it to "gui"      
+      Generally if the sound's path start with "GUI" then set it to "gui"  
+       Not enabled on external file    
       Example:
       * "gui" : volume of sounds in group "gui" will be temporarily 
       setted to above Volume   -->
   <VolumeType>gui</VolumeType>
   <!-- ----------------------------------------------------- -->
+  
+  
+  
+  
   
   
   <!-- ------------------- TimerRange ------------------------

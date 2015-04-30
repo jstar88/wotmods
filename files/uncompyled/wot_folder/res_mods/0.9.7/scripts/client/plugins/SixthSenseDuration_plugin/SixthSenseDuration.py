@@ -11,10 +11,15 @@ from gui.shared.utils.HangarSpace import _HangarSpace
 from gui import GUI_SETTINGS
 import re
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+import subprocess
 
 class SixthSenseDuration:
     myConf = {
               'AudioPath': '/GUI/notifications_FX/cybersport_timer',
+              'AudioIsExternal': True,
+              'AudioExternal': ['res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/dlc.exe',
+                                '-p',
+                                'res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3'],
               'AudioRange': 9000,
               'AudioTick': 1000,
               'IconRange': 2000,
@@ -52,15 +57,32 @@ class SixthSenseDuration:
         SoundGroups.g_instance.setVolume(SixthSenseDuration.myConf['VolumeType'],SixthSenseDuration.backupVolume)
     
     @staticmethod
+    def playExtSound(i):
+        if i < 1:
+            return
+        try:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+            subprocess.Popen(SixthSenseDuration.myConf['AudioExternal'], startupinfo=startupinfo)
+        except:
+            pass
+        i -= 1
+        BigWorld.callback(SixthSenseDuration.myConf['AudioTick']/1000, partial(SixthSenseDuration.playExtSound,i))
+    
+    @staticmethod
     def new_showSixthSenseIndicator(self, isShow):
         old_showSixthSenseIndicatorFromSixthSenseDuration(self, isShow)
         SixthSenseDuration.startGuiCountDown()
-        sound = SoundGroups.g_instance.FMODgetSound(SixthSenseDuration.myConf['AudioPath'])
-        #sound.stop()
+        
         i = SixthSenseDuration.myConf['AudioRange'] / SixthSenseDuration.myConf['AudioTick']
-        SixthSenseDuration.backupVolume = SoundGroups.g_instance.getVolume(SixthSenseDuration.myConf['VolumeType'])
-        SoundGroups.g_instance.setVolume(SixthSenseDuration.myConf['VolumeType'],SixthSenseDuration.myConf['Volume'])
-        SixthSenseDuration.playSound(sound,i)
+        if not SixthSenseDuration.myConf['AudioIsExternal']:
+            sound = SoundGroups.g_instance.FMODgetSound(SixthSenseDuration.myConf['AudioPath'])
+            SixthSenseDuration.backupVolume = SoundGroups.g_instance.getVolume(SixthSenseDuration.myConf['VolumeType'])
+            SoundGroups.g_instance.setVolume(SixthSenseDuration.myConf['VolumeType'],SixthSenseDuration.myConf['Volume'])
+            SixthSenseDuration.playSound(sound,i)
+        else:
+            SixthSenseDuration.playExtSound(i)
 
     # --------------- icon ------------- #
     @staticmethod
@@ -116,6 +138,10 @@ class SixthSenseDuration:
     def readConfig(self):
         SixthSenseDuration.myConf = FileUtils.readConfig('scripts/client/plugins/SixthSenseDuration_plugin/config.xml',SixthSenseDuration.myConf,"SixthSenseDuration")
         self.pluginEnable =  SixthSenseDuration.myConf['pluginEnable']
+        tmp = []
+        for d in SixthSenseDuration.myConf['AudioExternal']:
+            tmp.append(d.replace('{v}',FileUtils.getWotVersion()))
+        SixthSenseDuration.myConf['AudioExternal'] = tmp
     
     def run(self):
         saveOldFuncs()
