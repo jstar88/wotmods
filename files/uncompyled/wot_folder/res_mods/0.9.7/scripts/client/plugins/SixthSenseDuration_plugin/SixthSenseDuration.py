@@ -98,7 +98,7 @@ class SixthSenseDuration:
             SixthSenseDuration.initGuiUnspotted()
             SixthSenseDuration.guiSpotted.visible = isShow
             SixthSenseDuration.guiUnspotted.visible = not isShow
-            BigWorld.callback(SixthSenseDuration.myConf['IconRange'],self.invertIcons())
+            BigWorld.callback(SixthSenseDuration.myConf['IconRange'],SixthSenseDuration.invertIcons)
             
         SixthSenseDuration.startGuiCountDown()
         
