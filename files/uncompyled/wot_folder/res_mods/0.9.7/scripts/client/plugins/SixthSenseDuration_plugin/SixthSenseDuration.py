@@ -23,7 +23,7 @@ class SixthSenseDuration:
                                 'res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3'],
               'AudioRange': 9000,
               'AudioTick': 1000,
-              'IconRange': 2000,
+              'IconRange': 9000,
               'Volume': 1.0,
               'VolumeType': "gui",
               'TimerColor': "#FF8000",
@@ -40,7 +40,10 @@ class SixthSenseDuration:
               'IconSpottedPosition': "(round(x / 2) + 120, 20, 0.7)",
               'IconInactivePath': "scripts/client/plugins/SixthSenseDuration_plugin/resources/inactive.dds",
               'IconUnspottedPath': "scripts/client/plugins/SixthSenseDuration_plugin/resources/unspotted.dds",
-              'IconSpottedPath': "scripts/client/plugins/SixthSenseDuration_plugin/resources/spotted.dds"
+              'IconSpottedPath': "scripts/client/plugins/SixthSenseDuration_plugin/resources/spotted.dds",
+              'IconSpottedSize': (52,52),
+              'IconUnspottedSize': (52,52),
+              'IconInactiveSize': (52,52)
     }
     guiCountDown = None
     backupVolume = None 
@@ -90,15 +93,14 @@ class SixthSenseDuration:
     
     @staticmethod
     def new_showSixthSenseIndicator(self, isShow):
-        if SixthSenseDuration.myConf['DisplayOriginalIcon']:
+        if  SixthSenseDuration.myConf['DisplayOriginalIcon'] or not isShow:
             old_showSixthSenseIndicatorFromSixthSenseDuration(self, isShow)
             
-        if SixthSenseDuration.hasSixthSense:
-            SixthSenseDuration.initGuiSpotted()
-            SixthSenseDuration.initGuiUnspotted()
-            SixthSenseDuration.guiSpotted.visible = isShow
-            SixthSenseDuration.guiUnspotted.visible = not isShow
-            BigWorld.callback(SixthSenseDuration.myConf['IconRange']/1000,SixthSenseDuration.invertIcons)
+        SixthSenseDuration.initGuiSpotted()
+        SixthSenseDuration.initGuiUnspotted()
+        SixthSenseDuration.guiSpotted.visible = isShow
+        SixthSenseDuration.guiUnspotted.visible = not isShow
+        BigWorld.callback(SixthSenseDuration.myConf['IconRange']/1000,SixthSenseDuration.invertIcons)
             
         SixthSenseDuration.startGuiCountDown()
         
@@ -161,25 +163,25 @@ class SixthSenseDuration:
     def initGuiSpotted():
         if SixthSenseDuration.guiSpotted is None:
             SixthSenseDuration.fixPosition('IconSpottedPosition')
-            SixthSenseDuration.guiSpotted = SixthSenseDuration.createTexture(SixthSenseDuration.myConf['IconSpottedPath'], SixthSenseDuration.myConf['IconSpottedPosition'])
+            SixthSenseDuration.guiSpotted = SixthSenseDuration.createTexture(SixthSenseDuration.myConf['IconSpottedPath'], SixthSenseDuration.myConf['IconSpottedPosition'],SixthSenseDuration.myConf['IconSpottedSize'])
         SixthSenseDuration.guiSpotted.visible = False
         
     @staticmethod
     def initGuiUnspotted():
         if SixthSenseDuration.guiUnspotted is None:
             SixthSenseDuration.fixPosition('IconUnspottedPosition')
-            SixthSenseDuration.guiUnspotted = SixthSenseDuration.createTexture(SixthSenseDuration.myConf['IconUnspottedPath'], SixthSenseDuration.myConf['IconUnspottedPosition'])
+            SixthSenseDuration.guiUnspotted = SixthSenseDuration.createTexture(SixthSenseDuration.myConf['IconUnspottedPath'], SixthSenseDuration.myConf['IconUnspottedPosition'],SixthSenseDuration.myConf['IconUnspottedSize'])
         SixthSenseDuration.guiUnspotted.visible = SixthSenseDuration.hasSixthSense    
             
     @staticmethod
     def initGuiInactive():
         if SixthSenseDuration.guiInactive is None:
             SixthSenseDuration.fixPosition('IconInactivePosition')
-            SixthSenseDuration.guiInactive = SixthSenseDuration.createTexture(SixthSenseDuration.myConf['IconInactivePath'], SixthSenseDuration.myConf['IconInactivePosition'])
+            SixthSenseDuration.guiInactive = SixthSenseDuration.createTexture(SixthSenseDuration.myConf['IconInactivePath'], SixthSenseDuration.myConf['IconInactivePosition'],SixthSenseDuration.myConf['IconInactiveSize'])
         SixthSenseDuration.guiInactive.visible = not SixthSenseDuration.hasSixthSense
 
     @staticmethod
-    def createTexture(texture,position):
+    def createTexture(texture,position,size):
         item = GUI.Simple(texture)
         GUI.addRoot(item)
         item.widthMode = 'PIXEL'
@@ -189,7 +191,7 @@ class SixthSenseDuration:
         item.horizontalAnchor = 'LEFT'
         item.verticalAnchor = 'TOP'
         item.position = position
-        item.size = (52,52)
+        item.size = size
         return item
     
     @staticmethod

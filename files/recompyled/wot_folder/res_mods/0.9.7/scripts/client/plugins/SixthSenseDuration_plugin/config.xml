@@ -1,46 +1,106 @@
 <config.xml>
 
+  <!-- ----- Enable the plugin ---- 
+  	 true/false -->
   <pluginEnable>false</pluginEnable>
   
   <!-- ------------------- IconRange ------------------------
-      This entry represent the icon duration in milliseconds.      
+      This entry represent the icon duration in milliseconds.
+      Note: this will set the duration of both original icon and own icons      
       Example:
-      * "2000" : The spot Icon stay for 2 seconds  -->
+      * "2000" : The spot Icon stay for 2 seconds -->
   <IconRange>2000</IconRange>
   <!-- ----------------------------------------------------- -->
   
   <!-- ------------------- DisplayOriginalIcon ------------------------ 
-      Display the original spotted icon.                            -->
+      Display the original spotted icon.
+      Note: the other icons will keep be shown 
+      true/false -->
   <DisplayOriginalIcon>false</DisplayOriginalIcon>
   <!-- ----------------------------------------------------- -->
   
-  <!-- ------------------- IconInactivePosition ------------------------ -->    
+  
+  
+  <!-- ################ Icons position ################ -->
+  
+  <!-- ------------------- IconInactivePosition ------------------------ 
+  		The position on the screen of the icon shown when sixthsense perk is not enabled 
+  		X is your screen's width
+      	Y is your screen's height 
+      	use float numbers -->    
   <IconInactivePosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconInactivePosition>
   <!-- ----------------------------------------------------- -->
   
-  <!-- ------------------- IconSpottedPosition ------------------------  -->   
-  <IconSpottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconSpottedPosition>
-  <!-- ----------------------------------------------------- -->
-  
-  <!-- ------------------- IconUnspottedPosition ------------------------  -->   
+  <!-- ------------------- IconUnspottedPosition ------------------------  
+  		The position on the screen of the icon shown when sixthsense is enabled and you are not spotted
+  		X is your screen's width
+      	Y is your screen's height 
+      	use float numbers -->   
   <IconUnspottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconUnspottedPosition>
   <!-- ----------------------------------------------------- -->
   
-  <!-- ------------------- IconInactivePath ------------------------ -->
+  <!-- ------------------- IconSpottedPosition ------------------------  
+  		The position on the screen of the icon shown when sixthsense is enabled and you are spotted
+  		X is your screen's width
+      	Y is your screen's height 
+      	use float numbers -->   
+  <IconSpottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconSpottedPosition>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  
+  
+  <!-- ################ Icons path ################ -->
+  
+  <!-- ------------------- IconInactivePath ------------------------ 
+  		The path of the icon shown when sixthsense perk is not enabled 
+  		To disable the icon set it to 
+  		scripts/client/plugins/SixthSenseDuration_plugin/resources/transparent.dds -->
   <IconInactivePath>scripts/client/plugins/SixthSenseDuration_plugin/resources/inactive.dds</IconInactivePath>
   <!-- ----------------------------------------------------- -->
   
-  <!-- ------------------- IconUnspottedPath ------------------------ -->
+  <!-- ------------------- IconUnspottedPath ------------------------ 
+  		The path of the icon shown when sixthsense is enabled and you are not spotted 
+  		To disable the icon set it to 
+  		scripts/client/plugins/SixthSenseDuration_plugin/resources/transparent.dds -->
   <IconUnspottedPath>scripts/client/plugins/SixthSenseDuration_plugin/resources/unspotted.dds</IconUnspottedPath>
   <!-- ----------------------------------------------------- -->
   
-  <!-- ------------------- IconSpottedPath ------------------------ -->
+  <!-- ------------------- IconSpottedPath ------------------------ 
+  		The path of the icon shown when sixthsense is enabled and you are spotted 
+  		To disable the icon set it to 
+  		scripts/client/plugins/SixthSenseDuration_plugin/resources/transparent.dds -->
   <IconSpottedPath>scripts/client/plugins/SixthSenseDuration_plugin/resources/spotted.dds</IconSpottedPath>
   <!-- ----------------------------------------------------- -->
   
   
-  <!-- ----------------- AudioIsExternal -------------------
-      Set it to true to enable the external audio reader. -->
+  
+  
+  <!-- ################ Icons size ################ -->
+  
+  <!-- ------------------- IconInactiveSize ------------------------ 
+		The size of the icon shown when sixthsense perk is not enabled -->
+  <IconInactiveSize>52 52</IconInactiveSize>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconUnspottedSize ------------------------ 
+  		The size of the icon shown when sixthsense is enabled and you are not spotted -->
+  <IconUnspottedSize>52 52</IconUnspottedSize>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconSpottedSize ------------------------
+  		The size of the icon shown  when sixthsense is enabled and you are spotted -->
+  <IconSpottedSize>52 52</IconSpottedSize>
+  <!-- ----------------------------------------------------- -->
+  
+  
+  
+  
+  <!-- ################ Audio ################ -->
+    
+  <!-- -----------------   <!-- ################ Icons size ################ --> -------------------
+      Set it to true to enable the external audio reader. 
+      true/false -->
   <AudioIsExternal>true</AudioIsExternal>
   <!-- ----------------------------------------------------- -->
   
@@ -54,7 +114,7 @@
   
 
   <!--  ------------------- AudioPath ------------------------
-      This entry represent the sound path.
+      This entry represent the sound path. Used when AudioIsExternal is false.
       Sound paths can be found in different files as 
       res/packages/gui/gui_sounds.xml
       or
@@ -70,7 +130,7 @@
   
   <!-- ------------------- AudioRange ------------------------
       This entry represent the sound system duration in milliseconds 
-      after the spot.      
+      after the spot. To use both when AudioIsExternal is true or false.     
       Example:
       * "9000" : 9 seconds  
       * "0" : no audio      -->
@@ -81,16 +141,17 @@
   <!-- ------------------- AudioTick ------------------------
       This entry represent time between sound repetition in milliseconds.
       Generally this is usefull to repeat sounds that are smaller than 
-      the AudioRange value. If setted to 1000, it represent a clock.      
+      the AudioRange value. If setted to 1000, it represent a clock.
+      Used when AudioIsExternal is true or false.       
       Example:
       * "1000" : the sound repeat each 1 second for AudioRange/AudioTick = 9 times  
-      * "9000" : the sound repeat each 1 second for AudioRange/AudioTick = 1 time                                                       -->
+      * "9000" : the sound repeat each 1 second for AudioRange/AudioTick = 1 time   -->                                                    -->
   <AudioTick>10000</AudioTick>
   <!-- ----------------------------------------------------- -->
   
   
   <!-- ------------------- Volume ------------------------
-      This entry represent the sound volume. Not enabled on external file
+      This entry represent the sound volume. Used when AudioIsExternal is false.
       Min = 0.0, Max = 1.0      
       Example:
       * "0.8" : The volume is 80%  -->
@@ -102,8 +163,8 @@
       This entry represent the type of sound in milliseconds.
       You must set this because sounds in WOT are placed in groups.
       You can increase volume of specific groups.
-      Generally if the sound's path start with "GUI" then set it to "gui"  
-       Not enabled on external file    
+      Generally if the sound's path start with "GUI" then set it to "gui".  
+      Used when AudioIsExternal is false.
       Example:
       * "gui" : volume of sounds in group "gui" will be temporarily 
       setted to above Volume   -->
@@ -113,7 +174,7 @@
   
   
   
-  
+   <!-- ################ Timer ################ --> 
   
   <!-- ------------------- TimerRange ------------------------
       This entry represent the countdown timer duration in milliseconds.
