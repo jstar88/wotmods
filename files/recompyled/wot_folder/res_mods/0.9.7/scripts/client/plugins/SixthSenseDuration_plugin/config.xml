@@ -9,6 +9,36 @@
   <IconRange>2000</IconRange>
   <!-- ----------------------------------------------------- -->
   
+  <!-- ------------------- DisplayOriginalIcon ------------------------ 
+      Display the original spotted icon.                            -->
+  <DisplayOriginalIcon>false</DisplayOriginalIcon>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconInactivePosition ------------------------ -->    
+  <IconInactivePosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconInactivePosition>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconSpottedPosition ------------------------  -->   
+  <IconSpottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconSpottedPosition>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconUnspottedPosition ------------------------  -->   
+  <IconUnspottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconUnspottedPosition>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconInactivePath ------------------------ -->
+  <IconInactivePath>scripts/client/plugins/SixthSenseDuration_plugin/resources/inactive.dds</IconInactivePath>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconUnspottedPath ------------------------ -->
+  <IconUnspottedPath>scripts/client/plugins/SixthSenseDuration_plugin/resources/unspotted.dds</IconUnspottedPath>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconSpottedPath ------------------------ -->
+  <IconSpottedPath>scripts/client/plugins/SixthSenseDuration_plugin/resources/spotted.dds</IconSpottedPath>
+  <!-- ----------------------------------------------------- -->
+  
+  
   <!-- ----------------- AudioIsExternal -------------------
       Set it to true to enable the external audio reader. -->
   <AudioIsExternal>true</AudioIsExternal>
@@ -17,8 +47,7 @@
   <!-- ----------------- AudioExternal -------------------
       A list of cmd commands to run the external audio. -->
   <AudioExternal>
-    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/dlc.exe</item>
-    <item>-p</item>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/cmdmp3win.exe</item>
     <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3</item>
   </AudioExternal>
   <!-- ----------------------------------------------------- -->
@@ -45,7 +74,7 @@
       Example:
       * "9000" : 9 seconds  
       * "0" : no audio      -->
-  <AudioRange>9000</AudioRange>
+  <AudioRange>10000</AudioRange>
   <!-- ----------------------------------------------------- -->
   
   
@@ -54,8 +83,9 @@
       Generally this is usefull to repeat sounds that are smaller than 
       the AudioRange value. If setted to 1000, it represent a clock.      
       Example:
-      * "1000" : the sound repeat each 1 second for AudioRange/AudioTick = 9 times  -->
-  <AudioTick>1000</AudioTick>
+      * "1000" : the sound repeat each 1 second for AudioRange/AudioTick = 9 times  
+      * "9000" : the sound repeat each 1 second for AudioRange/AudioTick = 1 time                                                       -->
+  <AudioTick>10000</AudioTick>
   <!-- ----------------------------------------------------- -->
   
   
