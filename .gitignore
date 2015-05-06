@@ -2,4 +2,5 @@ libs/
 files/originals/
 files/pyd/
 *.bat
-.gitignore
+AutoAim_plugin
+*.gitignore

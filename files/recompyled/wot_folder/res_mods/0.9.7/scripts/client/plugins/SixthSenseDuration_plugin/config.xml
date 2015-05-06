@@ -9,7 +9,14 @@
       Note: this will set the duration of both original icon and own icons      
       Example:
       * "2000" : The spot Icon stay for 2 seconds -->
-  <IconRange>2000</IconRange>
+  <IconRange>9000</IconRange>
+  <!-- ----------------------------------------------------- -->
+  
+  <!-- ------------------- IconSpottedSize ------------------------
+  		This attribute determines what operation is used to render the icons onto the background.
+        Possible values are ADD, BLEND, BLEND_COLOUR, BLEND_INVERSE_COLOUR, SOLID, MODULATE2X, ALPHA_TEST, BLEND_INVERSE_ALPHA, BLEND2X, ADD_SIGNED 
+        "BLEND", which applies the alpha channel transparency, "SOLID" which ignores the alpha channel and overwrites the background, and "ADD" which just adds the colour to the existing background colour, making the component look like it is transparent and glowing. The default is "ADD". Note that ADD_SIGNED is a fudge, it basically performs a MOD2 blend with the frame buffer. For most situations this should be fine. -->
+  <materialFX>ADD</materialFX>
   <!-- ----------------------------------------------------- -->
   
   <!-- ------------------- DisplayOriginalIcon ------------------------ 
@@ -92,6 +99,7 @@
   		The size of the icon shown  when sixthsense is enabled and you are spotted -->
   <IconSpottedSize>52 52</IconSpottedSize>
   <!-- ----------------------------------------------------- -->
+
   
   
   

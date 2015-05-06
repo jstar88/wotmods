@@ -43,7 +43,8 @@ class SixthSenseDuration:
               'IconSpottedPath': "scripts/client/plugins/SixthSenseDuration_plugin/resources/spotted.dds",
               'IconSpottedSize': (52,52),
               'IconUnspottedSize': (52,52),
-              'IconInactiveSize': (52,52)
+              'IconInactiveSize': (52,52),
+              'materialFX': 'ADD'
     }
     guiCountDown = None
     backupVolume = None 
@@ -100,6 +101,7 @@ class SixthSenseDuration:
         SixthSenseDuration.initGuiUnspotted()
         SixthSenseDuration.guiSpotted.visible = isShow
         SixthSenseDuration.guiUnspotted.visible = not isShow
+        SixthSenseDuration.guiInactive.visible = False
         BigWorld.callback(SixthSenseDuration.myConf['IconRange']/1000,SixthSenseDuration.invertIcons)
             
         SixthSenseDuration.startGuiCountDown()
@@ -192,6 +194,7 @@ class SixthSenseDuration:
         item.verticalAnchor = 'TOP'
         item.position = position
         item.size = size
+        item.materialFX = SixthSenseDuration.myConf['materialFX']
         return item
     
     @staticmethod

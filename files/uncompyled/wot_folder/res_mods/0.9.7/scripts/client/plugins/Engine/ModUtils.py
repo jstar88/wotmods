@@ -107,7 +107,7 @@ class MinimapUtils:
 class FileUtils:
     
     @staticmethod
-    def readElement(value,defaultValue,filename=""):
+    def readElement(value,defaultValue,filename="",ke = ""):
         if type(defaultValue) is list:
             value = value.values()
             tmp = []
@@ -116,7 +116,7 @@ class FileUtils:
                     LOG_WARNING(filename+": missing list entry",k+1)
                     tmp.append(v)
                 else:
-                    tmp.append(FileUtils.readElement(value[k],v,filename))
+                    tmp.append(FileUtils.readElement(value[k],v,filename,k))
             return tmp
         if type(defaultValue) is tuple:
             values = filter(None, value.asString.split(" "))
@@ -126,7 +126,7 @@ class FileUtils:
                     LOG_WARNING(filename+": missing tuple entry",k+1)
                     tmp += (v)
                 else:
-                    miniTuple = (FileUtils.readElement(values[k],v,filename),)
+                    miniTuple = (FileUtils.readElement(values[k],v,filename,k),)
                     tmp += miniTuple
             return tmp
         if type(defaultValue) is dict:
@@ -141,48 +141,42 @@ class FileUtils:
                     LOG_WARNING(filename+": missing dict key",k)
                     tmp[k] = v
                 else:
-                    tmp[k]= FileUtils.readElement(value[k],v,filename)
+                    tmp[k]= FileUtils.readElement(value[k],v,filename,k)
             return tmp
         if type(defaultValue) is int:
+            if type(value) is not str:
+                value = value.asString
             try:
-                if type(value) is str:
-                    value = int(value)
-                else:
-                    value = value.asInt
+                value = int(value)
             except Exception:
-                LOG_WARNING(filename+": wrong value type",value.asString)
+                LOG_WARNING(filename+" in key '"+ ke +"': wrong value type",value)
                 value = defaultValue
             return value
         if type(defaultValue) is float:
+            if type(value) is not str:
+                value = value.asString
             try:
-                if type(value) is str:
-                    value = float(value)
-                else:
-                    value = value.asFloat
+                value = float(value)
             except Exception:
-                LOG_WARNING(filename+": wrong value type",value.asString)
+                LOG_WARNING(filename+" in key '"+ ke +"': wrong value type",value)
                 value = defaultValue
             return value
         if type(defaultValue) is bool:
-            try:
-                if type(value) is str:
-                    value = bool(value)
-                else:
-                    value = value.asBool
-            except Exception:
-                if value.asString == "True":
-                    value = True
-                elif value.asString == "False":
-                    value = False
-                else:
-                    LOG_WARNING(filename+": wrong value type",value.asString)
-                    value = defaultValue
+            if type(value) is not str:
+                value = value.asString
+            if value.lower() == "true":
+                value = True
+            elif value.lower() == "false":
+                value = False
+            else:
+                LOG_WARNING(filename+" in key '"+ ke +"': wrong value type",value)
+                value = defaultValue
             return value
         if type(defaultValue) is str:
             if type(value) is str:
                 return value
             return value.asString
-        LOG_ERROR(filename+": type not found",type(defaultValue))
+        LOG_ERROR(filename+": type not found in key '"+ ke+"'",type(defaultValue))
         return None
         
     
@@ -192,7 +186,7 @@ class FileUtils:
         if cfg is None:
             LOG_WARNING('no config found')
             return defset
-        return FileUtils.readElement(cfg, defset, filename)
+        return FileUtils.readElement(cfg, defset, filename,'root')
     
     @staticmethod
     def readConfig(path, defset, fromfile = ''):
