@@ -117,8 +117,8 @@ class SixthSenseDuration:
 
     @staticmethod
     def invertIcons():
-        SixthSenseDuration.guiSpotted.visible = not SixthSenseDuration.guiSpotted.visible
-        SixthSenseDuration.guiUnspotted.visible = not SixthSenseDuration.guiUnspotted.visible
+        SixthSenseDuration.guiSpotted.visible = False
+        SixthSenseDuration.guiUnspotted.visible = True
     
     # --------------- icon ------------- #
     @staticmethod
