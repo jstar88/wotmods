@@ -219,7 +219,7 @@
       http://www.w3schools.com/tags/ref_colorpicker.asp  
       Example:
       * "#FF8000" : orange   -->
-  <TimerColor>#FF0000</TimerColor>
+  <TimerColor>#FF8000</TimerColor>
   <!-- ----------------------------------------------------- -->
   
   
@@ -238,7 +238,7 @@
       Y is your screen's height
       Example:
       * "(round(x / 2) + 120, round(y / 6) + 20, 0.7)" : (x,y,z)   -->
-  <TimerPosition>(round(x / 2) + 120, round(y / 6) + 20, 0.7)</TimerPosition>
+  <TimerPosition>(round(x / 2) + 200.0,  30.0, 0.7)</TimerPosition>
   <!-- ----------------------------------------------------- -->
   
   
