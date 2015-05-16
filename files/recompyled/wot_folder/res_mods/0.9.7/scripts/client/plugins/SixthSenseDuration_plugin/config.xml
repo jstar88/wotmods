@@ -115,8 +115,8 @@
   <!-- ----------------- AudioExternal -------------------
       A list of cmd commands to run the external audio. -->
   <AudioExternal>
-    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/cmdmp3win.exe</item>
-    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3</item>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sounder.exe</item>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.wav</item>
   </AudioExternal>
   <!-- ----------------------------------------------------- -->
   
