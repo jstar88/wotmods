@@ -33,7 +33,7 @@ class Statistics(object):
     t = None
     lastime = 0 
     config = {
-              'pluginEnable': True,
+              'pluginEnable': False,
               
               'delay' : 1,
               'maxentries' : 3,
@@ -41,42 +41,86 @@ class Statistics(object):
               'region' : 'eu',
               'pr_index': 'global_rating',
               'lang_index': 'client_language',
-              'wr_index': 'Statisticss.all.wins',
-              'battles_index': 'Statisticss.all.battles',
+              'wr_index': 'statistics.all.wins',
+              'battles_index': 'statistics.all.battles',
               'application_id': 'demo',
               'url': 'http://api.worldoftanks.{region}/wot/account/info/?application_id={application_id}&fields={pr_index},{lang_index},{wr_index},{battles_index}&account_id={id}',
               
               'panels_enable' : True,
-              'left' : "<font color='#{color}'>{lang}</font>  {player_name}<br/>",
-              'right' : "<font color='#{color}'>{lang}</font>  {player_name}<br/>",
-              'left_c' : "<font size='17' color='#{color}'>«</font><font color='#{color}'>{lang}</font><font size='17' color='#{color}'>»</font>  {player_name}<br/>",
-              'right_c' : "<font size='17' color='#{color}'>«</font><font color='#{color}'>{lang}</font><font size='17' color='#{color}'>»</font>  {player_name}<br/>",
+              'left' : "<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>",
+              'right' : "<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>",
+              'left_c' : "<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>",
+              'right_c' : "<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>",
               
               'marker_enable' : True,
-              'marker' : ' {rating}',
+              'marker' : ' {pr}',
               
               'chat_enable' : True,
               
               'battle_loading_enable' : True,
-              'battle_loading_string_left' : '  {lang}|{win_rate}%|{rating}',
-              'battle_loading_string_right' : '{lang}|{win_rate}%|{rating}  ',
+              'battle_loading_string_left' : '  {lang}|{wr}%|{pr}',
+              'battle_loading_string_right' : '{lang}|{wr}%|{pr}  ',
               
               'tab_enable': True,
-              'tab_left': '{lang}|{win_rate}%|{rating}  ',
-              'tab_right': '  {lang}|{win_rate}%|{rating}',
-              'tab_left_c': '«{lang}»|{win_rate}%|{rating}  ',
-              'tab_right_c': '  «{lang}»|{win_rate}%|{rating}',
+              'tab_left': '{lang}|{wr}%|{pr}  ',
+              'tab_right': '  {lang}|{wr}%|{pr}',
+              'tab_left_c': '«{lang}»|{wr}%|{pr}  ',
+              'tab_right_c': '  «{lang}»|{wr}%|{pr}',
               
               'win_chance_enable': True,
               'win_chance_text': "( Chance for win: <font color='{color}'>{win_chance}%</font> )",
               
-              'colors':[{'min':0,'color':'FE0E00'},
+              'colors_pr':[{'min':0,'color':'FE0E00'},
                         {'min':2020,'color':'FE7903'},
                         {'min':4185,'color':'F8F400'},
                         {'min':6340,'color':'60FF00'},
                         {'min':8525,'color':'02C9B3'},
                         {'min':9930,'color':'D042F3'},
-                        {'min':11000,'color':'490A59'}]
+                        {'min':11000,'color':'490A59'}],
+              
+              'colors_wr':[{'min':0,'color':'FE0E00'},
+                        {'min':40,'color':'FE7903'},
+                        {'min':48,'color':'F8F400'},
+                        {'min':53,'color':'60FF00'},
+                        {'min':55,'color':'02C9B3'},
+                        {'min':58,'color':'D042F3'},
+                        {'min':61,'color':'490A59'}],
+              
+              'colors_bt':[{'min':0,'color':'FE0E00'},
+                        {'min':2000,'color':'FE7903'},
+                        {'min':8000,'color':'F8F400'},
+                        {'min':15000,'color':'60FF00'},
+                        {'min':22000,'color':'02C9B3'},
+                        {'min':26000,'color':'D042F3'},
+                        {'min':32000,'color':'490A59'}],
+              
+              'panels_bt_divisor':1000,
+              'panels_bt_decimals':0,
+              'panels_pr_divisor':1000,
+              'panels_pr_decimals':0,
+              'panels_wr_decimals':0,
+              'panels_wr_divisor':1,
+              
+              'marker_bt_divisor':1000,
+              'marker_bt_decimals':0,
+              'marker_pr_divisor':1000,
+              'marker_pr_decimals':0,
+              'marker_wr_decimals':0,
+              'marker_wr_divisor':1,
+              
+              'battle_loading_bt_divisor':1000,
+              'battle_loading_bt_decimals':0,
+              'battle_loading_pr_divisor':1000,
+              'battle_loading_pr_decimals':0,
+              'battle_loading_wr_decimals':0,
+              'battle_loading_wr_divisor':1,
+              
+              'tab_bt_divisor':1000,
+              'tab_bt_decimals':0,
+              'tab_pr_divisor':1000,
+              'tab_pr_decimals':0,
+              'tab_wr_decimals':0,
+              'tab_wr_divisor':1
               
               }
     
@@ -131,22 +175,53 @@ class Statistics(object):
         return (wins,lang,wr,battles)
     
     @staticmethod
-    def getColor(PR):
+    def getColor(PR,type='pr'):
         if not PR:
             return ''
-        last = None
-        levels = Statistics.config['colors']
+        levels = Statistics.config['colors_'+type]
+        last = levels[0]['color']
         for level in levels:
-            if last is None:
-                last = level['color']
             if PR < level['min']:
                 return last
             last = level['color']
         return last
     
+    @staticmethod
+    def prettyNumber(number,type):
+        divisor = Statistics.config[type+'_divisor']
+        decimals = Statistics.config[type+'_decimals']
+        value = 1.0*number / divisor 
+        if decimals == 0:
+            return int(round(value))
+        return round(value,decimals)
+    
+    @staticmethod
+    def updateWithNumbersDict(orig,couples,group):
+        numberDict={}
+        for name,value in couples.iteritems():
+            numberDict[name]= Statistics.prettyNumber(value,group+'_'+name)
+        orig.update(numberDict)
+        return orig
+    
+    @staticmethod
+    def getFormat(type,pr,wr,bt,lang,player_name='',tank_name=''):
+       formatz = {'player_name':player_name, 'lang':lang, 'tank_name':tank_name}
+       couple = {'pr':pr,'wr':wr,'bt':bt}
+       formatz = Statistics.updateWithColorDict(formatz, couple)
+       formatz = Statistics.updateWithNumbersDict(formatz, couple,type) 
+       return formatz
+    
+    @staticmethod
+    def updateWithColorDict(orig,couples):
+        colorDict={}
+        for name,value in couples.iteritems():
+            colorDict['color_'+name]= Statistics.getColor(value, name)
+        orig.update(colorDict)
+        return orig
+    
     @staticmethod        
-    def isMyCompatriot(tid):
-        curVeh = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]
+    def isMyCompatriot(tid,player):
+        curVeh = player.arena.vehicles[player.playerVehicleID]
         id = curVeh['accountDBID']
         if id == tid :
             return False
@@ -158,25 +233,25 @@ class Statistics(object):
     def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName):
         if not Statistics.okCw() or not Statistics.config['panels_enable']:
             return old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
+        player = BigWorld.player()
         uid = vInfoVO.player.accountDBID
-        wins,lang,wr,bt = Statistics.getInfos(uid)
+        pr,lang,wr,bt = Statistics.getInfos(uid)
         player_name = fullPlayerName
         tank_name = vInfoVO.vehicleType.shortName
         fullPlayerName, fragsString, shortName =  old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
-        color = Statistics.getColor(wins)
         if BattleUtils.isMyTeam(vInfoVO.team):
-            if Statistics.isMyCompatriot(uid):
+            if Statistics.isMyCompatriot(uid,player):
                 fullPlayerName = str(Statistics.config['left_c'])
             else:
                 fullPlayerName = str(Statistics.config['left'])
         else:
-            if Statistics.isMyCompatriot(uid):
+            if Statistics.isMyCompatriot(uid,player):
                 fullPlayerName = str(Statistics.config['right_c'])
             else:
                 fullPlayerName = str(Statistics.config['right'])
-        bt = round(bt /1000)
-        wr = round(wr,1)
-        formatz = {'color':color, 'rating':wins, 'player_name':player_name, 'lang':lang, 'tank_name':tank_name, 'win_rate':wr, 'battle_amount':bt}
+        
+        
+        formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name)
         fullPlayerName = fullPlayerName.format(**formatz)
         return (fullPlayerName, fragsString, shortName)
      
@@ -201,6 +276,7 @@ class Statistics(object):
         vInfo = dict(vProxy.publicInfo)
         if g_sessionProvider.getCtx().isObserver(vProxy.id):
             return -1
+        player = BigWorld.player()
         isFriend = BattleUtils.isMyTeam(vInfo['team'])
         vInfoEx = g_sessionProvider.getArenaDP().getVehicleInfo(vProxy.id)
         vTypeDescr = vProxy.typeDescriptor
@@ -209,7 +285,7 @@ class Statistics(object):
         tags = set(vTypeDescr.type.tags & VEHICLE_CLASS_TAGS)
         vClass = tags.pop() if len(tags) > 0 else ''
         entityName = g_sessionProvider.getCtx().getPlayerEntityName(vProxy.id, vInfoEx.team)
-        entityType = 'ally' if BigWorld.player().team == vInfoEx.team else 'enemy'
+        entityType = 'ally' if player.team == vInfoEx.team else 'enemy'
         speaking = False
         if GUI_SETTINGS.voiceChat:
             speaking = VoiceChatInterface.g_instance.isPlayerSpeaking(vInfoEx.player.accountDBID)
@@ -219,13 +295,11 @@ class Statistics(object):
         fullName, pName, clanAbbrev, regionCode, vehShortName = g_sessionProvider.getCtx().getFullPlayerNameWithParts(vProxy.id)
         #new code
         PR = ''
-        curVeh = BigWorld.player().arena.vehicles[vProxy.id]
+        curVeh = player.arena.vehicles[vProxy.id]
         if curVeh is not None:
             curID = curVeh['accountDBID']
-            wins,lang,wr,bt = Statistics.getInfos(curID)
-            bt = round(bt /1000)
-            wr = round(wr,1)
-            formatz = {'rating':wins,'lang':lang,'battle_amount':bt,'win_rate':wr,'color':Statistics.getColor(wins)}
+            pr,lang,wr,bt = Statistics.getInfos(curID)
+            formatz= Statistics.getFormat('marker',pr, wr, bt, lang)
             PR = Statistics.config['marker'].format(**formatz)
         self.invokeMarker(handle, 'init', [vClass,
             vInfoEx.vehicleType.iconPath,
@@ -248,10 +322,8 @@ class Statistics(object):
     def new_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam):
         old_return = old_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam)
         if Statistics.config['battle_loading_enable'] and Statistics.okCw():
-            wins,lang,wr,bt = Statistics.getInfos(vInfoVO.player.accountDBID)
-            bt = round(bt /1000)
-            wr = round(wr,1)
-            formatz = {'rating':wins,'lang':lang,'battle_amount':bt,'win_rate':wr,'color':Statistics.getColor(wins)}
+            pr,lang,wr,bt = Statistics.getInfos(vInfoVO.player.accountDBID)
+            formatz= Statistics.getFormat('battle_loading',pr, wr, bt, lang)
             if BattleUtils.isMyTeam(vInfoVO.team):
                 s = Statistics.config['battle_loading_string_left'].format(**formatz)
                 old_return['playerName'] = s + old_return['playerName']
@@ -269,6 +341,7 @@ class Statistics(object):
         playerVO = vInfoVO.player
         dbID = playerVO.accountDBID
         user = userGetter(dbID)
+        player = BigWorld.player()
         if user:
             roster = _getRoster(user)
             isMuted = user.isMuted()
@@ -280,21 +353,19 @@ class Statistics(object):
         region = regionGetter(dbID)
         if region is None:
             region = ''
-        wins,lang,wr,bt = Statistics.getInfos(dbID)
-        color = Statistics.getColor(wins)
+        pr,lang,wr,bt = Statistics.getInfos(dbID)
         if BattleUtils.isMyTeam(vInfoVO.team):
-            if Statistics.isMyCompatriot(dbID):
+            if Statistics.isMyCompatriot(dbID,player):
                 userName = str(Statistics.config['tab_left_c']) + userName
             else:
                 userName = str(Statistics.config['tab_left']) + userName
         else:
-            if Statistics.isMyCompatriot(dbID):
+            if Statistics.isMyCompatriot(dbID,player):
                 region += str(Statistics.config['tab_right_c'])
             else:
                 region += str(Statistics.config['tab_right'])
-        bt = round(bt /1000)
-        wr = round(wr,1)
-        formatz = {'color':color, 'rating':wins, 'lang':lang, 'win_rate':wr, 'battle_amount':bt}
+        
+        formatz= Statistics.getFormat('tab',pr, wr, bt, lang)
         userName = userName.format(**formatz)
         region = region.format(**formatz)
     
@@ -343,7 +414,7 @@ class Statistics(object):
             return
         curVeh = vehicles[player.playerVehicleID]
         Statistics.getInfos(curVeh['accountDBID'])
-        vehicles[BigWorld.player().playerVehicleID]['team']
+        vehicles[player.playerVehicleID]['team']
         ally_balance_weight = 0
         enemy_balance_weight = 0
         for accountDBID,entityObj in Statistics.getEmo().getAll().iteritems():

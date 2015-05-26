@@ -20,6 +20,8 @@ class SixthSenseDuration:
               'AudioPath': '/GUI/notifications_FX/cybersport_timer',
               'AudioIsExternal': True,
               'AudioExternal': ['res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/cmdmp3win.exe',
+                                '/stop',
+                                '/timer 10000',
                                 'res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3'],
               'AudioRange': 9000,
               'AudioTick': 1000,
@@ -123,6 +125,7 @@ class SixthSenseDuration:
     # --------------- icon ------------- #
     @staticmethod
     def onChangedVeh():
+        LOG_NOTE('onChangedVeh')
         for c in g_currentVehicle.item.crew:
             tankcrew = c[1]
             if tankcrew is None:
@@ -132,8 +135,10 @@ class SixthSenseDuration:
                 commander_sixthSense = skills['commander_sixthSense']
                 if commander_sixthSense.isActive and commander_sixthSense.isEnable:
                     SixthSenseDuration.hasSixthSense = True
+                    LOG_NOTE('True')
                     return
         SixthSenseDuration.hasSixthSense = False
+        LOG_NOTE('False')
     
     
     @staticmethod

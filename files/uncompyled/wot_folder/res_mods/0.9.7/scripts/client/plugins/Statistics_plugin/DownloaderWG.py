@@ -18,7 +18,8 @@ class DownloaderWG(object):
     def getEntities(self,ids):
         self.formatz['id'] = ','.join(map(str,ids))
         tmp = []
-        ens = safe_list_get(json.loads(urllib2.urlopen(self.url.format(**self.formatz), timeout=30).read()),'data',None)
+        data = urllib2.urlopen(self.url.format(**self.formatz), timeout=30).read()
+        ens = safe_list_get(json.loads(data),'data',None)
         if ens is None:
             LOG_NOTE('players is None')
         else:
