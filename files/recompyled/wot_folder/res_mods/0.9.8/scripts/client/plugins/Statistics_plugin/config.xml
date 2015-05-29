@@ -53,14 +53,22 @@
        *********  rating on chat name ************* 
        ******************************************** -->
   <chat_enable>true</chat_enable>
+  <!-- html for chat replacing the current player full name --> 
+  <chat><![CDATA[{player_name}|{pr}]]></chat> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt}-->
   
+  <chat_bt_divisor>1000</chat_bt_divisor>
+  <chat_bt_decimals>0</chat_bt_decimals>
+  <chat_pr_divisor>1</chat_pr_divisor>
+  <chat_pr_decimals>0</chat_pr_decimals>
+  <chat_wr_decimals>0</chat_wr_decimals>
+  <chat_wr_divisor>1</chat_wr_divisor>
   
   <!-- ********************************************
        *********  marker on every tank ************ 
        ******************************************** -->
   <marker_enable>true</marker_enable> 
-  <!-- html for marker --> 
-  <marker><![CDATA[ {pr}]]></marker> <!-- {lang} {pr}{wr}{bt}-->
+  <!-- html for marker replacing the current player full name --> 
+  <marker><![CDATA[{player_name} {pr}]]></marker> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt}-->
   
   <marker_bt_divisor>1000</marker_bt_divisor>
   <marker_bt_decimals>0</marker_bt_decimals>

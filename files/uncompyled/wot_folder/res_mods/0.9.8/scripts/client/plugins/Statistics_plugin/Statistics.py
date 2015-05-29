@@ -8,24 +8,21 @@ import BigWorld
 import threading
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from avatar import PlayerAvatar
-from gui.Scaleform.daapi.view.battle.PlayersPanel import PlayersPanel
 from gui.battle_control.BattleContext import BattleContext
-from gui.battle_control.arena_info import getClientArena
 from gui.battle_control import g_sessionProvider
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui import GUI_SETTINGS    
 from gui.Scaleform import VoiceChatInterface
 from gui.battle_control.arena_info.arena_vos import VehicleActions
-from gui.Scaleform.Battle import _VehicleMarker, VehicleMarkersManager
+from gui.Scaleform.daapi.view.battle.markers import _VehicleMarker, MarkersManager
 from gui.Scaleform.daapi.view.BattleLoading import BattleLoading
 from gui.battle_control.battle_arena_ctrl import BattleArenaController
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.shared.utils.functions import getBattleSubTypeWinText
 from gui.battle_control.arena_info import getClientArena, getArenaTypeID
 from gui.WindowsManager import g_windowsManager
 from EntityManagerOnline import EntityManagerOnline
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
-from gui.battle_control.battle_arena_ctrl import _getRoster
+from gui.Scaleform.Battle import Battle
 
 class Statistics(object):
     
@@ -53,9 +50,10 @@ class Statistics(object):
               'right_c' : "<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>",
               
               'marker_enable' : True,
-              'marker' : ' {pr}',
+              'marker' : '{player_name} {pr}',
               
               'chat_enable' : True,
+              'chat':'{player_name}|{pr}',
               
               'battle_loading_enable' : True,
               'battle_loading_string_left' : '  {lang}|{wr}%|{pr}',
@@ -100,6 +98,13 @@ class Statistics(object):
               'panels_pr_decimals':0,
               'panels_wr_decimals':0,
               'panels_wr_divisor':1,
+              
+              'chat_bt_divisor':1000,
+              'chat_bt_decimals':0,
+              'chat_pr_divisor':1000,
+              'chat_pr_decimals':0,
+              'chat_wr_decimals':0,
+              'chat_wr_divisor':1,
               
               'marker_bt_divisor':1000,
               'marker_bt_decimals':0,
@@ -174,6 +179,47 @@ class Statistics(object):
             battles = player.getBattlesAmount()
         return (wins,lang,wr,battles)
     
+    
+    @staticmethod
+    def hex_to_rgb(value):
+        #value = value.lstrip('#')
+        lv = len(value)
+        return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+
+    @staticmethod
+    def rgb_to_hex(rgb):
+        return '%02x%02x%02x' % rgb
+    
+    @staticmethod
+    def hsl_to_rgb(c):
+       import colorsys
+       return colorsys.hls_to_rgb(c[0],c[1],c[2])
+
+    @staticmethod
+    def rgb_to_hsl(c):
+        import colorsys
+        return colorsys.rgb_to_hls(c[0],c[1],c[2])
+    
+    
+    
+    @staticmethod
+    def changeLightness(hes,lum):
+        LOG_NOTE(hes)
+        rgb = Statistics.hex_to_rgb(hes)
+        LOG_NOTE(rgb)
+        hsl = Statistics.rgb_to_hsl(rgb)
+        LOG_NOTE(hsl)
+        hsl = (hsl[0],hsl[1],hsl[2]*lum)
+        LOG_NOTE(hsl)
+        rgb = Statistics.hsl_to_rgb(hsl)
+        LOG_NOTE(rgb)
+        hes = Statistics.rgb_to_hex(rgb)
+        LOG_NOTE(hes)
+        return hes
+        
+    
+    
+    
     @staticmethod
     def getColor(PR,type='pr'):
         if not PR:
@@ -204,18 +250,21 @@ class Statistics(object):
         return orig
     
     @staticmethod
-    def getFormat(type,pr,wr,bt,lang,player_name='',tank_name=''):
+    def getFormat(type,pr,wr,bt,lang,player_name='',tank_name='',isAlive=True):
        formatz = {'player_name':player_name, 'lang':lang, 'tank_name':tank_name}
        couple = {'pr':pr,'wr':wr,'bt':bt}
-       formatz = Statistics.updateWithColorDict(formatz, couple)
+       formatz = Statistics.updateWithColorDict(formatz, couple, isAlive)
        formatz = Statistics.updateWithNumbersDict(formatz, couple,type) 
        return formatz
     
     @staticmethod
-    def updateWithColorDict(orig,couples):
+    def updateWithColorDict(orig,couples, isAlive=True):
         colorDict={}
         for name,value in couples.iteritems():
-            colorDict['color_'+name]= Statistics.getColor(value, name)
+            color = Statistics.getColor(value, name)
+            #if not isAlive:
+            #    color = Statistics.changeLightness(color, 0.8)
+            colorDict['color_'+name]= color
         orig.update(colorDict)
         return orig
     
@@ -229,6 +278,7 @@ class Statistics(object):
             return False
         return Statistics.getEmo().getEntity(id).getClientLang() == Statistics.getEmo().getEntity(tid).getClientLang()
     
+    #("<font color='#ffffff'>some</font><br/>", "<font color='#ffffff'> </font><br/>", "<font color='#ffffff'>M41 Bulldog</font><br/>")
     @staticmethod
     def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName):
         if not Statistics.okCw() or not Statistics.config['panels_enable']:
@@ -251,76 +301,88 @@ class Statistics(object):
                 fullPlayerName = str(Statistics.config['right'])
         
         
-        formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name)
+        formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,vInfoVO.isAlive())
         fullPlayerName = fullPlayerName.format(**formatz)
         return (fullPlayerName, fragsString, shortName)
      
     @staticmethod
-    def new__getFullPlayerNameWithParts(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
-        fullName, pName, clanAbbrev, regionCode, vehShortName = old__getFullPlayerNameWithParts(self, vID, accID, pName, showVehShortName, showClan, showRegion)
+    def new__getFullPlayerName(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
+        fullName,pName,clanAbbrev,regionCode,vehName = self.getFullPlayerNameWithParts(vID, accID, pName, showVehShortName, showClan,showRegion)
+        
+        if vID is None:
+            vID = self._BattleContext__arenaDP.getVehIDByAccDBID(accID)
+        vInfo = self._BattleContext__arenaDP.getVehicleInfo(vID)
+        if accID is None:
+            accID = vInfo.player.accountDBID
+        
         if accID is not None and Statistics.config['chat_enable'] and Statistics.okCw():
-            wins,lang,wr,bt = Statistics.getInfos(accID)
-            if wins:
-                fullName = str(wins) + ' ' + fullName
-                pName = str(wins) + ' ' + pName
-        return (fullName,
-            pName,
-            clanAbbrev,
-            regionCode,
-            vehShortName)    
+            pr,lang,wr,bt = Statistics.getInfos(accID)
+            formatz= Statistics.getFormat('chat',pr, wr, bt, lang,fullName,vehName)
+            tmp = Statistics.config['chat'].format(**formatz)
+        return tmp
     
     @staticmethod
     def new__createMarker(self, vProxy):
         if not Statistics.config['marker_enable'] or BattleUtils.isCw():
             return old_createMarker(self, vProxy)
-        vInfo = dict(vProxy.publicInfo)
-        if g_sessionProvider.getCtx().isObserver(vProxy.id):
-            return -1
+        
         player = BigWorld.player()
-        isFriend = BattleUtils.isMyTeam(vInfo['team'])
-        vInfoEx = g_sessionProvider.getArenaDP().getVehicleInfo(vProxy.id)
+        
+        #----------- original code ------------------
+        vInfo = dict(vProxy.publicInfo)
+        battleCtx = g_sessionProvider.getCtx()
+        if battleCtx.isObserver(vProxy.id):
+            return -1
+        isFriend = vInfo['team'] == player.team
+        vehID = vProxy.id
+        vInfoEx = g_sessionProvider.getArenaDP().getVehicleInfo(vehID)
         vTypeDescr = vProxy.typeDescriptor
         maxHealth = vTypeDescr.maxHealth
         mProv = vProxy.model.node('HP_gui')
         tags = set(vTypeDescr.type.tags & VEHICLE_CLASS_TAGS)
         vClass = tags.pop() if len(tags) > 0 else ''
-        entityName = g_sessionProvider.getCtx().getPlayerEntityName(vProxy.id, vInfoEx.team)
+        entityName = battleCtx.getPlayerEntityName(vehID, vInfoEx.team)
         entityType = 'ally' if player.team == vInfoEx.team else 'enemy'
         speaking = False
         if GUI_SETTINGS.voiceChat:
             speaking = VoiceChatInterface.g_instance.isPlayerSpeaking(vInfoEx.player.accountDBID)
         hunting = VehicleActions.isHunting(vInfoEx.events)
-        handle = self._VehicleMarkersManager__ownUI.addMarker(mProv, 'VehicleMarkerAlly' if isFriend else 'VehicleMarkerEnemy')
-        self._VehicleMarkersManager__markers[handle] = _VehicleMarker(vProxy, self._VehicleMarkersManager__ownUIProxy, handle)
-        fullName, pName, clanAbbrev, regionCode, vehShortName = g_sessionProvider.getCtx().getFullPlayerNameWithParts(vProxy.id)
-        #new code
+        handle = self._MarkersManager__ownUI.addMarker(mProv, 'VehicleMarkerAlly' if isFriend else 'VehicleMarkerEnemy')
+        self._MarkersManager__markers[handle] = _VehicleMarker(vProxy, self._MarkersManager__ownUIProxy(), handle)
+        fullName, pName, clanAbbrev, regionCode, vehShortName = battleCtx.getFullPlayerNameWithParts(vProxy.id)
+        #----- end -------
+        
         PR = ''
         curVeh = player.arena.vehicles[vProxy.id]
         if curVeh is not None:
             curID = curVeh['accountDBID']
             pr,lang,wr,bt = Statistics.getInfos(curID)
-            formatz= Statistics.getFormat('marker',pr, wr, bt, lang)
+            formatz= Statistics.getFormat('marker',pr, wr, bt, lang,pName,vehShortName)
             PR = Statistics.config['marker'].format(**formatz)
+            pName = PR
+        
+        #----------- original code ------------------
         self.invokeMarker(handle, 'init', [vClass,
-            vInfoEx.vehicleType.iconPath,
-            vehShortName,
-            vInfoEx.vehicleType.level,
-            fullName,
-            pName + PR,
-            clanAbbrev,
-            regionCode,
-            vProxy.health,
-            maxHealth,
-            entityName.name(),
-            speaking,
-            hunting,
-            entityType])
-        self._VehicleMarkersManager__parentUI.call('minimap.entryInited', [])
+         vInfoEx.vehicleType.iconPath,
+         vehShortName,
+         vInfoEx.vehicleType.level,
+         fullName,
+         pName,
+         clanAbbrev,
+         regionCode,
+         vProxy.health,
+         maxHealth,
+         entityName.name(),
+         speaking,
+         hunting,
+         entityType,
+         self.isVehicleFlagbearer(vehID)])
         return handle
+        #----------- end -----------------
     
     @staticmethod
-    def new_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam):
-        old_return = old_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam)
+    def new_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy):
+        old_return = old_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam,isEnemy)
         if Statistics.config['battle_loading_enable'] and Statistics.okCw():
             pr,lang,wr,bt = Statistics.getInfos(vInfoVO.player.accountDBID)
             formatz= Statistics.getFormat('battle_loading',pr, wr, bt, lang)
@@ -333,24 +395,15 @@ class Statistics(object):
         return old_return
     
     @staticmethod
-    def new_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter):
+    def new_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited):
+        tmp = old_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
         if not Statistics.config['tab_enable'] or not Statistics.okCw():
-            return old_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter)
-        vehicleID = vInfoVO.vehicleID
-        vTypeVO = vInfoVO.vehicleType
-        playerVO = vInfoVO.player
-        dbID = playerVO.accountDBID
-        user = userGetter(dbID)
-        player = BigWorld.player()
-        if user:
-            roster = _getRoster(user)
-            isMuted = user.isMuted()
-        else:
-            roster = 0
-            isMuted = False
-        
-        userName = playerVO.getPlayerLabel()
+            return tmp
+
+        dbID = vInfoVO.player.accountDBID
+        userName = vInfoVO.player.getPlayerLabel()
         region = regionGetter(dbID)
+        player = BigWorld.player()
         if region is None:
             region = ''
         pr,lang,wr,bt = Statistics.getInfos(dbID)
@@ -369,35 +422,9 @@ class Statistics(object):
         userName = userName.format(**formatz)
         region = region.format(**formatz)
     
-        return {
-            'position': index + 1,
-            'label': playerFullName,
-            'userName': userName,
-            'icon': vTypeVO.iconPath,
-            'vehicle': vTypeVO.shortName,
-            'vehicleState': vInfoVO.vehicleStatus,
-            'frags': vStatsVO.frags,
-            'squad': ctx.getSquadIndex(vInfoVO),
-            'clanAbbrev': playerVO.clanAbbrev,
-            'speaking': isSpeaking(dbID),
-            'uid': dbID,
-            'himself': ctx.isPlayerSelected(vInfoVO),
-            'roster': roster,
-            'muted': isMuted,
-            'vipKilled': 0,
-            'VIP': False,
-            'teamKiller': ctx.isTeamKiller(vInfoVO),
-            'denunciations': ctx.denunciationsLeft,
-            'isPostmortemView': ctx.isPostmortemView(vInfoVO),
-            'level': vTypeVO.level if g_settingsCore.getSetting('ppShowLevels') else 0,
-            'vehAction': ctx.getAction(vInfoVO),
-            'team': vInfoVO.team,
-            'vehId': vehicleID,
-            'isIGR': playerVO.isIGR(),
-            'igrType': playerVO.igrType,
-            'igrLabel': playerVO.getIGRLabel(),
-            'isEnabledInRoaming': isMenuEnabled(dbID),
-            'region': region}
+        tmp['region'] = region
+        tmp['userName'] = userName
+        return tmp
     
     @staticmethod
     def getBalanceWeight(v_info,entityObj):
@@ -460,28 +487,41 @@ class Statistics(object):
         injectNewFuncs()
         
 def saveOldFuncs():
-    global old__onBecomePlayer,old_createMarker,old__getFullPlayerNameWithParts,old__getFormattedStrings,old_makeItem,old_makeHash,old_addArenaExtraData
+    global old__onBecomePlayer,old_createMarker,old__getFullPlayerName,old__getFormattedStrings,old_makeItem,old_makeHash,old_addArenaExtraData
     DecorateUtils.ensureGlobalVarNotExist('old__onBecomePlayer')
     DecorateUtils.ensureGlobalVarNotExist('old_createMarker')
-    DecorateUtils.ensureGlobalVarNotExist('old__getFullPlayerNameWithParts')
+    DecorateUtils.ensureGlobalVarNotExist('old__getFullPlayerName')
     DecorateUtils.ensureGlobalVarNotExist('old__getFormattedStrings')
     DecorateUtils.ensureGlobalVarNotExist('old_makeItem')
     DecorateUtils.ensureGlobalVarNotExist('old_makeHash')
     DecorateUtils.ensureGlobalVarNotExist('old_addArenaExtraData')
         
     old__onBecomePlayer = PlayerAvatar.onBecomePlayer
-    old_createMarker = VehicleMarkersManager.createMarker
-    old__getFullPlayerNameWithParts = BattleContext.getFullPlayerNameWithParts
-    old__getFormattedStrings = PlayersPanel.getFormattedStrings
+    old_createMarker = MarkersManager.createMarker
+    old__getFullPlayerName = BattleContext.getFullPlayerName
+    old__getFormattedStrings = Battle.getFormattedStrings
     old_makeItem = BattleLoading._BattleLoading__makeItem
     old_makeHash = BattleArenaController._BattleArenaController__makeHash
     old_addArenaExtraData = BattleLoading._BattleLoading__addArenaExtraData
         
 def injectNewFuncs():
-    BattleLoading._BattleLoading__addArenaExtraData = Statistics.new_addArenaExtraData
+    
+    #tab
     BattleArenaController._BattleArenaController__makeHash = Statistics.new_makeHash
-    PlayersPanel.getFormattedStrings = Statistics.new__getFormattedStrings
-    VehicleMarkersManager.createMarker = Statistics.new__createMarker
-    BattleContext.getFullPlayerNameWithParts = Statistics.new__getFullPlayerNameWithParts
+    
+    #player panels
+    Battle.getFormattedStrings = Statistics.new__getFormattedStrings
+    
+    #marker
+    MarkersManager.createMarker = Statistics.new__createMarker
+    
+    #chat
+    BattleContext.getFullPlayerName = Statistics.new__getFullPlayerName
+    
+    #winchance
+    BattleLoading._BattleLoading__addArenaExtraData = Statistics.new_addArenaExtraData
+    
+    #battleloading
     BattleLoading._BattleLoading__makeItem = Statistics.new_makeItem
+    
     g_windowsManager.onDestroyBattleGUI += Statistics.stopBattle
