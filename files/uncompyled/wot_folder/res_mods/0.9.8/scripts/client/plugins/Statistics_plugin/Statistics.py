@@ -8,8 +8,7 @@ import BigWorld
 import threading
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from avatar import PlayerAvatar
-#from gui.battle_control.BattleContext import BattleContext
-from messenger.gui.Scaleform.channels.bw_chat2.battle_controllers import _ChannelController
+from messenger.formatters.chat_message import _BattleMessageBuilder,CommonMessageBuilder
 from gui.battle_control import g_sessionProvider
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui import GUI_SETTINGS    
@@ -237,7 +236,12 @@ class Statistics(object):
     def prettyNumber(number,type):
         divisor = Statistics.config[type+'_divisor']
         decimals = Statistics.config[type+'_decimals']
-        value = 1.0*number / divisor 
+        if number == "":
+            number = 0.0
+        else:
+            number = float(number)
+        divisor = float(divisor)
+        value = number / divisor 
         if decimals == 0:
             return int(round(value))
         return round(value,decimals)
@@ -307,27 +311,21 @@ class Statistics(object):
         return (fullPlayerName, fragsString, shortName)
      
     @staticmethod
-    def new__formatMessage(self, message, doFormatting = True):
+    def new__setName(self, dbID, pName = None):
+        old__setName(self, dbID, pName)
         if Statistics.config['chat_enable'] and Statistics.okCw():
-            pr,lang,wr,bt = Statistics.getInfos(message.accountDBID)
-            formatz= Statistics.getFormat('chat',pr, wr, bt, lang,message.accountName)
-            message.accountName = Statistics.config['chat'].format(**formatz)
-        return old__formatMessage(self, message, doFormatting)
-    
-    #def new__getFullPlayerName(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
-    #    fullName,pName,clanAbbrev,regionCode,vehName = self.getFullPlayerNameWithParts(vID, accID, pName, showVehShortName, showClan,showRegion)
-    #    
-    #    if vID is None:
-    #        vID = self._BattleContext__arenaDP.getVehIDByAccDBID(accID)
-    #    vInfo = self._BattleContext__arenaDP.getVehicleInfo(vID)
-    #    if accID is None:
-    #        accID = vInfo.player.accountDBID
-    #    
-    #    if accID is not None and Statistics.config['chat_enable'] and Statistics.okCw():
-    #        pr,lang,wr,bt = Statistics.getInfos(accID)
-    #        formatz= Statistics.getFormat('chat',pr, wr, bt, lang,fullName,vehName)
-    #        fullName = Statistics.config['chat'].format(**formatz)
-    #    return fullName
+            pr,lang,wr,bt = Statistics.getInfos(dbID)
+            formatz= Statistics.getFormat('chat',pr, wr, bt, lang,self._ctx['playerName'])
+            self._ctx['playerName'] = Statistics.config['chat'].format(**formatz)
+        return self
+    @staticmethod
+    def new__setNameCommon(self, dbID, pName = None):
+        old__setNameCommon(self, dbID, pName)
+        if Statistics.config['chat_enable'] and Statistics.okCw():
+            pr,lang,wr,bt = Statistics.getInfos(dbID)
+            formatz= Statistics.getFormat('chat',pr, wr, bt, lang,self._ctx['playerName'])
+            self._ctx['playerName'] = Statistics.config['chat'].format(**formatz)
+        return self
     
     @staticmethod
     def new__createMarker(self, vProxy):
@@ -495,10 +493,11 @@ class Statistics(object):
         injectNewFuncs()
         
 def saveOldFuncs():
-    global old__onBecomePlayer,old_createMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old_addArenaExtraData,old__formatMessage
+    global old__onBecomePlayer,old_createMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old_addArenaExtraData,old__setName,old__setNameCommon
     DecorateUtils.ensureGlobalVarNotExist('old__onBecomePlayer')
     DecorateUtils.ensureGlobalVarNotExist('old_createMarker')
-    DecorateUtils.ensureGlobalVarNotExist('old__formatMessage')
+    DecorateUtils.ensureGlobalVarNotExist('old__setName')
+    DecorateUtils.ensureGlobalVarNotExist('old__setNameCommon')
     DecorateUtils.ensureGlobalVarNotExist('old__getFormattedStrings')
     DecorateUtils.ensureGlobalVarNotExist('old_makeItem')
     DecorateUtils.ensureGlobalVarNotExist('old_makeHash')
@@ -506,8 +505,8 @@ def saveOldFuncs():
         
     old__onBecomePlayer = PlayerAvatar.onBecomePlayer
     old_createMarker = MarkersManager.createMarker
-    #old__getFullPlayerName = BattleContext.getFullPlayerName
-    old__formatMessage = _ChannelController._formatMessage
+    old__setName = _BattleMessageBuilder.setName
+    old__setNameCommon = CommonMessageBuilder.setName
     old__getFormattedStrings = Battle.getFormattedStrings
     old_makeItem = BattleLoading._BattleLoading__makeItem
     old_makeHash = BattleArenaController._BattleArenaController__makeHash
@@ -525,8 +524,8 @@ def injectNewFuncs():
     MarkersManager.createMarker = Statistics.new__createMarker
     
     #chat
-    #BattleContext.getFullPlayerName = Statistics.new__getFullPlayerName
-    _ChannelController._formatMessage = Statistics.new__formatMessage
+    _BattleMessageBuilder.setName= Statistics.new__setName
+    CommonMessageBuilder.setName= Statistics.new__setNameCommon
     
     #winchance
     BattleLoading._BattleLoading__addArenaExtraData = Statistics.new_addArenaExtraData

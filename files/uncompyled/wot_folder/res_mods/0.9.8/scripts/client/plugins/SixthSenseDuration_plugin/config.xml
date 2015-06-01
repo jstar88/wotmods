@@ -117,8 +117,6 @@
       http://www.elifulkerson.com/projects/commandline-wav-player.php -->
   <AudioExternal>
     <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sounder.exe</item>
-    <item>/stop</item>
-    <item>/timer 10000</item>
     <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.wav</item>
   </AudioExternal>
   <!-- ***************************************************** -->
@@ -212,7 +210,7 @@
       the "0" disappear.
       Example:
       * "200" : after 0.2 seconds   -->
-  <TimerZeroDelay>0.2</TimerZeroDelay>
+  <TimerZeroDelay>200</TimerZeroDelay>
   <!-- ***************************************************** -->
   
   

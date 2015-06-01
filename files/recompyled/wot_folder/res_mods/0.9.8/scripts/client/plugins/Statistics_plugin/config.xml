@@ -54,7 +54,7 @@
        ******************************************** -->
   <chat_enable>true</chat_enable>
   <!-- html for chat replacing the current player full name --> 
-  <chat><![CDATA[{player_name}|{pr}]]></chat> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt}-->
+  <chat><![CDATA[{player_name}|{pr}]]></chat> <!-- {lang} {player_name} {pr}{wr}{bt}-->
   
   <chat_bt_divisor>1000</chat_bt_divisor>
   <chat_bt_decimals>0</chat_bt_decimals>

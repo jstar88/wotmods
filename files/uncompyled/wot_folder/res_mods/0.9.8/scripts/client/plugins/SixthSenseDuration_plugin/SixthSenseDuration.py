@@ -20,8 +20,6 @@ class SixthSenseDuration:
               'AudioPath': '/GUI/notifications_FX/cybersport_timer',
               'AudioIsExternal': True,
               'AudioExternal': ['res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/cmdmp3win.exe',
-                                '/stop',
-                                '/timer 10000',
                                 'res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.mp3'],
               'AudioRange': 9000,
               'AudioTick': 1000,
