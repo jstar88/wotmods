@@ -203,7 +203,9 @@ class FileUtils:
     @staticmethod
     def getWotVersion():
         ver = ResMgr.openSection(VERSION_FILE_PATH).readString('version')
-        return ver[2:7]
+        ver = ver.split(' ')
+        ver = ver[0]
+        return ver[2:]
     
     @staticmethod
     def readJson(path,defset,filename = ''):
