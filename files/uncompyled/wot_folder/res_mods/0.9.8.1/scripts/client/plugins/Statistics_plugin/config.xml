@@ -82,8 +82,8 @@
        ********  info on battle loading *********** 
        ******************************************** -->
   <battle_loading_enable>true</battle_loading_enable>
-  <battle_loading_string_right><![CDATA[  {lang}|{wr}%|{pr}]]></battle_loading_string_right> <!-- {lang} {pr}{wr}{bt}-->
-  <battle_loading_string_left><![CDATA[{lang}|{wr}%|{pr}  ]]></battle_loading_string_left> <!-- {lang} {pr}{wr}{bt}  -->
+  <battle_loading_string_right><![CDATA[{player_name}  {lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></battle_loading_string_right> <!-- {lang}{player_name} {pr}{wr}{bt}-->
+  <battle_loading_string_left><![CDATA[{lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></battle_loading_string_left> <!-- {lang}{player_name} {pr}{wr}{bt}  -->
   
   <battle_loading_bt_divisor>1000</battle_loading_bt_divisor>
   <battle_loading_bt_decimals>0</battle_loading_bt_decimals>
@@ -98,16 +98,16 @@
   <tab_enable>true</tab_enable>
   
   <!-- html for left tab panel --> 
-  <tab_left><![CDATA[{lang}|{wr}%|{pr}  ]]></tab_left><!-- {lang}{pr}{wr}{bt} --> 
+  <tab_left><![CDATA[{lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} --> 
   
   <!-- html for right tab panel -->   
-  <tab_right><![CDATA[  {lang}|{wr}%|{pr}]]></tab_right><!-- {lang}{pr}{wr}{bt} --> 
+  <tab_right><![CDATA[{player_name}  {lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></tab_right><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} --> 
   
   <!-- html for left tab panel in case of compatriot -->   
-  <tab_left_c><![CDATA[«{lang}»|{wr}%|{pr}  ]]></tab_left_c><!-- {lang}{pr}{wr}{bt} -->  
+  <tab_left_c><![CDATA[«{lang}»|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left_c><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} -->  
   
   <!-- html for right tab panel in case of compatriot -->  
-  <tab_right_c><![CDATA[  «{lang}»|{wr}%|{pr}]]></tab_right_c><!-- {lang}{pr}{wr}{bt} -->  
+  <tab_right_c><![CDATA[{player_name}  «{lang}»|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></tab_right_c><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} -->  
   
   <tab_bt_divisor>1000</tab_bt_divisor>
   <tab_bt_decimals>0</tab_bt_decimals>

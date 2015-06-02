@@ -391,13 +391,20 @@ class Statistics(object):
         old_return = old_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam,isEnemy)
         if Statistics.config['battle_loading_enable'] and Statistics.okCw():
             pr,lang,wr,bt = Statistics.getInfos(vInfoVO.player.accountDBID)
-            formatz= Statistics.getFormat('battle_loading',pr, wr, bt, lang)
+            userName = old_return['playerName']
+            region = old_return['region']
+            clan = old_return['clanAbbrev']
+            if clan:
+                userName += '['+clan+']'
+            if region:
+                userName += region
+            formatz= Statistics.getFormat('battle_loading',pr, wr, bt, lang, userName)
             if BattleUtils.isMyTeam(vInfoVO.team):
-                s = Statistics.config['battle_loading_string_left'].format(**formatz)
-                old_return['playerName'] = s + old_return['playerName']
+                old_return['playerName'] = Statistics.config['battle_loading_string_left'].format(**formatz)
             else:
-                s = Statistics.config['battle_loading_string_right'].format(**formatz)
-                old_return['region'] = s
+                old_return['playerName'] = Statistics.config['battle_loading_string_right'].format(**formatz)
+        old_return['region'] = ''
+        old_return['clanAbbrev'] = ''
         return old_return
     
     @staticmethod
@@ -412,24 +419,26 @@ class Statistics(object):
         player = BigWorld.player()
         if region is None:
             region = ''
+        if tmp['clanAbbrev']:
+            userName +='['+tmp['clanAbbrev']+']'+region
         pr,lang,wr,bt = Statistics.getInfos(dbID)
         if BattleUtils.isMyTeam(vInfoVO.team):
             if Statistics.isMyCompatriot(dbID,player):
-                userName = str(Statistics.config['tab_left_c']) + userName
+                f = Statistics.config['tab_left_c']
             else:
-                userName = str(Statistics.config['tab_left']) + userName
+                f =Statistics.config['tab_left']
         else:
             if Statistics.isMyCompatriot(dbID,player):
-                region += str(Statistics.config['tab_right_c'])
+                f = Statistics.config['tab_right_c']
             else:
-                region += str(Statistics.config['tab_right'])
+                f = Statistics.config['tab_right']
         
-        formatz= Statistics.getFormat('tab',pr, wr, bt, lang)
-        userName = userName.format(**formatz)
-        region = region.format(**formatz)
+        formatz= Statistics.getFormat('tab',pr, wr, bt, lang, userName)
+        userName = f.format(**formatz)
     
-        tmp['region'] = region
+        tmp['region'] = ''
         tmp['userName'] = userName
+        tmp['clanAbbrev'] = ''
         return tmp
     
     @staticmethod
