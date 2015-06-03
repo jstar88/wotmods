@@ -122,6 +122,19 @@
   <win_chance_enable>true</win_chance_enable>
   <win_chance_text><![CDATA[( Chance for win: <font color='{color}'>{win_chance}%</font> )]]></win_chance_text><!-- {color} {win_chance} -->
   
+  <!-- ********************************************
+       *********  powerbar ************* 
+       ******************************************** -->
+  <powerbar_enable>true</powerbar_enable>  
+  <powerbar_texture>system/maps/col_white.dds</powerbar_texture> 
+  <powerbar_width>200</powerbar_width> 
+  <powerbar_height>5</powerbar_height>
+  <powerbar_position>(x/2-100,y/10 - 50,0.7)</powerbar_position> 
+  <powerbar_colors>
+  	<item>(100, 255, 0, 100)</item>
+  	<item>(255, 50, 50, 100)</item>
+  </powerbar_colors>  
+     
   
   
   <!-- ********************************************

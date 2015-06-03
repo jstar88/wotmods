@@ -23,6 +23,8 @@ from gui.WindowsManager import g_windowsManager
 from EntityManagerOnline import EntityManagerOnline
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 from gui.Scaleform.Battle import Battle
+import PowerBar
+import re
 
 class Statistics(object):
     
@@ -42,6 +44,13 @@ class Statistics(object):
               'battles_index': 'statistics.all.battles',
               'application_id': 'demo',
               'url': 'http://api.worldoftanks.{region}/wot/account/info/?application_id={application_id}&fields={pr_index},{lang_index},{wr_index},{battles_index}&account_id={id}',
+              
+              'powerbar_enable': True,
+              'powerbar_texture':'system/maps/col_white.dds',
+              'powerbar_width': 400,
+              'powerbar_height': 5,
+              'powerbar_position': '(x/2-200,y/10 - 50,0.7)',
+              'powerbar_colors': ['(100, 255, 0, 100)','(255, 50, 50, 100)'],
               
               'panels_enable' : True,
               'left' : "<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>",
@@ -283,9 +292,27 @@ class Statistics(object):
             return False
         return Statistics.getEmo().getEntity(id).getClientLang() == Statistics.getEmo().getEntity(tid).getClientLang()
     
-    #("<font color='#ffffff'>some</font><br/>", "<font color='#ffffff'> </font><br/>", "<font color='#ffffff'>M41 Bulldog</font><br/>")
+    @staticmethod
+    def updatePowerBar():
+       if Statistics.okCw() and Statistics.config['powerbar_enable']:
+            win_chance = Statistics.getWinChance()
+            if win_chance:
+                arenaTypeID = getArenaTypeID()
+                color = '#ff0000'
+                if win_chance < 49:
+                    color = '#ff0000'
+                elif win_chance >= 49 and win_chance <= 51:
+                    color = '#ffff00'
+                elif win_chance > 51:
+                    color = '#00ff00'
+                color = '\\c' + re.sub('[^A-Za-z0-9]+', '', color) + 'FF;'
+                PowerBar.updateWinRate(win_chance*1.0/100,color+str(win_chance)+'%',Statistics.config)
+    
+    
     @staticmethod
     def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName):
+        
+        Statistics.updatePowerBar()
         if not Statistics.okCw() or not Statistics.config['panels_enable']:
             return old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
         player = BigWorld.player()
@@ -526,7 +553,7 @@ def injectNewFuncs():
     #tab
     BattleArenaController._BattleArenaController__makeHash = Statistics.new_makeHash
     
-    #player panels
+    #player panels + powerbar
     Battle.getFormattedStrings = Statistics.new__getFormattedStrings
     
     #marker
@@ -543,3 +570,6 @@ def injectNewFuncs():
     BattleLoading._BattleLoading__makeItem = Statistics.new_makeItem
     
     g_windowsManager.onDestroyBattleGUI += Statistics.stopBattle
+    
+    #powerbar
+    g_windowsManager.onDestroyBattleGUI += PowerBar.battleEnd
