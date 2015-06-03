@@ -1,7 +1,11 @@
 import urllib2
+import traceback
+from StringIO import StringIO
+import gzip
 import json
+import zlib
 from Entity import Entity
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE, LOG_WARNING
 
 
 class DownloaderWG(object):
@@ -18,8 +22,15 @@ class DownloaderWG(object):
     def getEntities(self,ids):
         self.formatz['id'] = ','.join(map(str,ids))
         tmp = []
-        data = urllib2.urlopen(self.url.format(**self.formatz), timeout=30).read()
-        ens = safe_list_get(json.loads(data),'data',None)
+        try:
+            url = self.url.format(**self.formatz)
+            data = fetchUrl(url)
+            ens = safe_list_get(json.loads(data),'data',None)
+        except:
+            traceback.print_exc()
+            for id in ids:
+                tmp.append(Entity(id, 0,'', 0.0,0))
+            return tmp
         if ens is None:
             LOG_NOTE('players is None')
         else:
@@ -38,6 +49,26 @@ class DownloaderWG(object):
                     tmp.append(entity)
         return tmp
     
+
+def decode (page):
+    encoding = page.info().get("Content-Encoding") 
+    content = page.read()   
+    if encoding in ('gzip', 'x-gzip', 'deflate'):
+        if encoding == 'deflate':
+            data = StringIO(zlib.decompress(content))
+        else:
+            data = gzip.GzipFile('', 'rb', 9, StringIO(content))
+        content = data.read()
+    return content
+
+
+def fetchUrl(url,tryGzip=True,timeout=10):
+    opener = urllib2.build_opener()
+    if tryGzip:
+        opener.addheaders = [('Accept-encoding', 'gzip,deflate')]
+    response = opener.open(url)    
+    return decode(response)
+
 def getNestedElement(v,path):
     indexes = path.split('.')
     for index in indexes:
