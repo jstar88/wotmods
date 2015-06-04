@@ -133,10 +133,10 @@ class SixthSenseDuration:
                 commander_sixthSense = skills['commander_sixthSense']
                 if commander_sixthSense.isActive and commander_sixthSense.isEnable:
                     SixthSenseDuration.hasSixthSense = True
-                    LOG_NOTE('True')
+                    LOG_NOTE('hasSixthSense:True')
                     return
         SixthSenseDuration.hasSixthSense = False
-        LOG_NOTE('False')
+        LOG_NOTE('hasSixthSense:False')
     
     
     @staticmethod
@@ -148,6 +148,7 @@ class SixthSenseDuration:
     # --------------- countdown ------------- #
     @staticmethod
     def initGuiCountDown():
+        LOG_NOTE('hasSixthSenseInBattle:'+str( SixthSenseDuration.hasSixthSense))
         if SixthSenseDuration.guiCountDown is not None:
             return
         SixthSenseDuration.fixPosition('TimerPosition')

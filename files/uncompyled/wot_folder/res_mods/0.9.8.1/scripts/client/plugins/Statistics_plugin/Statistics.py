@@ -58,6 +58,11 @@ class Statistics(object):
               'left_c' : "<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>",
               'right_c' : "<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>",
               
+              'left_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              'right_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              'left_c_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              'right_c_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              
               'marker_enable' : True,
               'marker' : '{player_name} {pr}',
               
@@ -323,18 +328,24 @@ class Statistics(object):
         fullPlayerName, fragsString, shortName =  old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
         if BattleUtils.isMyTeam(vInfoVO.team):
             if Statistics.isMyCompatriot(uid,player):
-                fullPlayerName = str(Statistics.config['left_c'])
+                fullPlayerName = Statistics.config['left_c']
+                shortName = Statistics.config['left_c_2']
             else:
-                fullPlayerName = str(Statistics.config['left'])
+                fullPlayerName = Statistics.config['left']
+                shortName = Statistics.config['left_2']
         else:
             if Statistics.isMyCompatriot(uid,player):
-                fullPlayerName = str(Statistics.config['right_c'])
+                fullPlayerName = Statistics.config['right_c']
+                shortName = Statistics.config['right_c_2']
             else:
-                fullPlayerName = str(Statistics.config['right'])
+                fullPlayerName = Statistics.config['right']
+                shortName = Statistics.config['right_2']
         
         
         formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,vInfoVO.isAlive())
         fullPlayerName = fullPlayerName.format(**formatz)
+        shortName = shortName.format(**formatz)
+        
         return (fullPlayerName, fragsString, shortName)
      
     @staticmethod
