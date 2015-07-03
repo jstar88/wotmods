@@ -124,6 +124,7 @@ class SixthSenseDuration:
     @staticmethod
     def onChangedVeh():
         LOG_NOTE('onChangedVeh')
+        LOG_NOTE(g_currentVehicle.item.shortUserName)
         for c in g_currentVehicle.item.crew:
             tankcrew = c[1]
             if tankcrew is None:

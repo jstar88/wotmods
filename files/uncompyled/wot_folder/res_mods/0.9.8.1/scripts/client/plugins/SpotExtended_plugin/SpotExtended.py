@@ -4,6 +4,7 @@ from gui.battle_control import g_sessionProvider
 from gui.battle_control.battlesessionprovider import BattleSessionProvider
 from gui.WindowsManager import g_windowsManager
 import BigWorld
+from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 
 class SpotExtended:
     myConf = {'pluginEnable' : True,
