@@ -16,6 +16,7 @@ class SpotExtended:
         self.pluginEnable = False
         
     def run(self):
+        saveOldFuncs()
         g_windowsManager.onInitBattleGUI += SpotExtended.start
         BattleFeedbackAdaptor.setPlayerAssistResult = SpotExtended.setPlayerAssistResult
         
@@ -39,6 +40,7 @@ class SpotExtended:
 
     @staticmethod
     def setPlayerAssistResult(self, assistType, vehiclesIDs):
+        old__start(self, assistType, vehiclesIDs)
         if assistType == _SET.SPOTTED:
             arena = BigWorld.player().arena
             for idV in vehiclesIDs:
@@ -47,3 +49,7 @@ class SpotExtended:
                 vehicleType = vehicleDescr.type
                 shortName = vehicleType.shortUserString
                 SpotExtended.showMessageOnPanel(SpotExtended.myConf['panel'],shortName,SpotExtended.myConf['color'])
+        
+def saveOldFuncs():
+    global old__start
+    old__start = BattleFeedbackAdaptor.setPlayerAssistResult
