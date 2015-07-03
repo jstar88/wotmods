@@ -34,7 +34,7 @@ class SpotExtended:
     def start():
         if g_sessionProvider is not None and g_sessionProvider.getFeedback() is not None:
             g_sessionProvider._BattleSessionProvider__feedback.stop()
-            _sessionProvider._BattleSessionProvider__feedback = BattleFeedbackAdaptor()
+            g_sessionProvider._BattleSessionProvider__feedback = BattleFeedbackAdaptor()
             g_sessionProvider._BattleSessionProvider__feedback.start(g_sessionProvider._BattleSessionProvider__arenaDP)
 
     @staticmethod
