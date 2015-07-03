@@ -1,0 +1,12 @@
+<config.xml>
+
+  <!-- ************** Enable the plugin ************* true/false -->
+  <pluginEnable>false</pluginEnable>
+  
+  <!-- ************** Where write ************* VehicleErrorsPanel/VehicleMessagesPanel/PlayerMessagesPanel -->
+  <panel>PlayerMessagesPanel</panel>
+  
+  <!-- ************** Color ************* green/red -->
+  <color>gold</color>
+  
+</config.xml>
