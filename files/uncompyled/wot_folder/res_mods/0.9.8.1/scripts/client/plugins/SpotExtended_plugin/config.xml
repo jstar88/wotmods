@@ -1,12 +1,18 @@
 <config.xml>
 
-  <!-- ************** Enable the plugin ************* true/false -->
-  <pluginEnable>false</pluginEnable>
+  <!-- *** Enable the plugin *** true/false -->
+  <pluginEnable>true</pluginEnable>
   
-  <!-- ************** Where write ************* VehicleErrorsPanel/VehicleMessagesPanel/PlayerMessagesPanel -->
+  <!-- *** Where write *** VehicleErrorsPanel/VehicleMessagesPanel/PlayerMessagesPanel -->
   <panel>PlayerMessagesPanel</panel>
   
-  <!-- ************** Color ************* green/red -->
+  <!-- **** Color *** green/red -->
   <color>gold</color>
+  
+  <!-- **** Enable the marker for spotted tank *** true/false -->
+  <showMarker>true</showMarker>
+  <markerType>eye</markerType>
+  <markerHeight>9</markerHeight>
+  <markerTime>9.0</markerTime>
   
 </config.xml>
