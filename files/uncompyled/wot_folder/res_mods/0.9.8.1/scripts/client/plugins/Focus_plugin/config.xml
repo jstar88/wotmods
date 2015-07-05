@@ -1,7 +1,7 @@
 <config.xml>
 
   <!-- If false the plugin will not be loaded -->
-  <pluginEnable>false</pluginEnable>      <!-- boolean -->
+  <pluginEnable>true</pluginEnable>      <!-- boolean -->
   
   <!-- Max amount of active arrows -->
   <maxArrows>3</maxArrows>                <!-- integer -->

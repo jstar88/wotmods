@@ -14,14 +14,14 @@ class ModelManager:
     def __init__(self, mapName):
         self.data = {}
         self.tmpdata = None
-        path = FileUtils.getRealPluginPath('Builder_plugin')
+        path = FileUtils.getRealPluginPath('Builder')
         path = os.path.join(path, 'service')
         path = os.path.join(path, 'dist')
         path = os.path.join(path, 'generic_instance_manager.exe')
         f = FrontEndJsonCallback([path])
         f.run()
         
-        path = FileUtils.getRealPluginPath('Builder_plugin')
+        path = FileUtils.getRealPluginPath('Builder')
         path = os.path.join(path, 'maps')
         if not os.path.exists(path):
             os.makedirs(path)

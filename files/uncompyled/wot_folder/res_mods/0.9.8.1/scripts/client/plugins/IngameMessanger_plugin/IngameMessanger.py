@@ -8,17 +8,18 @@ import BigWorld
 from plugins.Engine.ModUtils import FileUtils
 from debug_utils import LOG_ERROR
 from functools import partial
+from plugins.Engine.Plugin import Plugin
 
 
-class IngameMessanger:
-    myconfig = {"TextDelay":0.5,"CommandDelay":5}
+class IngameMessanger(Plugin):
+    myConf = {"TextDelay":0.5,"CommandDelay":5}
     cooldDown = 0
     def __init__(self):
+        super(IngameMessanger, self).__init__()
         self.commonChannelController = None
         self.teamChannelController = None
         self.squadChannelController = None
         self.initied = False
-        self.pluginEnable = True
     
     # retrive channel controllers only when in battle!
     def checkInit(self):
@@ -73,21 +74,15 @@ class IngameMessanger:
         if diff < 0:
             diff = 0
             IngameMessanger.cooldDown = BigWorld.time()
-        IngameMessanger.cooldDown += IngameMessanger.myconfig['CommandDelay']
+        IngameMessanger.cooldDown += IngameMessanger.myConf['CommandDelay']
         BigWorld.callback(diff, partial(controller.sendCommand,command)) 
     def sendText(self,controller,text):
         diff = IngameMessanger.cooldDown - BigWorld.time()
         if diff < 0:
             diff = 0
             IngameMessanger.cooldDown = BigWorld.time()
-        IngameMessanger.cooldDown += IngameMessanger.myconfig['TextDelay']
+        IngameMessanger.cooldDown += IngameMessanger.myConf['TextDelay']
         BigWorld.callback(diff,partial(controller._broadcast,text))
-
-    def readConfig(self):
-        IngameMessanger.myconfig = FileUtils.readConfig('scripts/client/plugins/IngameMessanger_plugin/config.xml',IngameMessanger.myconfig,"IngameMenssanger")     
-        
-    def run(self):
-        pass
 
 
      

@@ -14,8 +14,9 @@ from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUt
 import subprocess
 import threading
 from CurrentVehicle import g_currentVehicle
+from plugins.Engine.Plugin import Plugin
 
-class SixthSenseDuration:
+class SixthSenseDuration(Plugin):
     myConf = {
               'AudioPath': '/GUI/notifications_FX/cybersport_timer',
               'AudioIsExternal': True,
@@ -53,9 +54,6 @@ class SixthSenseDuration:
     guiInactive = None
     guiSpotted = None
     
-    
-    def __init__(self):
-        self.pluginEnable = False
     
     # --------------- audio ------------- #
     @staticmethod
@@ -249,8 +247,7 @@ class SixthSenseDuration:
         SixthSenseDuration.myConf[type] = eval(SixthSenseDuration.myConf[type])
     
     def readConfig(self):
-        SixthSenseDuration.myConf = FileUtils.readConfig('scripts/client/plugins/SixthSenseDuration_plugin/config.xml',SixthSenseDuration.myConf,"SixthSenseDuration")
-        self.pluginEnable =  SixthSenseDuration.myConf['pluginEnable']
+        super(SixthSenseDuration, self).readConfig()
         wotv = FileUtils.getWotVersion()
         tmp = []
         for d in SixthSenseDuration.myConf['AudioExternal']:

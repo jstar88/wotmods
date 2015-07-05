@@ -10,10 +10,11 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from plugins.IngameMessanger_plugin.IngameMessanger import IngameMessanger
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+from plugins.Engine.Plugin import Plugin
 
-class SpotMessanger:
+class SpotMessanger(Plugin):
     isActive = True
-    myconfig = {
+    myConf = {
         'ActiveByDefault':True,
         'ActivationHotkey':'KEY_F11',
         'DoPing':False,
@@ -42,10 +43,7 @@ class SpotMessanger:
         'MaxTeamAmountOnFortifications':0,
         'MaxTeamAmountOnClanWar':0,
         'pluginEnable' : True
-        }
-    
-    def __init__(self):
-        self.pluginEnable = False    
+        } 
     
     @staticmethod
     def getController(player):
@@ -56,64 +54,64 @@ class SpotMessanger:
         battleTypeName = ''
         if battleType == constants.ARENA_GUI_TYPE.RANDOM:
             battleTypeName = 'Random'
-            if SpotMessanger.myconfig['TryPlatoonMes']:
+            if SpotMessanger.myConf['TryPlatoonMes']:
                 if IngameMessanger().hasSquadChannelController():
                     controller = IngameMessanger().getSquadChannelController()
-                elif SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+                elif SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                     return None
                 else:
                     controller = IngameMessanger().getTeamChannelController()
-            elif SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            elif SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 return None
             else:
                 controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.TRAINING:
             battleTypeName = 'Training'
-            if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            if SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 return None
             controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.COMPANY:
             battleTypeName = 'Company'
-            if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            if SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 return None
             controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.CYBERSPORT:
             battleTypeName = 'CyberSport'
-            if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            if SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 return None
             controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.HISTORICAL:
             battleTypeName = 'Historical'
-            if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            if SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 return None
             controller = IngameMessanger().getTeamChannelController()
         elif battleType == constants.ARENA_GUI_TYPE.SORTIE:
             battleTypeName = 'Fortifications'
-            if SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            if SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 return None
             controller = IngameMessanger().getTeamChannelController()
         else:
             battleTypeName = 'ClanWar'
-            if not SpotMessanger.myconfig['Avoid'+battleTypeName+'Mes']:
+            if not SpotMessanger.myConf['Avoid'+battleTypeName+'Mes']:
                 controller = IngameMessanger().getTeamChannelController()
             else:
                 return None
         
         #vehicle type checks
         vehicleType = BattleUtils.getVehicleType(BattleUtils.getCurrentVehicleDesc(player))
-        if vehicleType == VEHICLE_CLASS_NAME.SPG and not SpotMessanger.myconfig['OnSPG']:
+        if vehicleType == VEHICLE_CLASS_NAME.SPG and not SpotMessanger.myConf['OnSPG']:
             return None
-        elif vehicleType == VEHICLE_CLASS_NAME.LIGHT_TANK and not SpotMessanger.myconfig['OnLT']:
+        elif vehicleType == VEHICLE_CLASS_NAME.LIGHT_TANK and not SpotMessanger.myConf['OnLT']:
             return None
-        elif vehicleType == VEHICLE_CLASS_NAME.MEDIUM_TANK and not SpotMessanger.myconfig['OnMD']:
+        elif vehicleType == VEHICLE_CLASS_NAME.MEDIUM_TANK and not SpotMessanger.myConf['OnMD']:
             return None
-        elif vehicleType == VEHICLE_CLASS_NAME.HEAVY_TANK and not SpotMessanger.myconfig['OnHT']:
+        elif vehicleType == VEHICLE_CLASS_NAME.HEAVY_TANK and not SpotMessanger.myConf['OnHT']:
             return None
-        elif vehicleType == VEHICLE_CLASS_NAME.AT_SPG and not SpotMessanger.myconfig['OnTD']:
+        elif vehicleType == VEHICLE_CLASS_NAME.AT_SPG and not SpotMessanger.myConf['OnTD']:
             return None
         
         #team amount checks
-        maxTeamAmount = SpotMessanger.myconfig['MaxTeamAmountOn'+battleTypeName]
+        maxTeamAmount = SpotMessanger.myConf['MaxTeamAmountOn'+battleTypeName]
         if maxTeamAmount > 0:
             if maxTeamAmount < BattleUtils.getTeamAmount(player):
                 return None
@@ -121,12 +119,12 @@ class SpotMessanger:
 
     @staticmethod
     def myDoPing(controller,position):
-        if controller and SpotMessanger.myconfig['DoPing']:
+        if controller and SpotMessanger.myConf['DoPing']:
             IngameMessanger().doPing(controller,MinimapUtils.name2cell(position))
             
     @staticmethod
     def myCallHelp(controller):
-        if controller and SpotMessanger.myconfig['CallHelp']:
+        if controller and SpotMessanger.myConf['CallHelp']:
             IngameMessanger().callHelp(controller)
     
     @staticmethod
@@ -140,7 +138,7 @@ class SpotMessanger:
         if isShow and SpotMessanger.isActive:
             player = BattleUtils.getPlayer()
             position = MinimapUtils.getOwnPos(player)
-            text = SpotMessanger.myconfig['ImSpotted']
+            text = SpotMessanger.myConf['ImSpotted']
             controller = SpotMessanger.getController(player)
             SpotMessanger.mySendMessage(controller,text.replace("{pos}", position+""))
             SpotMessanger.myDoPing(controller,position)
@@ -152,11 +150,11 @@ class SpotMessanger:
     def handleKeyEvent(event):
         try:
             isDown, key, mods, isRepeat = game.convertKeyEvent(event)
-            if not isRepeat and isDown and HotKeysUtils.keysMatch([key],SpotMessanger.myconfig['ActivationHotkey']):
+            if not isRepeat and isDown and HotKeysUtils.keysMatch([key],SpotMessanger.myConf['ActivationHotkey']):
                 if SpotMessanger.isActive:
-                    BattleUtils.DebugMsg(SpotMessanger.myconfig['DisableSystemMsg'], True)
+                    BattleUtils.DebugMsg(SpotMessanger.myConf['DisableSystemMsg'], True)
                 else:
-                    BattleUtils.DebugMsg(SpotMessanger.myconfig['EnableSystemMsg'], True)
+                    BattleUtils.DebugMsg(SpotMessanger.myConf['EnableSystemMsg'], True)
                 SpotMessanger.isActive = not SpotMessanger.isActive
                 return
         except Exception as e:
@@ -170,10 +168,9 @@ class SpotMessanger:
         injectNewFuncs()
         
     def readConfig(self):
-        SpotMessanger.myconfig = FileUtils.readConfig('scripts/client/plugins/SpotMessanger_plugin/config.xml',SpotMessanger.myconfig,"SpotMessanger")
-        SpotMessanger.myconfig['ActivationHotkey'] = HotKeysUtils.parseHotkeys(SpotMessanger.myconfig['ActivationHotkey'])
-        SpotMessanger.isActive = SpotMessanger.myconfig['ActiveByDefault']
-        self.pluginEnable =  SpotMessanger.myconfig['pluginEnable']
+        super(SpotMessanger, self).readConfig()
+        SpotMessanger.myConf['ActivationHotkey'] = HotKeysUtils.parseHotkeys(SpotMessanger.myConf['ActivationHotkey'])
+        SpotMessanger.isActive = SpotMessanger.myConf['ActiveByDefault']
         
 def saveOldFuncs():
     global oldShowSixthSenseIndicatorFromSpotMessanger,oldHandleKeyEventFromSpotMessanger

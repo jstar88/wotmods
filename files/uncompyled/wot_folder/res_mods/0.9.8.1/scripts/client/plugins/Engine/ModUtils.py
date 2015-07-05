@@ -10,6 +10,7 @@ from helpers import VERSION_FILE_PATH
 import json
 import codecs
 import os
+from functools import partial
 
 class BattleUtils:
 
@@ -189,13 +190,20 @@ class FileUtils:
         return FileUtils.readElement(cfg, defset, filename,'root')
     
     @staticmethod
-    def readConfig(path, defset, fromfile = ''):
-        path = FileUtils.fixPath(path)
-        fileName, fileExtension = os.path.splitext(path)
-        if fileExtension == ".json":
-            return FileUtils.readJson(path,defset,fromfile)
-        if fileExtension == ".xml":
-            return FileUtils.readXml(path, defset, fromfile)
+    def readConfig(pluginName, defset, configName = 'config'):
+        realPath = FileUtils.getRealPluginPath(pluginName)
+        virtualPath = FileUtils.getVirtualPluginPath(pluginName)
+        
+        xmlVirtualPath = os.path.join(virtualPath,configName+'.xml')
+        jsonVirtualPath = os.path.join(virtualPath,configName+'.json')
+        xmlRealPath = os.path.join(realPath,configName+'.xml')
+        jsonRealPath = os.path.join(realPath,configName+'.json')
+        
+        d={xmlRealPath:partial(FileUtils.readXml, xmlVirtualPath, defset, pluginName),
+           jsonRealPath:partial(FileUtils.readJson, jsonVirtualPath, defset, pluginName)}
+        for s,f in d.iteritems():
+            if os.path.isfile(s):
+                return f()
         LOG_WARNING(path+" can't be read, unknow format")
         return defset
             
@@ -290,7 +298,11 @@ class FileUtils:
     
     @staticmethod
     def getRealPluginPath(pluginName):
-        return os.path.join(FileUtils.getRealPluginsPath(),pluginName)
+        return os.path.join(FileUtils.getRealPluginsPath(),pluginName+'_plugin')
+    
+    @staticmethod 
+    def getVirtualPluginPath(pluginName):
+        return os.path.join('scripts', 'client', 'plugins', pluginName+'_plugin')
         
     
 class HotKeysUtils:

@@ -22,17 +22,18 @@ from gui.battle_control.arena_info import getClientArena, getArenaTypeID
 from gui.WindowsManager import g_windowsManager
 from EntityManagerOnline import EntityManagerOnline
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+from plugins.Engine.Plugin import Plugin
 from gui.Scaleform.Battle import Battle
 import PowerBar
 import re
 
-class Statistics(object):
+class Statistics(Plugin):
     
     emo = None
     t = None
     lastime = 0 
-    config = {
-              'pluginEnable': False,
+    myConf = {
+              'pluginEnable': True,
               
               'delay' : 1,
               'maxentries' : 3,
@@ -142,22 +143,15 @@ class Statistics(object):
               'tab_wr_divisor':1
               
               }
-    
-    def __init__(self):
-        self.pluginEnable = False
-        
-    def readConfig(self):
-        Statistics.config = FileUtils.readConfig('scripts/client/plugins/Statistics_plugin/config.xml',Statistics.config,'Statistics')
-        self.pluginEnable = Statistics.config['pluginEnable']
         
     @staticmethod
     def okCw():
-        return not BattleUtils.isCw() or Statistics.config['cw']
+        return not BattleUtils.isCw() or Statistics.myConf['cw']
     
     @staticmethod
     def getEmo():
         if Statistics.emo is None:
-            Statistics.emo = EntityManagerOnline(Statistics.config)
+            Statistics.emo = EntityManagerOnline(Statistics.myConf)
         return Statistics.emo
 
     @staticmethod
@@ -175,7 +169,7 @@ class Statistics(object):
     def getInfos(uid):
         if BattleUtils.isCw():
             curtime = BigWorld.time()
-            if (Statistics.t is None or not Statistics.t.isAlive()) and (Statistics.lastime + Statistics.config['delay'] < curtime ):
+            if (Statistics.t is None or not Statistics.t.isAlive()) and (Statistics.lastime + Statistics.myConf['delay'] < curtime ):
                 Statistics.t = threading.Thread(target=Statistics.updateStats)
                 Statistics.t.start()
                 Statistics.lastime = curtime
@@ -238,7 +232,7 @@ class Statistics(object):
     def getColor(PR,type='pr'):
         if not PR:
             return ''
-        levels = Statistics.config['colors_'+type]
+        levels = Statistics.myConf['colors_'+type]
         last = levels[0]['color']
         for level in levels:
             if PR < level['min']:
@@ -248,8 +242,8 @@ class Statistics(object):
     
     @staticmethod
     def prettyNumber(number,type):
-        divisor = Statistics.config[type+'_divisor']
-        decimals = Statistics.config[type+'_decimals']
+        divisor = Statistics.myConf[type+'_divisor']
+        decimals = Statistics.myConf[type+'_decimals']
         if number == "":
             number = 0.0
         else:
@@ -299,7 +293,7 @@ class Statistics(object):
     
     @staticmethod
     def updatePowerBar():
-       if Statistics.okCw() and Statistics.config['powerbar_enable']:
+       if Statistics.okCw() and Statistics.myConf['powerbar_enable']:
             win_chance = Statistics.getWinChance()
             if win_chance:
                 arenaTypeID = getArenaTypeID()
@@ -311,14 +305,14 @@ class Statistics(object):
                 elif win_chance > 51:
                     color = '#00ff00'
                 color = '\\c' + re.sub('[^A-Za-z0-9]+', '', color) + 'FF;'
-                PowerBar.updateWinRate(win_chance*1.0/100,color+str(win_chance)+'%',Statistics.config)
+                PowerBar.updateWinRate(win_chance*1.0/100,color+str(win_chance)+'%',Statistics.myConf)
     
     
     @staticmethod
     def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName):
         
         Statistics.updatePowerBar()
-        if not Statistics.okCw() or not Statistics.config['panels_enable']:
+        if not Statistics.okCw() or not Statistics.myConf['panels_enable']:
             return old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
         player = BigWorld.player()
         uid = vInfoVO.player.accountDBID
@@ -328,18 +322,18 @@ class Statistics(object):
         fullPlayerName, fragsString, shortName =  old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
         if BattleUtils.isMyTeam(vInfoVO.team):
             if Statistics.isMyCompatriot(uid,player):
-                fullPlayerName = Statistics.config['left_c']
-                shortName = Statistics.config['left_c_2']
+                fullPlayerName = Statistics.myConf['left_c']
+                shortName = Statistics.myConf['left_c_2']
             else:
-                fullPlayerName = Statistics.config['left']
-                shortName = Statistics.config['left_2']
+                fullPlayerName = Statistics.myConf['left']
+                shortName = Statistics.myConf['left_2']
         else:
             if Statistics.isMyCompatriot(uid,player):
-                fullPlayerName = Statistics.config['right_c']
-                shortName = Statistics.config['right_c_2']
+                fullPlayerName = Statistics.myConf['right_c']
+                shortName = Statistics.myConf['right_c_2']
             else:
-                fullPlayerName = Statistics.config['right']
-                shortName = Statistics.config['right_2']
+                fullPlayerName = Statistics.myConf['right']
+                shortName = Statistics.myConf['right_2']
         
         
         formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,vInfoVO.isAlive())
@@ -351,23 +345,23 @@ class Statistics(object):
     @staticmethod
     def new__setName(self, dbID, pName = None):
         old__setName(self, dbID, pName)
-        if Statistics.config['chat_enable'] and Statistics.okCw():
+        if Statistics.myConf['chat_enable'] and Statistics.okCw():
             pr,lang,wr,bt = Statistics.getInfos(dbID)
             formatz= Statistics.getFormat('chat',pr, wr, bt, lang,self._ctx['playerName'])
-            self._ctx['playerName'] = Statistics.config['chat'].format(**formatz)
+            self._ctx['playerName'] = Statistics.myConf['chat'].format(**formatz)
         return self
     @staticmethod
     def new__setNameCommon(self, dbID, pName = None):
         old__setNameCommon(self, dbID, pName)
-        if Statistics.config['chat_enable'] and Statistics.okCw():
+        if Statistics.myConf['chat_enable'] and Statistics.okCw():
             pr,lang,wr,bt = Statistics.getInfos(dbID)
             formatz= Statistics.getFormat('chat',pr, wr, bt, lang,self._ctx['playerName'])
-            self._ctx['playerName'] = Statistics.config['chat'].format(**formatz)
+            self._ctx['playerName'] = Statistics.myConf['chat'].format(**formatz)
         return self
     
     @staticmethod
     def new__createMarker(self, vProxy):
-        if not Statistics.config['marker_enable'] or BattleUtils.isCw():
+        if not Statistics.myConf['marker_enable'] or BattleUtils.isCw():
             return old_createMarker(self, vProxy)
         
         player = BigWorld.player()
@@ -402,7 +396,7 @@ class Statistics(object):
             curID = curVeh['accountDBID']
             pr,lang,wr,bt = Statistics.getInfos(curID)
             formatz= Statistics.getFormat('marker',pr, wr, bt, lang,pName,vehShortName)
-            PR = Statistics.config['marker'].format(**formatz)
+            PR = Statistics.myConf['marker'].format(**formatz)
             pName = PR
         
         #----------- original code ------------------
@@ -427,7 +421,7 @@ class Statistics(object):
     @staticmethod
     def new_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy):
         old_return = old_makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam,isEnemy)
-        if Statistics.config['battle_loading_enable'] and Statistics.okCw():
+        if Statistics.myConf['battle_loading_enable'] and Statistics.okCw():
             pr,lang,wr,bt = Statistics.getInfos(vInfoVO.player.accountDBID)
             userName = old_return['playerName']
             region = old_return['region']
@@ -438,9 +432,9 @@ class Statistics(object):
                 userName += region
             formatz= Statistics.getFormat('battle_loading',pr, wr, bt, lang, userName)
             if BattleUtils.isMyTeam(vInfoVO.team):
-                old_return['playerName'] = Statistics.config['battle_loading_string_left'].format(**formatz)
+                old_return['playerName'] = Statistics.myConf['battle_loading_string_left'].format(**formatz)
             else:
-                old_return['playerName'] = Statistics.config['battle_loading_string_right'].format(**formatz)
+                old_return['playerName'] = Statistics.myConf['battle_loading_string_right'].format(**formatz)
         old_return['region'] = ''
         old_return['clanAbbrev'] = ''
         return old_return
@@ -448,7 +442,7 @@ class Statistics(object):
     @staticmethod
     def new_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited):
         tmp = old_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
-        if not Statistics.config['tab_enable'] or not Statistics.okCw():
+        if not Statistics.myConf['tab_enable'] or not Statistics.okCw():
             return tmp
 
         dbID = vInfoVO.player.accountDBID
@@ -462,14 +456,14 @@ class Statistics(object):
         pr,lang,wr,bt = Statistics.getInfos(dbID)
         if BattleUtils.isMyTeam(vInfoVO.team):
             if Statistics.isMyCompatriot(dbID,player):
-                f = Statistics.config['tab_left_c']
+                f = Statistics.myConf['tab_left_c']
             else:
-                f =Statistics.config['tab_left']
+                f =Statistics.myConf['tab_left']
         else:
             if Statistics.isMyCompatriot(dbID,player):
-                f = Statistics.config['tab_right_c']
+                f = Statistics.myConf['tab_right_c']
             else:
-                f = Statistics.config['tab_right']
+                f = Statistics.myConf['tab_right']
         
         formatz= Statistics.getFormat('tab',pr, wr, bt, lang, userName)
         userName = f.format(**formatz)
@@ -513,7 +507,7 @@ class Statistics(object):
     @staticmethod    
     def new_addArenaExtraData(self, arenaDP):
         old_addArenaExtraData(self, arenaDP)
-        if not Statistics.config['win_chance_enable'] or not Statistics.okCw():
+        if not Statistics.myConf['win_chance_enable'] or not Statistics.okCw():
             return
         win_chance = Statistics.getWinChance()
         if win_chance:
@@ -526,7 +520,7 @@ class Statistics(object):
             elif win_chance > 51:
                 colour = '#00ff00'
             formatz = {'win_chance':win_chance,'color':colour}
-            text = Statistics.config['win_chance_text'].format(**formatz)
+            text = Statistics.myConf['win_chance_text'].format(**formatz)
             self.as_setWinTextS(getBattleSubTypeWinText(arenaTypeID, 2) + text)
     
     @staticmethod    

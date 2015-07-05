@@ -5,26 +5,20 @@ from gui.battle_control.battlesessionprovider import BattleSessionProvider
 from gui.WindowsManager import g_windowsManager
 import BigWorld
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+from plugins.Engine.Plugin import Plugin
 
-class SpotExtended:
+class SpotExtended(Plugin):
     myConf = {'pluginEnable' : True,
               'panel':'PlayerMessagesPanel',
               'color': 'gold'
               }
-    
-    def __init__(self):
-        self.pluginEnable = False
         
     def run(self):
         saveOldFuncs()
         g_windowsManager.onInitBattleGUI += SpotExtended.start
         BattleFeedbackAdaptor.setPlayerAssistResult = SpotExtended.setPlayerAssistResult
-        
-    def readConfig(self):
-        SpotExtended.myConf = FileUtils.readConfig('scripts/client/plugins/SpotExtended_plugin/config.xml',SpotExtended.myConf,"SpotExtended")
-        self.pluginEnable =  SpotExtended.myConf['pluginEnable']
     
-
+    
     #Show message on specified panel: VehicleErrorsPanel, VehicleMessagesPanel, PlayerMessagesPanel
     @staticmethod
     def showMessageOnPanel(panel, msgText, color, index = 0):

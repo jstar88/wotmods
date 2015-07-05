@@ -2,7 +2,7 @@
 
   <!-- ***************** Enable the plugin ***************
   	 true/false -->
-  <pluginEnable>false</pluginEnable>
+  <pluginEnable>true</pluginEnable>
   
   <!-- ******************* IconRange **********************
       This entry represent the icon duration in milliseconds.

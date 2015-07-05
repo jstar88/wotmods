@@ -11,8 +11,9 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from constants import SERVER_TICK_LENGTH
 import constants
 import BattleReplay
+from plugins.Engine.Plugin import Plugin
 
-class Builder:
+class Builder(Plugin):
     pm = None
     mm = None
     currentPath = ''
@@ -21,8 +22,8 @@ class Builder:
     inBattle = False
     blockMove = False
     
-    myconfig = {
-        'pluginEnable': False,
+    myConf = {
+        'pluginEnable': True,
         'NextModel':'KEY_ADD',
         'PrevModel': 'KEY_MINUS',
         'SaveModel': 'KEY_NUMPADENTER',
@@ -34,13 +35,6 @@ class Builder:
         'RotationTick': 0.2,
         'AltitudeTick':0.5
         }
-    
-    def __init__(self):
-        self.pluginEnable = False
-        
-    def readConfig(self):
-        Builder.myconfig = FileUtils.readConfig('scripts/client/plugins/Builder_plugin/config.xml',Builder.myconfig,"Builder")
-        self.pluginEnable =  Builder.myconfig['pluginEnable']
         
     def run(self):
         saveOldFuncs()
@@ -54,7 +48,7 @@ class Builder:
         try:
             isDown, key, mods, isRepeat = game.convertKeyEvent(event)
             if not isRepeat and isDown:
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['NextModel']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['NextModel']):
                     Builder.blockMove = False
                     Builder.inBattle = True
                     Builder.currentPath = Builder.pm.getNextPath()
@@ -66,7 +60,7 @@ class Builder:
                         BigWorld.callback(SERVER_TICK_LENGTH, Builder.previewMove)
                         Builder.moving = True
                         
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['PrevModel']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['PrevModel']):
                     Builder.blockMove = False
                     Builder.inBattle = True
                     Builder.currentPath = Builder.pm.getPrevPath()
@@ -78,7 +72,7 @@ class Builder:
                         BigWorld.callback(SERVER_TICK_LENGTH, Builder.previewMove)
                         Builder.moving = True
                     
-                if HotKeysUtils.keyMatch(key,  Builder.myconfig['SaveModel']):
+                if HotKeysUtils.keyMatch(key,  Builder.myConf['SaveModel']):
                     position = BigWorld.player().inputHandler.getDesiredShotPoint()
                     yaw = 0
                     if Builder.currentPreview is not None:
@@ -87,28 +81,28 @@ class Builder:
                     Builder.mm.addModel(position, yaw, Builder.currentPath)
                     Builder.blockMove = False
                     
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['BlockMoving']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['BlockMoving']):
                      Builder.blockMove = not Builder.blockMove
                     
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['RotateLeft']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['RotateLeft']):
                     if Builder.currentPreview is None:
                         return
-                    Builder.currentPreview.increaseRotation(Builder.myconfig['RotationTick'])
+                    Builder.currentPreview.increaseRotation(Builder.myConf['RotationTick'])
                     
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['RotateRight']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['RotateRight']):
                     if Builder.currentPreview is None:
                         return
-                    Builder.currentPreview.increaseRotation(-Builder.myconfig['RotationTick'])
+                    Builder.currentPreview.increaseRotation(-Builder.myConf['RotationTick'])
                 
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['IncreaseAltitude']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['IncreaseAltitude']):
                     if Builder.currentPreview is None:
                         return
-                    Builder.currentPreview.increaseAltitude(Builder.myconfig['AltitudeTick'])
+                    Builder.currentPreview.increaseAltitude(Builder.myConf['AltitudeTick'])
                 
-                if HotKeysUtils.keyMatch(key, Builder.myconfig['DecreaseAltitude']):
+                if HotKeysUtils.keyMatch(key, Builder.myConf['DecreaseAltitude']):
                     if Builder.currentPreview is None:
                         return
-                    Builder.currentPreview.increaseAltitude(-Builder.myconfig['AltitudeTick'])
+                    Builder.currentPreview.increaseAltitude(-Builder.myConf['AltitudeTick'])
                     
         except Exception as e:
             LOG_CURRENT_EXCEPTION()

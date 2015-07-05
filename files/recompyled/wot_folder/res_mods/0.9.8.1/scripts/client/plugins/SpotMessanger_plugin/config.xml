@@ -4,7 +4,7 @@
   
 <config.xml>
 
-  <pluginEnable>false</pluginEnable>
+  <pluginEnable>true</pluginEnable>
   
   <!-- Activation options -->
   <ActiveByDefault>true</ActiveByDefault> <!-- Activate Mod at the beginning of the battle - true/false. -->

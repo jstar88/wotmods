@@ -8,12 +8,13 @@ from warnings import catch_warnings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from gui.WindowsManager import g_windowsManager
 from chat_shared import CHAT_COMMANDS
+from plugins.Engine.Plugin import Plugin
 
-class Focus:
+class Focus(Plugin):
 
     lastCallback = None
     inBattle = False
-    myconfig = {
+    myConf = {
                 "pluginEnable":False,
                 "setVName":False,
                 "swf_path":"gui/scaleform",
@@ -35,13 +36,6 @@ class Focus:
                 "scaleMode":"NoScale",
                 "backgroundAlpha":0.0
                 } 
-    
-    def __init__(self):
-        self.pluginEnable = False
-        
-    def readConfig(self):
-        Focus.myconfig = FileUtils.readConfig('scripts/client/plugins/Focus_plugin/config.xml',Focus.myconfig,"Focus")
-        self.pluginEnable = Focus.myconfig["pluginEnable"]
         
     def run(self):
         saveOldFuncs()
@@ -62,7 +56,7 @@ class Focus:
     def check():
         if not Focus.inBattle:
             return
-        MarkersStorage.updateMarkers(Focus.myconfig)
+        MarkersStorage.updateMarkers(Focus.myConf)
         Focus.lastCallback = BigWorld.callback(0.7,Focus.check)
 
     @staticmethod
@@ -73,7 +67,7 @@ class Focus:
             Focus.check()
         receiverID = cmd.getFirstTargetID()
         if receiverID and cmd.showMarkerForReceiver():
-            showMarker(receiverID,Focus.myconfig)
+            showMarker(receiverID,Focus.myConf)
         
 def saveOldFuncs():
     global old_handlePublicCommand
