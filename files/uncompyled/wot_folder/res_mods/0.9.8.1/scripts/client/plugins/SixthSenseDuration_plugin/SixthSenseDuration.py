@@ -121,8 +121,6 @@ class SixthSenseDuration(Plugin):
     # --------------- icon ------------- #
     @staticmethod
     def onChangedVeh():
-        LOG_NOTE('onChangedVeh')
-        LOG_NOTE(g_currentVehicle.item.shortUserName)
         for c in g_currentVehicle.item.crew:
             tankcrew = c[1]
             if tankcrew is None:
@@ -132,22 +130,20 @@ class SixthSenseDuration(Plugin):
                 commander_sixthSense = skills['commander_sixthSense']
                 if commander_sixthSense.isActive and commander_sixthSense.isEnable:
                     SixthSenseDuration.hasSixthSense = True
-                    LOG_NOTE('hasSixthSense:True')
                     return
         SixthSenseDuration.hasSixthSense = False
-        LOG_NOTE('hasSixthSense:False')
     
     
     @staticmethod
     def new_spaceDone(self):
         old_spaceDoneFromSixthSenseDuration(self)
         GUI_SETTINGS._GuiSettings__settings['sixthSenseDuration'] = SixthSenseDuration.myConf['IconRange']
-
+        SixthSenseDuration.onChangedVeh()
+    
 
     # --------------- countdown ------------- #
     @staticmethod
     def initGuiCountDown():
-        LOG_NOTE('hasSixthSenseInBattle:'+str( SixthSenseDuration.hasSixthSense))
         if SixthSenseDuration.guiCountDown is not None:
             return
         SixthSenseDuration.fixPosition('TimerPosition')
