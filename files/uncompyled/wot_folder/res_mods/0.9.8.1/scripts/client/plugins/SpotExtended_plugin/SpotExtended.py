@@ -21,7 +21,7 @@ class Marker(object):
         self.handle = None
     
     def remove(self):
-        if self.handle is not None:
+        if self.handle is not None and g_windowsManager.battleWindow is not None:
             g_windowsManager.battleWindow.markersManager._MarkersManager__ownUI.delMarker(self.handle)
         
     def show(self):
@@ -122,6 +122,7 @@ class SpotExtended(Plugin):
     def start():
         global inBattle
         inBattle = True
+        mm.clean()
         if g_sessionProvider is not None and g_sessionProvider.getFeedback() is not None:
             g_sessionProvider._BattleSessionProvider__feedback.stop()
             g_sessionProvider._BattleSessionProvider__feedback = BattleFeedbackAdaptor()
