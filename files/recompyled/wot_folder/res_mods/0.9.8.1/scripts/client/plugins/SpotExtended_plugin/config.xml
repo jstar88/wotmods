@@ -9,6 +9,9 @@
   
   <!-- ===================== MESSAGES =========================== --> 
   
+  <!-- **** Enable the message for spotted tank *** true / false -->
+  <showMessage>true</showMessage>
+  
   <!-- *** Where write *** VehicleErrorsPanel / VehicleMessagesPanel / PlayerMessagesPanel -->
   <panel>PlayerMessagesPanel</panel>
   
