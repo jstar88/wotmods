@@ -1,18 +1,43 @@
 <config.xml>
 
-  <!-- *** Enable the plugin *** true/false -->
+  <!-- ===================== SHARED =========================== -->
+  
+  <!-- *** Enable the plugin *** true / false -->
   <pluginEnable>true</pluginEnable>
   
-  <!-- *** Where write *** VehicleErrorsPanel/VehicleMessagesPanel/PlayerMessagesPanel -->
+  
+  
+  <!-- ===================== MESSAGES =========================== --> 
+  
+  <!-- *** Where write *** VehicleErrorsPanel / VehicleMessagesPanel / PlayerMessagesPanel -->
   <panel>PlayerMessagesPanel</panel>
   
-  <!-- **** Color *** green/red -->
+  <!-- **** Color *** green / red -->
   <color>gold</color>
   
-  <!-- **** Enable the marker for spotted tank *** true/false -->
+  <!-- **** Message format *** {playerName} / {shortTankName} / {fullTankName} / {clanAbbrev} -->
+  <message>{playerName}[{shortTankName}]</message>
+  
+  
+  
+  <!-- ===================== MARKERS =========================== -->
+  
+  <!-- **** Enable the marker for spotted tank *** true / false -->
   <showMarker>true</showMarker>
+  
+  <!-- **** Marker swf name *** eye/.. -->
   <markerType>eye</markerType>
-  <markerHeight>9</markerHeight>
+  
+  <!-- **** Marker height from spotted tank *** 1 / 2 /.. -->
+  <markerHeight>12</markerHeight>
+  
+  <!-- **** Marker life time *** 1.2 / 2.5/.. -->
   <markerTime>9.0</markerTime>
+  
+  <!-- **** Marker updating time *** 1.2 / 2.5 /.. -->
+  <markerUpdateTime>0.1</markerUpdateTime>
+  
+  <!-- **** Enable marker following spotted tank *** true / false -->
+  <markerMove>true</markerMove>
   
 </config.xml>
