@@ -17,9 +17,15 @@
   
   <!-- **** Color *** green / red -->
   <color>gold</color>
+    
+  <!-- **** Message format *** {playerName} / {fullPlayerName} / {shortTankName} / {fullTankName} / {clanAbbrev} / {icon} -->
+  <message>{playerName}[{shortTankName}]{icon}</message>
   
-  <!-- **** Message format *** {playerName} / {shortTankName} / {fullTankName} / {clanAbbrev} -->
-  <message>{playerName}[{shortTankName}]</message>
+  <!-- **** Icon size *** 40 20 / 20 10 / etc etc -->
+  <iconSize>70 24</iconSize>
+  
+  <!-- **** Show multiple spotted tank on same line *** true / false -->
+  <inline>false</inline>
   
   
   
@@ -42,5 +48,13 @@
   
   <!-- **** Enable marker following spotted tank *** true / false -->
   <markerMove>true</markerMove>
+  
+  
+  <!-- ===================== MARKERS =========================== -->
+  <!-- **** Play a sound for spotted tank *** true / false -->
+  <playSound>false</playSound>
+  
+  <!-- **** Sound type *** /GUI/notifications_FX/enemy_sighted_for_team  /GUI/notifications_FX/gun_intuition /GUI/notifications_FX/cybersport_auto_search /fortified_area/gui/gun_intuition-->
+  <sound>/GUI/notifications_FX/enemy_sighted_for_team</sound>
   
 </config.xml>

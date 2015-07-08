@@ -9,7 +9,7 @@ import Math
 import BigWorld
 from copy import deepcopy
 from functools import partial
-
+from gui.shared.utils.sound import Sound
 
 
 class Marker(object):
@@ -103,7 +103,11 @@ class SpotExtended(Plugin):
               'markerTime': 9.0,
               'markerMove': True,
               'markerUpdateTime': 0.1,
-              'message':'{name}{tank}'
+              'message':'{name}{tank}',
+              'iconSize': (70,24),
+              'inline': True,
+              'playSound': False,
+              'sound': '/GUI/notifications_FX/enemy_sighted_for_team'
               }
         
     #plugin function, called at wot start
@@ -138,11 +142,20 @@ class SpotExtended(Plugin):
         if assistType == _SET.SPOTTED:
             player = BigWorld.player()
             arena = player.arena
+            msgs = ''
             for idV in vehiclesIDs:
                 if SpotExtended.myConf['showMarker']: 
                     SpotExtended.addMarker(idV, arena, player)
                 if SpotExtended.myConf['showMessage']:
-                    SpotExtended.addMessage(idV, arena)
+                    msg = SpotExtended.formatMessage(idV, arena)
+                    if SpotExtended.myConf['inline']:
+                        SpotExtended.addMessage(msg)
+                    else:
+                        msgs += msg
+            if msgs:
+                SpotExtended.addMessage(msgs)
+            if SpotExtended.myConf['playSound']:
+                Sound(SpotExtended.myConf['sound']).play()
 
     # add a 3D marker above spotted tank    
     @staticmethod
@@ -166,17 +179,26 @@ class SpotExtended(Plugin):
     
     # format the message and show it
     @staticmethod
-    def addMessage(idV, arena):
+    def addMessage(msg):
+        SpotExtended.showMessageOnPanel(SpotExtended.myConf['panel'],msg,SpotExtended.myConf['color'])
+        
+    @staticmethod
+    def formatMessage(idV, arena):
         entryVehicle = arena.vehicles[idV]
         vehicleType = entryVehicle['vehicleType'].type
+        iconPath = g_sessionProvider.getArenaDP().getVehicleInfo(idV).vehicleType.iconPath
+        width, height = SpotExtended.myConf['iconSize']
+        icon = '<img src="img://%s" width="%s" height="%s" />' %(iconPath.replace('..','gui'), width, height)
+        fullPlayerName = g_sessionProvider.getCtx().getFullPlayerName(vID=idV)
         infos = {'clanAbbrev': entryVehicle['clanAbbrev'],
                  'playerName':entryVehicle['name'],
                  'shortTankName': vehicleType.shortUserString,
-                 'fullTankName': vehicleType.name}
-                
-        msg = SpotExtended.myConf['message'].format(**infos)
-        SpotExtended.showMessageOnPanel(SpotExtended.myConf['panel'],msg,SpotExtended.myConf['color'])
-        
+                 'fullTankName': vehicleType.name,
+                 'fullPlayerName': fullPlayerName,
+                 'icon': icon
+                 }           
+        return SpotExtended.myConf['message'].format(**infos)
+    
     #Show message on specified panel: VehicleErrorsPanel, VehicleMessagesPanel, PlayerMessagesPanel
     @staticmethod
     def showMessageOnPanel(panel, msgText, color, index = 0):
