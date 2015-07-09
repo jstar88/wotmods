@@ -35,17 +35,21 @@ Usefull to increase focus fire's efficiency
 Pressing a combinations of buttons you are able to put objects around wot maps, the map that you created is automatically saved and loaded.  
 Both render engine and editor are only enabled in training battle and in replay mode.  
 Edited maps can be seen by other players using this mod and, of course, every map can be shared in safe way.  
-It's possible to use all models inside shared_content.pkg , but in future will be easy to add external models too.
+It's possible to use all models inside shared_content.pkg , but in future will be easy to add external models too.  
+
+* [SpotExtended_plugin](http://forum.worldoftanks.eu/index.php?/topic/510979-0981-spottedextended-no-xvm/)  
+This mod write to the ingame right panel(where kills are announced)  name of  tanks spotted by you.  
+It can also show an "eye" marker above the spotted tank for a chosen time.  
 
 #### Installation
 Download all code from [here](https://github.com/jstar88/wotmods/archive/master.zip)      
 Then extract the content of *files/recompyled/wot_folder* in your game root.   
 
-To enale a plugin,open *{game_root}/res_mods/0.9.x/scripts/client/plugins/{plugin_name}/config.xml* and set pluginEnable to true.
+To enable/disable plugins,open *{game_root}/res_mods/0.9.x/scripts/client/plugins/{plugin_name}/config.xml* and set pluginEnable to true/false.
 
 where  
 
 * {game_root} is your World of Tank installation directory
 * x is the wot version   
-* {plugin_name} is the name of the plugin
+* {plugin_name} is the plugin's name
 
