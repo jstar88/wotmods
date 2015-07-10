@@ -18,7 +18,7 @@
   <!-- **** Color *** green / red -->
   <color>gold</color>
     
-  <!-- **** Message format *** {playerName} / {fullPlayerName} / {shortTankName} / {fullTankName} / {clanAbbrev} / {icon} -->
+  <!-- **** Message format *** {playerName} / {fullPlayerName} / {shortTankName} / {fullTankName} / {clanAbbrev} / {icon} / {distance} -->
   <message>{playerName}[{shortTankName}]{icon}</message>
   
   <!-- **** Icon size *** 40 20 / 20 10 / etc etc -->

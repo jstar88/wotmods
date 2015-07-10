@@ -3,7 +3,7 @@ from constants import BATTLE_EVENT_TYPE as _SET
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battlesessionprovider import BattleSessionProvider
 from gui.WindowsManager import g_windowsManager
-from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
+from plugins.Engine.ModUtils import BattleUtils, MinimapUtils, FileUtils, HotKeysUtils, DecorateUtils
 from plugins.Engine.Plugin import Plugin
 import Math
 import BigWorld
@@ -14,7 +14,7 @@ from gui.shared.utils.sound import Sound
 
 class Marker(object):
 
-    def __init__(self,position,distance,idM,time = None):
+    def __init__(self, position, distance, idM, time=None):
         self.idM = idM
         if time is None:
             self.time = BigWorld.time()
@@ -39,57 +39,115 @@ class Marker(object):
 
 class MarkerManager(object):
     def __init__(self):
+        self.procStarted = False
         self.markers = {}
         self.waiting = []
         
-    def __add(self,marker):
+    def __add(self, marker):
         self.markers[marker.idM] = marker
         marker.show()
     
-    def __remove(self,idM):
+    def __remove(self, idM):
         if self.markers.has_key(idM):
             self.markers[idM].remove()
             del self.markers[idM]
         
-    def __set(self,marker):
+    def __set(self, marker):
         if self.markers.has_key(marker.idM):
             self.__remove(marker.idM)
         self.__add(marker)
         
-    def enqueue(self,marker):
+    def enqueue(self, marker):
         self.waiting.append(marker)
         
     def clean(self):
-        for k,v in self.markers.iteritems():
+        for k, v in self.markers.iteritems():
             v.remove()
         self.markers = {}
         self.waiting = []
         
     def updateMarkers(self):
-        if not inBattle:
+        if not Utils.inBattle:
             return
         for marker in self.waiting:
             self.__set(marker)
         self.waiting = []
         player = BigWorld.player()
         
-        for k,v in deepcopy(self.markers).iteritems(): 
-            if BigWorld.entities.has_key(k) and BigWorld.entities[k].isAlive() and BigWorld.time()-v.time < SpotExtended.myConf['markerTime']:
+        for k, v in deepcopy(self.markers).iteritems(): 
+            if BigWorld.entities.has_key(k) and BigWorld.entities[k].isAlive() and BigWorld.time() - v.time < SpotExtended.myConf['markerTime']:
                 if SpotExtended.myConf['markerMove']:
                     pos = BigWorld.entities[k].position
-                    distance = (player.position-pos).length
+                    distance = (player.position - pos).length
                     marker = Marker(pos, distance, k, v.time)
                     self.__set(marker)
             else:
                 self.__remove(k)
-        BigWorld.callback(SpotExtended.myConf['markerUpdateTime'], self.updateMarkers)    
-
+        BigWorld.callback(SpotExtended.myConf['markerUpdateTime'], self.updateMarkers) 
         
-    
+    # add a 3D marker above spotted tank    
+    def addMarker(self, idV, player, position):
+        distance = (player.position - position).length
+        self.enqueue(Marker(position, distance, idV))
+        if not self.procStarted:
+            self.updateMarkers()
+            self.procStarted = True   
 
-mm = MarkerManager()
-inBattle = False
-procStarted = False
+class MessageManager():
+    def __init__(self, vehiclesIDs):
+        self.message = ''
+        self.vehiclesIDs = {}
+        for vehicleID in vehiclesIDs:
+            self.vehiclesIDs[vehicleID] = vehicleID
+    
+    def add(self, idV, player, arena, position):
+        del self.vehiclesIDs[idV]
+        entryVehicle = arena.vehicles[idV]
+        vehicleType = entryVehicle['vehicleType'].type
+        iconPath = g_sessionProvider.getArenaDP().getVehicleInfo(idV).vehicleType.iconPath
+        width, height = SpotExtended.myConf['iconSize']
+        icon = '<img src="img://%s" width="%s" height="%s" />' % (iconPath.replace('..', 'gui'), width, height)
+        fullPlayerName = g_sessionProvider.getCtx().getFullPlayerName(vID=idV)
+        distance = round((player.position - position).length)
+        infos = {'clanAbbrev': entryVehicle['clanAbbrev'],
+                 'playerName':entryVehicle['name'],
+                 'shortTankName': vehicleType.shortUserString,
+                 'fullTankName': vehicleType.name,
+                 'fullPlayerName': fullPlayerName,
+                 'icon': icon,
+                 'distance':distance
+                 }           
+        self.message += SpotExtended.myConf['message'].format(**infos)
+        if not SpotExtended.myConf['inline'] or len(self.vehiclesIDs) == 0:
+            self.flush()
+    
+    # Show message on specified panel: VehicleErrorsPanel, VehicleMessagesPanel, PlayerMessagesPanel
+    def flush(self):
+        panel = SpotExtended.myConf['panel']
+        color = SpotExtended.myConf['color']
+        index = 0
+        if g_windowsManager.battleWindow is not None and panel in ('VehicleErrorsPanel', 'VehicleMessagesPanel', 'PlayerMessagesPanel'):
+            g_windowsManager.battleWindow.call('battle.' + panel + '.ShowMessage', [index, self.message, color])
+        self.clean()
+        
+    def clean(self):
+        self.message = ''
+    
+class Utils(object):
+    inBattle = False
+    
+    @staticmethod
+    def waitForPosition(idV, arena, function):
+        vehicle = BigWorld.entities.get(idV)   
+        if vehicle is not None:
+            position = BigWorld.entities[idV].position
+        elif arena.positions.has_key(idV):
+            position = arena.positions[idV]
+        else:
+            BigWorld.callback(0.5, partial(SpotExtended.waitForPosition, idV, arena, function))
+            return 
+        if position is not None:
+            function(position)
 
 class SpotExtended(Plugin):
     # default config
@@ -104,31 +162,29 @@ class SpotExtended(Plugin):
               'markerMove': True,
               'markerUpdateTime': 0.1,
               'message':'{name}{tank}',
-              'iconSize': (70,24),
+              'iconSize': (70, 24),
               'inline': True,
               'playSound': False,
               'sound': '/GUI/notifications_FX/enemy_sighted_for_team'
               }
         
-    #plugin function, called at wot start
+    # plugin function, called at wot start
     def run(self):
         saveOldFuncs()
         g_windowsManager.onInitBattleGUI += SpotExtended.start
-        g_windowsManager.onDestroyBattleGUI +=  SpotExtended.stop
+        g_windowsManager.onDestroyBattleGUI += SpotExtended.stop
         BattleFeedbackAdaptor.setPlayerAssistResult = SpotExtended.setPlayerAssistResult
     
     # injected, called when battle stop
     @staticmethod
     def stop():
-        global inBattle
-        inBattle = False
+        Utils.inBattle = False
         mm.clean()
     
     # injected, called when battle start
     @staticmethod
     def start():
-        global inBattle
-        inBattle = True
+        Utils.inBattle = True
         mm.clean()
         if g_sessionProvider is not None and g_sessionProvider.getFeedback() is not None:
             g_sessionProvider._BattleSessionProvider__feedback.stop()
@@ -142,69 +198,19 @@ class SpotExtended(Plugin):
         if assistType == _SET.SPOTTED:
             player = BigWorld.player()
             arena = player.arena
-            msgs = ''
+            msgm = MessageManager(vehiclesIDs)
             for idV in vehiclesIDs:
-                if SpotExtended.myConf['showMarker']: 
-                    SpotExtended.addMarker(idV, arena, player)
+                if SpotExtended.myConf['showMarker']:
+                    Utils.waitForPosition(idV, arena, partial(mm.addMarker, idV, player)) 
                 if SpotExtended.myConf['showMessage']:
-                    msg = SpotExtended.formatMessage(idV, arena)
-                    if SpotExtended.myConf['inline']:
-                        SpotExtended.addMessage(msg)
-                    else:
-                        msgs += msg
-            if msgs:
-                SpotExtended.addMessage(msgs)
+                    Utils.waitForPosition(idV, arena, partial(msgm.add, idV, player, arena))
             if SpotExtended.myConf['playSound']:
                 Sound(SpotExtended.myConf['sound']).play()
-
-    # add a 3D marker above spotted tank    
-    @staticmethod
-    def addMarker(idV, arena, player):
-        global procStarted
-        vehicle = BigWorld.entities.get(idV)
-        
-        if vehicle is not None:
-            position =  BigWorld.entities[idV].position
-        elif arena.positions.has_key(idV):
-            position = arena.positions[idV]
-        else:
-            BigWorld.callback(0.5,partial(SpotExtended.addMarker,idV, arena, player))
-            return
-        if position is not None:   
-            distance = (player.position-position).length
-            mm.enqueue(Marker(position,distance,idV))
-            if not procStarted:
-                mm.updateMarkers()
-                procStarted = True
-    
-    # format the message and show it
-    @staticmethod
-    def addMessage(msg):
-        SpotExtended.showMessageOnPanel(SpotExtended.myConf['panel'],msg,SpotExtended.myConf['color'])
-        
-    @staticmethod
-    def formatMessage(idV, arena):
-        entryVehicle = arena.vehicles[idV]
-        vehicleType = entryVehicle['vehicleType'].type
-        iconPath = g_sessionProvider.getArenaDP().getVehicleInfo(idV).vehicleType.iconPath
-        width, height = SpotExtended.myConf['iconSize']
-        icon = '<img src="img://%s" width="%s" height="%s" />' %(iconPath.replace('..','gui'), width, height)
-        fullPlayerName = g_sessionProvider.getCtx().getFullPlayerName(vID=idV)
-        infos = {'clanAbbrev': entryVehicle['clanAbbrev'],
-                 'playerName':entryVehicle['name'],
-                 'shortTankName': vehicleType.shortUserString,
-                 'fullTankName': vehicleType.name,
-                 'fullPlayerName': fullPlayerName,
-                 'icon': icon
-                 }           
-        return SpotExtended.myConf['message'].format(**infos)
-    
-    #Show message on specified panel: VehicleErrorsPanel, VehicleMessagesPanel, PlayerMessagesPanel
-    @staticmethod
-    def showMessageOnPanel(panel, msgText, color, index = 0):
-        if g_windowsManager.battleWindow is not None and panel in ('VehicleErrorsPanel', 'VehicleMessagesPanel', 'PlayerMessagesPanel'):
-            g_windowsManager.battleWindow.call('battle.' + panel + '.ShowMessage', [index, msgText, color])
+   
     
 def saveOldFuncs():
     global old__start
+    DecorateUtils.ensureGlobalVarNotExist('old__start')
     old__start = BattleFeedbackAdaptor.setPlayerAssistResult
+    
+mm = MarkerManager()
