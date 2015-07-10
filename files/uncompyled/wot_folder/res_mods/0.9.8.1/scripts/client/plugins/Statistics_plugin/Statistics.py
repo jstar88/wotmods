@@ -310,44 +310,41 @@ class Statistics(Plugin):
     
     
     @staticmethod
-    def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName):
+    def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, player_name):
         Statistics.updatePowerBar()
+        tmp =  old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, player_name)
         if not Statistics.okCw() or not Statistics.myConf['panels_enable']:
-            return old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
+            return tmp
         uid = vInfoVO.player.accountDBID
-        isAlive = vInfoVO.isAlive()
-        kk = str(uid)+str(isAlive)
-        if Statistics.cache.has_key('panels') and Statistics.cache['panels'].has_key(kk):
-            return Statistics.cache['panels'][kk]
-        player = BigWorld.player()
-        pr,lang,wr,bt = Statistics.getInfos(uid)
-        player_name = fullPlayerName
-        tank_name = vInfoVO.vehicleType.shortName
-        fullPlayerName, fragsString, shortName =  old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
-        if BattleUtils.isMyTeam(vInfoVO.team):
-            if Statistics.isMyCompatriot(uid,player):
-                fullPlayerName = Statistics.myConf['left_c']
-                shortName = Statistics.myConf['left_c_2']
-            else:
-                fullPlayerName = Statistics.myConf['left']
-                shortName = Statistics.myConf['left_2']
+        fullPlayerName, fragsString, shortName =  tmp
+        if Statistics.cache.has_key('panels') and Statistics.cache['panels'].has_key(uid):
+            fullPlayerName, shortName = Statistics.cache['panels'][uid]
         else:
-            if Statistics.isMyCompatriot(uid,player):
-                fullPlayerName = Statistics.myConf['right_c']
-                shortName = Statistics.myConf['right_c_2']
+            player = BigWorld.player()
+            pr,lang,wr,bt = Statistics.getInfos(uid)
+            tank_name = vInfoVO.vehicleType.shortName
+            if BattleUtils.isMyTeam(vInfoVO.team):
+                if Statistics.isMyCompatriot(uid,player):
+                    fullPlayerName = Statistics.myConf['left_c']
+                    shortName = Statistics.myConf['left_c_2']
+                else:
+                    fullPlayerName = Statistics.myConf['left']
+                    shortName = Statistics.myConf['left_2']
             else:
-                fullPlayerName = Statistics.myConf['right']
-                shortName = Statistics.myConf['right_2']
+                if Statistics.isMyCompatriot(uid,player):
+                    fullPlayerName = Statistics.myConf['right_c']
+                    shortName = Statistics.myConf['right_c_2']
+                else:
+                    fullPlayerName = Statistics.myConf['right']
+                    shortName = Statistics.myConf['right_2']
+            formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,vInfoVO.isAlive())
+            fullPlayerName = fullPlayerName.format(**formatz)
+            shortName = shortName.format(**formatz)
+            if not Statistics.cache.has_key('panels'):
+                Statistics.cache['panels'] = {}
+            Statistics.cache['panels'][uid] = (fullPlayerName, shortName)
         
-        
-        formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,isAlive)
-        fullPlayerName = fullPlayerName.format(**formatz)
-        shortName = shortName.format(**formatz)
-        returnData = (fullPlayerName, fragsString, shortName)
-        if not Statistics.cache.has_key('panels'):
-            Statistics.cache['panels'] = {}
-        Statistics.cache['panels'][kk] = returnData
-        return returnData
+        return (fullPlayerName, fragsString, shortName)
      
     @staticmethod
     def new__setName(self, dbID, pName = None):
@@ -401,17 +398,15 @@ class Statistics(Plugin):
         curVeh = player.arena.vehicles[vProxy.id]
         if curVeh is not None:
             curID = curVeh['accountDBID']
-            isAlive = curVeh['isAlive']
-            kk = str(curID)+str(isAlive)
-            if Statistics.cache.has_key('marker') and Statistics.cache['marker'].has_key(kk):
-                PR = Statistics.cache['marker'][kk]
+            if Statistics.cache.has_key('marker') and Statistics.cache['marker'].has_key(curID):
+                PR = Statistics.cache['marker'][curID]
             else:
-                pr,lang,wr,bt = Statistics.getInfos(curID)
+                pr, lang, wr, bt = Statistics.getInfos(curID)
                 formatz= Statistics.getFormat('marker',pr, wr, bt, lang,pName,vehShortName)
                 PR = Statistics.myConf['marker'].format(**formatz)
                 if not Statistics.cache.has_key('marker'):
                     Statistics.cache['marker'] = {}
-                Statistics.cache['marker'][kk] = PR
+                Statistics.cache['marker'][curID] = PR
             pName = PR
         
         #----------- original code ------------------
@@ -460,38 +455,36 @@ class Statistics(Plugin):
         if not Statistics.myConf['tab_enable'] or not Statistics.okCw():
             return tmp
         dbID = vInfoVO.player.accountDBID
-        isAlive = vInfoVO.isAlive()
-        kk = str(dbID)+str(isAlive)
-        if Statistics.cache.has_key('tab') and Statistics.cache['tab'].has_key(kk):
-            return Statistics.cache['tab'][kk]
         userName = vInfoVO.player.getPlayerLabel()
         region = regionGetter(dbID)
-        player = BigWorld.player()
         if region is None:
             region = ''
-        if tmp['clanAbbrev']:
-            userName +='['+tmp['clanAbbrev']+']'+region
-        pr,lang,wr,bt = Statistics.getInfos(dbID)
-        if BattleUtils.isMyTeam(vInfoVO.team):
-            if Statistics.isMyCompatriot(dbID,player):
-                f = Statistics.myConf['tab_left_c']
-            else:
-                f =Statistics.myConf['tab_left']
+        if Statistics.cache.has_key('tab') and Statistics.cache['tab'].has_key(dbID):
+            userName = Statistics.cache['tab'][dbID]
         else:
-            if Statistics.isMyCompatriot(dbID,player):
-                f = Statistics.myConf['tab_right_c']
+            player = BigWorld.player()
+            if tmp['clanAbbrev']:
+                userName +='['+tmp['clanAbbrev']+']'+region
+            pr, lang, wr, bt = Statistics.getInfos(dbID)
+            if BattleUtils.isMyTeam(vInfoVO.team):
+                if Statistics.isMyCompatriot(dbID,player):
+                    f = Statistics.myConf['tab_left_c']
+                else:
+                    f =Statistics.myConf['tab_left']
             else:
-                f = Statistics.myConf['tab_right']
-        
-        formatz= Statistics.getFormat('tab',pr, wr, bt, lang, userName)
-        userName = f.format(**formatz)
+                if Statistics.isMyCompatriot(dbID,player):
+                    f = Statistics.myConf['tab_right_c']
+                else:
+                    f = Statistics.myConf['tab_right']        
+            formatz= Statistics.getFormat('tab',pr, wr, bt, lang, userName)
+            userName = f.format(**formatz)
+            if not Statistics.cache.has_key('tab'):
+                Statistics.cache['tab'] = {}
+            Statistics.cache['tab'][dbID] = userName
     
         tmp['region'] = ''
         tmp['userName'] = userName
         tmp['clanAbbrev'] = ''
-        if not Statistics.cache.has_key('tab'):
-            Statistics.cache['tab'] = {}
-        Statistics.cache['tab'][kk] = tmp
         return tmp
     
     @staticmethod

@@ -144,7 +144,7 @@ class Utils(object):
         elif arena.positions.has_key(idV):
             position = arena.positions[idV]
         else:
-            BigWorld.callback(0.5, partial(SpotExtended.waitForPosition, idV, arena, function))
+            BigWorld.callback(0.5, partial(Utils.waitForPosition, idV, arena, function))
             return 
         if position is not None:
             function(position)
