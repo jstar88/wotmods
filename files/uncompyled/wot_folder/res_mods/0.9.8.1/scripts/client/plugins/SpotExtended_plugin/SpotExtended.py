@@ -148,6 +148,17 @@ class Utils(object):
             return 
         if position is not None:
             function(position)
+            
+    @staticmethod
+    def minimapPulse(vehicleID):
+        if g_windowsManager is None:
+            return    
+        if g_windowsManager.battleWindow is None:
+            return
+        minimap = g_windowsManager.battleWindow.minimap
+        if minimap is None:
+            return
+        minimap.showActionMarker(vehicleID,SpotExtended.myConf['minimapEffect'])
 
 class SpotExtended(Plugin):
     # default config
@@ -165,7 +176,9 @@ class SpotExtended(Plugin):
               'iconSize': (70, 24),
               'inline': True,
               'playSound': False,
-              'sound': '/GUI/notifications_FX/enemy_sighted_for_team'
+              'sound': '/GUI/notifications_FX/enemy_sighted_for_team',
+              'showMinimapEffect':True,
+              'minimapEffect':'firstEnemy'
               }
         
     # plugin function, called at wot start
@@ -204,6 +217,8 @@ class SpotExtended(Plugin):
                     Utils.waitForPosition(idV, arena, partial(mm.addMarker, idV, player)) 
                 if SpotExtended.myConf['showMessage']:
                     Utils.waitForPosition(idV, arena, partial(msgm.add, idV, player, arena))
+                if SpotExtended.myConf['showMinimapEffect']:
+                    Utils.minimapPulse(idV)
             if SpotExtended.myConf['playSound']:
                 Sound(SpotExtended.myConf['sound']).play()
    

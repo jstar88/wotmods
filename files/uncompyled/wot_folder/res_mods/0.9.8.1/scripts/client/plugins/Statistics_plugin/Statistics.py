@@ -31,6 +31,7 @@ class Statistics(Plugin):
     
     emo = None
     t = None
+    cache = {}
     lastime = 0 
     myConf = {
               'pluginEnable': True,
@@ -310,12 +311,15 @@ class Statistics(Plugin):
     
     @staticmethod
     def new__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName):
-        
         Statistics.updatePowerBar()
         if not Statistics.okCw() or not Statistics.myConf['panels_enable']:
             return old__getFormattedStrings(self, vInfoVO, vStatsVO, ctx, fullPlayerName)
-        player = BigWorld.player()
         uid = vInfoVO.player.accountDBID
+        isAlive = vInfoVO.isAlive()
+        kk = str(uid)+str(isAlive)
+        if Statistics.cache.has_key('panels') and Statistics.cache['panels'].has_key(kk):
+            return Statistics.cache['panels'][kk]
+        player = BigWorld.player()
         pr,lang,wr,bt = Statistics.getInfos(uid)
         player_name = fullPlayerName
         tank_name = vInfoVO.vehicleType.shortName
@@ -336,11 +340,14 @@ class Statistics(Plugin):
                 shortName = Statistics.myConf['right_2']
         
         
-        formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,vInfoVO.isAlive())
+        formatz= Statistics.getFormat('panels',pr, wr, bt, lang, player_name, tank_name,isAlive)
         fullPlayerName = fullPlayerName.format(**formatz)
         shortName = shortName.format(**formatz)
-        
-        return (fullPlayerName, fragsString, shortName)
+        returnData = (fullPlayerName, fragsString, shortName)
+        if not Statistics.cache.has_key('panels'):
+            Statistics.cache['panels'] = {}
+        Statistics.cache['panels'][kk] = returnData
+        return returnData
      
     @staticmethod
     def new__setName(self, dbID, pName = None):
@@ -394,9 +401,17 @@ class Statistics(Plugin):
         curVeh = player.arena.vehicles[vProxy.id]
         if curVeh is not None:
             curID = curVeh['accountDBID']
-            pr,lang,wr,bt = Statistics.getInfos(curID)
-            formatz= Statistics.getFormat('marker',pr, wr, bt, lang,pName,vehShortName)
-            PR = Statistics.myConf['marker'].format(**formatz)
+            isAlive = curVeh['isAlive']
+            kk = str(curID)+str(isAlive)
+            if Statistics.cache.has_key('marker') and Statistics.cache['marker'].has_key(kk):
+                PR = Statistics.cache['marker'][kk]
+            else:
+                pr,lang,wr,bt = Statistics.getInfos(curID)
+                formatz= Statistics.getFormat('marker',pr, wr, bt, lang,pName,vehShortName)
+                PR = Statistics.myConf['marker'].format(**formatz)
+                if not Statistics.cache.has_key('marker'):
+                    Statistics.cache['marker'] = {}
+                Statistics.cache['marker'][kk] = PR
             pName = PR
         
         #----------- original code ------------------
@@ -444,8 +459,11 @@ class Statistics(Plugin):
         tmp = old_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
         if not Statistics.myConf['tab_enable'] or not Statistics.okCw():
             return tmp
-
         dbID = vInfoVO.player.accountDBID
+        isAlive = vInfoVO.isAlive()
+        kk = str(dbID)+str(isAlive)
+        if Statistics.cache.has_key('tab') and Statistics.cache['tab'].has_key(kk):
+            return Statistics.cache['tab'][kk]
         userName = vInfoVO.player.getPlayerLabel()
         region = regionGetter(dbID)
         player = BigWorld.player()
@@ -471,6 +489,9 @@ class Statistics(Plugin):
         tmp['region'] = ''
         tmp['userName'] = userName
         tmp['clanAbbrev'] = ''
+        if not Statistics.cache.has_key('tab'):
+            Statistics.cache['tab'] = {}
+        Statistics.cache['tab'][kk] = tmp
         return tmp
     
     @staticmethod
@@ -528,6 +549,7 @@ class Statistics(Plugin):
         Statistics.t = None
         Statistics.lastime = 0
         Statistics.emo = None
+        Statistics.cache = {}
         
     def run(self):
         saveOldFuncs()
