@@ -451,7 +451,7 @@ class Statistics(Plugin):
         return old_return
     
     @staticmethod
-    def       new_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited):
+    def new_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited):
         tmp = old_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
         if not Statistics.myConf['tab_enable'] or not Statistics.okCw():
             return tmp
@@ -546,10 +546,15 @@ class Statistics(Plugin):
     
     @classmethod    
     def run(cls):
-        super(Statistics, Statistics).run()
-        cls.addEventHandler(Statistics.myConf['reloadConfigKey'],cls.reloadConfig)
+        super(cls, cls).run()
+        cls.addEventHandler(cls.myConf['reloadConfigKey'],cls.reloadConfig)
         saveOldFuncs()
         injectNewFuncs()
+        
+    @classmethod
+    def reloadConfig(cls):
+        cls.readConfig()
+        cls.cache = {}
         
 def saveOldFuncs():
     global old__onBecomePlayer,old_createMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old_setArenaInfo,old__setName,old__setNameCommon

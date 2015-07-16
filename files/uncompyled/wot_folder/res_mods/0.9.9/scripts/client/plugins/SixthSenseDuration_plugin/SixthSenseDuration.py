@@ -107,7 +107,7 @@ class SixthSenseDuration(Plugin):
         
         i = SixthSenseDuration.myConf['AudioRange'] / SixthSenseDuration.myConf['AudioTick']
         if not SixthSenseDuration.myConf['AudioIsExternal']:
-            sound = SoundGroups.g_instance.FMODgetSound(SixthSenseDuration.myConf['AudioPath'])
+            sound = SoundGroups.g_instance.getSound2D(SixthSenseDuration.myConf['AudioPath'])
             SixthSenseDuration.backupVolume = SoundGroups.g_instance.getVolume(SixthSenseDuration.myConf['VolumeType'])
             SoundGroups.g_instance.setVolume(SixthSenseDuration.myConf['VolumeType'],SixthSenseDuration.myConf['Volume'])
             SixthSenseDuration.playSound(sound,i)
