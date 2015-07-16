@@ -1,0 +1,258 @@
+<config.xml>
+
+  <!-- ***************** Enable the plugin ***************
+  	 true/false -->
+  <pluginEnable>true</pluginEnable>
+  
+  
+  <reloadConfigKey>KEY_NUMPAD2</reloadConfigKey>
+  
+  <!-- ******************* IconRange **********************
+      This entry represent the icon duration in milliseconds.
+      Note: this will set the duration of both original icon and own icons      
+      Example:
+      * "2000" : The spot Icon stay for 2 seconds -->
+  <IconRange>9000</IconRange>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconSpottedSize *****************
+  		This attribute determines what operation is used to render the icons onto the background.
+        Possible values are ADD, BLEND, BLEND_COLOUR, BLEND_INVERSE_COLOUR, SOLID, MODULATE2X, ALPHA_TEST, BLEND_INVERSE_ALPHA, BLEND2X, ADD_SIGNED 
+        "BLEND", which applies the alpha channel transparency, "SOLID" which ignores the alpha channel and overwrites the background, and "ADD" which just adds the colour to the existing background colour, making the component look like it is transparent and glowing. The default is "ADD". Note that ADD_SIGNED is a fudge, it basically performs a MOD2 blend with the frame buffer. For most situations this should be fine. -->
+  <materialFX>ADD</materialFX>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* DisplayOriginalIcon ************
+      Display the original spotted icon.
+      Note: the other icons will keep be shown 
+      true/false -->
+  <DisplayOriginalIcon>false</DisplayOriginalIcon>
+  <!-- ***************************************************** -->
+  
+  
+  
+  <!-- ################ Icons position ################ -->
+  
+  <!-- ******************* IconInactivePosition ************
+  		The position on the screen of the icon shown when sixthsense perk is not enabled 
+  		X is your screen's width
+      	Y is your screen's height 
+      	use float numbers -->    
+  <IconInactivePosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconInactivePosition>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconUnspottedPosition **********  
+  		The position on the screen of the icon shown when sixthsense is enabled and you are not spotted
+  		X is your screen's width
+      	Y is your screen's height 
+      	use float numbers -->   
+  <IconUnspottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconUnspottedPosition>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconSpottedPosition ************  
+  		The position on the screen of the icon shown when sixthsense is enabled and you are spotted
+  		X is your screen's width
+      	Y is your screen's height 
+      	use float numbers -->   
+  <IconSpottedPosition>(round(x / 2) + 140.0,  20.0, 0.7)</IconSpottedPosition>
+  <!-- ***************************************************** -->
+  
+  
+  
+  
+  <!-- ################ Icons path ################ -->
+  
+  <!-- ******************* IconInactivePath ***************
+  		The path of the icon shown when sixthsense perk is not enabled 
+  		To disable the icon set it to 
+  		scripts/client/plugins/SixthSenseDuration_plugin/resources/transparent.dds -->
+  <IconInactivePath>scripts/client/plugins/SixthSenseDuration_plugin/resources/inactive.dds</IconInactivePath>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconUnspottedPath **************
+  		The path of the icon shown when sixthsense is enabled and you are not spotted 
+  		To disable the icon set it to 
+  		scripts/client/plugins/SixthSenseDuration_plugin/resources/transparent.dds -->
+  <IconUnspottedPath>scripts/client/plugins/SixthSenseDuration_plugin/resources/unspotted.dds</IconUnspottedPath>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconSpottedPath ****************
+  		The path of the icon shown when sixthsense is enabled and you are spotted 
+  		To disable the icon set it to 
+  		scripts/client/plugins/SixthSenseDuration_plugin/resources/transparent.dds -->
+  <IconSpottedPath>scripts/client/plugins/SixthSenseDuration_plugin/resources/spotted.dds</IconSpottedPath>
+  <!-- ***************************************************** -->
+  
+  
+  
+  
+  <!-- ################ Icons size ################ -->
+  
+  <!-- ******************* IconInactiveSize *************** 
+		The size of the icon shown when sixthsense perk is not enabled -->
+  <IconInactiveSize>52 52</IconInactiveSize>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconUnspottedSize ************** 
+  		The size of the icon shown when sixthsense is enabled and you are not spotted -->
+  <IconUnspottedSize>52 52</IconUnspottedSize>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* IconSpottedSize ****************
+  		The size of the icon shown  when sixthsense is enabled and you are spotted -->
+  <IconSpottedSize>52 52</IconSpottedSize>
+  <!-- ***************************************************** -->
+
+  
+  
+  
+  
+  <!-- ################ Audio ################ -->
+    
+  <!-- ******************* AudioIsExternal ****************
+      Set it to true to enable the external audio reader. 
+      true/false -->
+  <AudioIsExternal>true</AudioIsExternal>
+  <!-- ***************************************************** -->
+  
+  <!-- ******************* AudioExternal *******************
+      A list of cmd commands to run the external audio. 
+      http://www.elifulkerson.com/projects/commandline-wav-player.php -->
+  <AudioExternal>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sounder.exe</item>
+    <item>res_mods/{v}/scripts/client/plugins/SixthSenseDuration_plugin/resources/sound.wav</item>
+  </AudioExternal>
+  <!-- ***************************************************** -->
+  
+
+  <!--  ******************* AudioPath *******************
+      This entry represent the sound path. Used when AudioIsExternal is false.
+      Sound paths can be found in different files as 
+      res/packages/gui/gui_sounds.xml
+      or
+      res/packages/gui/sound_notification.xml
+      and more.
+      Example:
+      * "Dlink" : /GUI/notifications_FX/gun_intuition
+      * "Clock" : /GUI/notifications_FX/cybersport_timer  
+      -->
+  <AudioPath>/GUI/notifications_FX/cybersport_timer</AudioPath>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* AudioRange *******************
+      This entry represent the sound system duration in milliseconds 
+      after the spot. To use both when AudioIsExternal is true or false.     
+      Example:
+      * "9000" : 9 seconds  
+      * "0" : no audio      -->
+  <AudioRange>10000</AudioRange>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* AudioTick *******************
+      This entry represent time between sound repetition in milliseconds.
+      Generally this is usefull to repeat sounds that are smaller than 
+      the AudioRange value. If setted to 1000, it represent a clock.
+      Used when AudioIsExternal is true or false.       
+      Example:
+      * "1000" : the sound repeat each 1 second for AudioRange/AudioTick = 9 times  
+      * "9000" : the sound repeat each 1 second for AudioRange/AudioTick = 1 time   -->                                                    -->
+  <AudioTick>10000</AudioTick>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* Volume *******************
+      This entry represent the sound volume. Used when AudioIsExternal is false.
+      Min = 0.0, Max = 1.0      
+      Example:
+      * "0.8" : The volume is 80%  -->
+  <Volume>0.8</Volume>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* VolumeType *******************
+      This entry represent the type of sound in milliseconds.
+      You must set this because sounds in WOT are placed in groups.
+      You can increase volume of specific groups.
+      Generally if the sound's path start with "GUI" then set it to "gui".  
+      Used when AudioIsExternal is false.
+      Example:
+      * "gui" : volume of sounds in group "gui" will be temporarily 
+      setted to above Volume   -->
+  <VolumeType>gui</VolumeType>
+  <!-- ***************************************************** -->
+  
+  
+  
+  
+   <!-- ################ Timer ################ --> 
+  
+  <!-- ******************* TimerRange *******************
+      This entry represent the countdown timer duration in milliseconds.
+      You must set an integer.    
+      Example:
+      * "9000" : 9 seconds   
+      * "0" : don't show the countdown 
+      -->
+  <TimerRange>9000</TimerRange>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* TimerTick *******************
+      This entry represent the time between timer number's change.
+      You must set an integer.    
+      Example:
+      * "1000" : each 1 second   -->
+  <TimerTick>1000</TimerTick>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* TimerZeroDelay *******************
+      This entry represent the time in milliseconds after that 
+      the "0" disappear.
+      Example:
+      * "200" : after 0.2 seconds   -->
+  <TimerZeroDelay>200</TimerZeroDelay>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* TimerColor *******************
+      This entry represent the HEX color of the timer.
+      You can find codes here:
+      http://www.w3schools.com/tags/ref_colorpicker.asp  
+      Example:
+      * "#FF8000" : orange   -->
+  <TimerColor>#FF8000</TimerColor>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* TimerFont *******************
+      This entry represent the font of the timer.     
+      Example:
+      * "verdana_medium.font" verdana, size medium
+      setted to above Volume   -->
+  <TimerFont>verdana_medium.font</TimerFont>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* TimerPosition ******************
+      This entry represent the timer position on the screen.
+      X is your screen's width
+      Y is your screen's height
+      Example:
+      * "(round(x / 2) + 120, round(y / 6) + 20, 0.7)" : (x,y,z)   -->
+  <TimerPosition>(round(x / 2) + 200.0,  30.0, 0.7)</TimerPosition>
+  <!-- ***************************************************** -->
+  
+  
+  <!-- ******************* TimerText *******************
+      This entry represent the timer text on the screen.
+      %s is the countdown time
+      Example:
+      * "Spotted for %s seconds":  Spotted for 9 seconds 
+      * "%s":  9      -->
+  <TimerText>Spotted for %s seconds</TimerText>
+  <!-- ***************************************************** -->
+  
+</config.xml>

@@ -1,5 +1,3 @@
-
-#1
 class B():
     def hello(self):
         return "hello"

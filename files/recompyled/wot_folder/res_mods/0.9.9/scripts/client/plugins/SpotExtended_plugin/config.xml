@@ -1,0 +1,67 @@
+<config.xml>
+
+  <!-- ===================== SHARED =========================== -->  
+  <!-- *** Enable the plugin *** true / false -->
+  <pluginEnable>true</pluginEnable>
+  <reloadConfigKey>KEY_NUMPAD3</reloadConfigKey>
+  
+  
+  <!-- ===================== MESSAGES =========================== -->  
+  <!-- **** Enable the message for spotted tank *** true / false -->
+  <showMessage>true</showMessage>
+  
+  <!-- *** Where write *** VehicleErrorsPanel / VehicleMessagesPanel / PlayerMessagesPanel -->
+  <panel>PlayerMessagesPanel</panel>
+  
+  <!-- **** Color *** green / red -->
+  <color>gold</color>
+    
+  <!-- **** Message format *** {playerName} / {fullPlayerName} / {shortTankName} / {fullTankName} / {clanAbbrev} / {icon} / {distance} -->
+  <message>{playerName}[{shortTankName}]{icon}</message>
+  
+  <!-- **** Icon size *** 40 20 / 20 10 / etc etc -->
+  <iconSize>70 24</iconSize>
+  
+  <!-- **** Show multiple spotted tank on same line *** true / false -->
+  <inline>false</inline>
+  
+  
+  
+  <!-- ===================== MARKERS =========================== --> 
+  <!-- **** Enable the marker for spotted tank *** true / false -->
+  <showMarker>true</showMarker>
+  
+  <!-- **** Marker swf name *** eye/.. -->
+  <markerType>eye</markerType>
+  
+  <!-- **** Marker height from spotted tank *** 1 / 2 /.. -->
+  <markerHeight>12</markerHeight>
+  
+  <!-- **** Marker life time *** 1.2 / 2.5/.. -->
+  <markerTime>9.0</markerTime>
+  
+  <!-- **** Marker updating time *** 1.2 / 2.5 /.. -->
+  <markerUpdateTime>0.1</markerUpdateTime>
+  
+  <!-- **** Enable marker following spotted tank *** true / false -->
+  <markerMove>true</markerMove>
+  
+  
+  <!-- ===================== MARKERS =========================== -->
+  <!-- **** Play a sound for spotted tank *** true / false -->
+  <playSound>false</playSound>
+  
+  <!-- **** Sound type *** /GUI/notifications_FX/enemy_sighted_for_team  /GUI/notifications_FX/gun_intuition /GUI/notifications_FX/cybersport_auto_search /fortified_area/gui/gun_intuition-->
+  <sound>/GUI/notifications_FX/enemy_sighted_for_team</sound>
+  
+  
+  
+  <!-- ===================== MINIMAP =========================== -->
+  <!-- **** Show spotted tank on minimap *** true / false -->
+  <showMinimapEffect>true</showMinimapEffect>
+  
+  <!-- firstEnemy / enemySPG / attack / attackSPG / attackSenderSPG / follow_me / reloading_gun / negative / positive / stop / help_me / help_me_ex / turn_back -->
+  <minimapEffect>firstEnemy</minimapEffect>
+
+
+</config.xml>
