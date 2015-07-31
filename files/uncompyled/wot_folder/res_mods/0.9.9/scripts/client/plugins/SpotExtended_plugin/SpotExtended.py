@@ -1,4 +1,4 @@
-from gui.battle_control.battle_feedback import BattleFeedbackAdaptor
+from gui.battle_control.battle_feedback import BattleFeedbackAdaptor,BattleFeedbackPlayer
 from constants import BATTLE_EVENT_TYPE as _SET
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battlesessionprovider import BattleSessionProvider
@@ -191,6 +191,7 @@ class SpotExtended(Plugin):
         g_windowsManager.onInitBattleGUI += SpotExtended.start
         g_windowsManager.onDestroyBattleGUI += SpotExtended.stop
         BattleFeedbackAdaptor.setPlayerAssistResult = SpotExtended.setPlayerAssistResult
+        BattleFeedbackPlayer.setPlayerAssistResult = SpotExtended.setPlayerAssistResult
     
     # injected, called when battle stop
     @staticmethod
@@ -203,11 +204,11 @@ class SpotExtended(Plugin):
     def start():
         Utils.inBattle = True
         mm.clean()
-        if g_sessionProvider is not None and g_sessionProvider.getFeedback() is not None:
+        '''if g_sessionProvider is not None and g_sessionProvider.getFeedback() is not None:
             g_sessionProvider._BattleSessionProvider__feedback.stop()
             g_sessionProvider._BattleSessionProvider__feedback = BattleFeedbackAdaptor()
             g_sessionProvider._BattleSessionProvider__feedback.start(g_sessionProvider._BattleSessionProvider__arenaDP)
-
+         '''
     # injected, called when client receive events
     @staticmethod
     def setPlayerAssistResult(self, assistType, vehiclesIDs):
