@@ -25,16 +25,17 @@ class DownloaderWG(object):
         try:
             url = self.url.format(**self.formatz)
             data = fetchUrl(url)
-            ens = safe_list_get(json.loads(data),'data',None)
+            ens = json.loads(data)['data']
         except:
-            traceback.print_exc()
+            #traceback.print_exc()
             for id in ids:
                 tmp.append(Entity(id, 0,'', 0.0,0))
             return tmp
         if ens is None:
-            LOG_NOTE('players is None')
+            LOG_NOTE('players are None')
         else:
             for id,info in ens.iteritems():
+                id = int(id)
                 if info is not None:
                     pr = int(getNestedElement(info,self.formatz['pr_index']))
                     bt = int(getNestedElement(info,self.formatz['battles_index']))
@@ -43,10 +44,11 @@ class DownloaderWG(object):
                         wr = 0.0
                     else:
                         wr = wr * 100.0 / bt
-                    id = int(id)
                     lang = getNestedElement(info,self.formatz['lang_index'])
                     entity = Entity(id, pr,lang, wr,bt)
                     tmp.append(entity)
+                else:
+                    tmp.append(Entity(id, 0,'', 0.0,0))
         return tmp
     
 
@@ -74,13 +76,3 @@ def getNestedElement(v,path):
     for index in indexes:
         v = v[index]
     return v
-
-def safe_list_get (l, idx, default):
-    if l is None:
-        LOG_NOTE("got None list")
-        return default
-    try:
-        return l[idx]
-    except:
-        LOG_NOTE("index: "+ str(idx)+ " not in list")
-    return default
