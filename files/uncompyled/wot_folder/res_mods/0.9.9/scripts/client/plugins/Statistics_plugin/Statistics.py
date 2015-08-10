@@ -48,6 +48,8 @@ class Statistics(Plugin):
               'application_id': 'demo',
               'url': 'http://api.worldoftanks.{region}/wot/account/info/?application_id={application_id}&fields={pr_index},{lang_index},{wr_index},{battles_index}&account_id={id}',
               
+              'flags_folder':'scripts/client/plugins/Statistics_plugin/flags',
+              
               'powerbar_enable': True,
               'powerbar_texture':'system/maps/col_white.dds',
               'powerbar_width': 400,
@@ -81,6 +83,11 @@ class Statistics(Plugin):
               'tab_right': '  {lang}|{wr}%|{pr}',
               'tab_left_c': '«{lang}»|{wr}%|{pr}  ',
               'tab_right_c': '  «{lang}»|{wr}%|{pr}',
+              
+              'tab_left_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              'tab_right_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              'tab_left_c_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
+              'tab_right_c_2' : "<font color='#{color_pr}'>{tank_name}</font><br/>",
               
               'win_chance_enable': True,
               'win_chance_text': "( Chance for win: <font color='{color}'>{win_chance}%</font> )",
@@ -267,9 +274,10 @@ class Statistics(Plugin):
     @staticmethod
     def getFormat(type,pr,wr,bt,lang,player_name='',tank_name='',isAlive=True):
        formatz = {'player_name':player_name, 'lang':lang, 'tank_name':tank_name}
-       couple = {'pr':pr,'wr':wr,'bt':bt}
+       couple = {'pr':pr,'wr':wr,'bt':bt }
        formatz = Statistics.updateWithColorDict(formatz, couple, isAlive)
        formatz = Statistics.updateWithNumbersDict(formatz, couple,type) 
+       formatz['flag_url'] = 'img://'+Statistics.myConf['flags_folder']+'/'+lang+'.png'
        return formatz
     
     @staticmethod
@@ -455,13 +463,14 @@ class Statistics(Plugin):
         tmp = old_makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
         if not Statistics.myConf['tab_enable'] or not Statistics.okCw():
             return tmp
-        dbID = vInfoVO.player.accountDBID
-        userName = vInfoVO.player.getPlayerLabel()
-        region = self._regionGetter(dbID)
+        dbID = tmp['uid']
+        userName = tmp['userName']
+        vehicle = tmp['vehicle']
+        region = tmp['region']
         if region is None:
             region = ''
         if Statistics.cache.has_key('tab') and Statistics.cache['tab'].has_key(dbID):
-            userName = Statistics.cache['tab'][dbID]
+            userName,vehicle = Statistics.cache['tab'][dbID]
         else:
             player = BigWorld.player()
             if tmp['clanAbbrev']:
@@ -470,21 +479,27 @@ class Statistics(Plugin):
             if BattleUtils.isMyTeam(vInfoVO.team):
                 if Statistics.isMyCompatriot(dbID,player):
                     f = Statistics.myConf['tab_left_c']
+                    g = Statistics.myConf['tab_left_c_2']
                 else:
                     f =Statistics.myConf['tab_left']
+                    g = Statistics.myConf['tab_left_2']
             else:
                 if Statistics.isMyCompatriot(dbID,player):
                     f = Statistics.myConf['tab_right_c']
+                    g = Statistics.myConf['tab_right_c_2']
                 else:
-                    f = Statistics.myConf['tab_right']        
-            formatz= Statistics.getFormat('tab',pr, wr, bt, lang, userName)
+                    f = Statistics.myConf['tab_right'] 
+                    g = Statistics.myConf['tab_right_2']       
+            formatz= Statistics.getFormat('tab',pr, wr, bt, lang, userName, vehicle)
             userName = f.format(**formatz)
+            vehicle = g.format(**formatz)
             if not Statistics.cache.has_key('tab'):
                 Statistics.cache['tab'] = {}
-            Statistics.cache['tab'][dbID] = userName
+            Statistics.cache['tab'][dbID] = (userName,vehicle)
     
         tmp['region'] = ''
         tmp['userName'] = userName
+        tmp['vehicle'] = vehicle
         tmp['clanAbbrev'] = ''
         return tmp
     

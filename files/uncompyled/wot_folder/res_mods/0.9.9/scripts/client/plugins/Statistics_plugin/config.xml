@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config.xml>
+  <!-- Code tips and examples:
+  *To correctly render html
+       <![CDATA[yourhtmlhere]]> 
+       
+  *To use macroes
+       place macro's name sorrounded by {}
+       {color_pr} is something like #FF0000    
+         
+  *To show flags
+       <img src='{flag_url}' width='16' height='12'> 
+  
+  *To change font color and size
+       <font size='17' color='{color_pr}'>your text here</font>   
+   -->
   
   <pluginEnable>true</pluginEnable>
   <reloadConfigKey>KEY_NUMPAD5</reloadConfigKey>
@@ -25,35 +39,38 @@
   <!-- enable the mod for cw -->
   <cw>false</cw> <!-- true or false --> 
   
+  <!-- folder where you placed flags -->
+  <flags_folder>scripts/client/plugins/Statistics_plugin/flags</flags_folder>
+  
   
   <!-- ********************************************
        ******  left and right playerspanel ******** 
        ******************************************** -->
   <panels_enable>true</panels_enable>
   <!-- html for left panel(first column) --> 
-  <left><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>]]></left><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt}-->  
+  <left><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>]]></left><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
   
   <!-- html for right panel(first column) -->   
-  <right><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>]]></right><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt}-->  
+  <right><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>]]></right><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
   
   <!-- html for left panel in case of compatriot(first column) -->   
-  <left_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>]]></left_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} --> 
+  <left_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>]]></left_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}--> 
   
   <!-- html for right panel in case of compatriot(first column) -->  
-  <right_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>]]></right_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} -->  
+  <right_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>]]></right_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
   
   
   <!-- html for left panel(second column) --> 
-  <left_2><![CDATA[{tank_name}<br/>]]></left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt}-->  
+  <left_2><![CDATA[{tank_name}<br/>]]></left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
   
   <!-- html for right panel(second column) -->   
-  <right_2><![CDATA[{tank_name}<br/>]]></right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt}-->  
+  <right_2><![CDATA[{tank_name}<br/>]]></right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
   
   <!-- html for left panel in case of compatriot(second column) -->   
-  <left_c_2><![CDATA[{tank_name}<br/>]]></left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} --> 
+  <left_c_2><![CDATA[{tank_name}<br/>]]></left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}--> 
   
   <!-- html for right panel in case of compatriot(second column) -->  
-  <right_c_2><![CDATA[{tank_name}<br/>]]></right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} -->
+  <right_c_2><![CDATA[{tank_name}<br/>]]></right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
   
   <panels_bt_divisor>1000</panels_bt_divisor>
   <panels_bt_decimals>0</panels_bt_decimals>
@@ -68,7 +85,7 @@
        ******************************************** -->
   <chat_enable>true</chat_enable>
   <!-- html for chat replacing the current player full name --> 
-  <chat><![CDATA[{player_name}|{pr}]]></chat> <!-- {lang} {player_name} {pr}{wr}{bt}-->
+  <chat><![CDATA[{player_name}|{pr}]]></chat> <!-- {lang} {player_name} {pr}{wr}{bt} {flag_url}-->
   
   <chat_bt_divisor>1000</chat_bt_divisor>
   <chat_bt_decimals>0</chat_bt_decimals>
@@ -82,7 +99,7 @@
        ******************************************** -->
   <marker_enable>true</marker_enable> 
   <!-- html for marker replacing the current player full name --> 
-  <marker><![CDATA[{player_name} {pr}]]></marker> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt}-->
+  <marker><![CDATA[{player_name} {pr}]]></marker> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
   
   <marker_bt_divisor>1000</marker_bt_divisor>
   <marker_bt_decimals>0</marker_bt_decimals>
@@ -112,16 +129,28 @@
   <tab_enable>true</tab_enable>
   
   <!-- html for left tab panel --> 
-  <tab_left><![CDATA[{lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} --> 
+  <tab_left><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}--> 
   
   <!-- html for right tab panel -->   
-  <tab_right><![CDATA[{player_name}  {lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></tab_right><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} --> 
+  <tab_right><![CDATA[{player_name}  <img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></tab_right><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}--> 
   
   <!-- html for left tab panel in case of compatriot -->   
-  <tab_left_c><![CDATA[«{lang}»|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left_c><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} -->  
+  <tab_left_c><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left_c><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}-->  
   
   <!-- html for right tab panel in case of compatriot -->  
-  <tab_right_c><![CDATA[{player_name}  «{lang}»|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></tab_right_c><!-- {lang}{player_name}{pr}{wr}{bt}{color_pr}{color_bt}{color_wr} -->  
+  <tab_right_c><![CDATA[{player_name}  <img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></tab_right_c><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}-->  
+  
+  <!-- html for left tab(second column) --> 
+  <tab_left_2>{tank_name}</tab_left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  
+  <!-- html for right tab(second column) -->   
+  <tab_right_2>{tank_name}</tab_right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  
+  <!-- html for left tab in case of compatriot(second column) -->   
+  <tab_left_c_2>{tank_name}</tab_left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}--> 
+  
+  <!-- html for right tab in case of compatriot(second column) -->  
+  <tab_right_c_2>{tank_name}</tab_right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
   
   <tab_bt_divisor>1000</tab_bt_divisor>
   <tab_bt_decimals>0</tab_bt_decimals>
