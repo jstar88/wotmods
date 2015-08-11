@@ -65,3 +65,7 @@ class HorizontalProgressionBar(object):
 
         self.a.setHeight(self.height)
         self.b.setHeight(self.height)
+    
+    def setMaterialFx(self,type = 'ADD'):
+        self.a.setMaterialFx(type)
+        self.b.setMaterialFx(type)

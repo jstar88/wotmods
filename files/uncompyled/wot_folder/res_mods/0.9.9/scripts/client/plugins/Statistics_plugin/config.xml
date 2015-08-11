@@ -12,11 +12,25 @@
        <img src='{flag_url}' width='16' height='12'> 
   
   *To change font color and size
-       <font size='17' color='{color_pr}'>your text here</font>   
+       <font size='17' color='{color_pr}'>your text here</font> 
+       
+  *Naming
+       pr = personal rating
+       bt = battle amount
+       wr = winrate
+       
+       color_pr = personal rating's related color
+       color_bt = battle amount's related color
+       color_wr = winrate's related color
+       
+       lang = client language shortcode
+       flag_url = url of the right flag image( based on client language )
    -->
   
   <pluginEnable>true</pluginEnable>
   <reloadConfigKey>KEY_NUMPAD5</reloadConfigKey>
+  
+  
   
   <!-- ********************************************
        ***********  general settings ************** 
@@ -41,6 +55,7 @@
   
   <!-- folder where you placed flags -->
   <flags_folder>scripts/client/plugins/Statistics_plugin/flags</flags_folder>
+  
   
   
   <!-- ********************************************
@@ -72,6 +87,7 @@
   <!-- html for right panel in case of compatriot(second column) -->  
   <right_c_2><![CDATA[{tank_name}<br/>]]></right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
   
+  <!-- pretty number formatting options -->
   <panels_bt_divisor>1000</panels_bt_divisor>
   <panels_bt_decimals>0</panels_bt_decimals>
   <panels_pr_divisor>1</panels_pr_divisor>
@@ -80,13 +96,15 @@
   <panels_wr_divisor>1</panels_wr_divisor>
   
   
+  
   <!-- ********************************************
        *********  rating on chat name ************* 
        ******************************************** -->
   <chat_enable>true</chat_enable>
-  <!-- html for chat replacing the current player full name --> 
+  <!-- html replacing the current player full name --> 
   <chat><![CDATA[{player_name}|{pr}]]></chat> <!-- {lang} {player_name} {pr}{wr}{bt} {flag_url}-->
   
+  <!-- pretty number formatting options -->
   <chat_bt_divisor>1000</chat_bt_divisor>
   <chat_bt_decimals>0</chat_bt_decimals>
   <chat_pr_divisor>1</chat_pr_divisor>
@@ -94,13 +112,16 @@
   <chat_wr_decimals>0</chat_wr_decimals>
   <chat_wr_divisor>1</chat_wr_divisor>
   
+  
+  
   <!-- ********************************************
        *********  marker on every tank ************ 
        ******************************************** -->
   <marker_enable>true</marker_enable> 
-  <!-- html for marker replacing the current player full name --> 
+  <!-- html replacing the current player full name --> 
   <marker><![CDATA[{player_name} {pr}]]></marker> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
   
+  <!-- pretty number formatting options -->
   <marker_bt_divisor>1000</marker_bt_divisor>
   <marker_bt_decimals>0</marker_bt_decimals>
   <marker_pr_divisor>1</marker_pr_divisor>
@@ -109,6 +130,7 @@
   <marker_wr_divisor>1</marker_wr_divisor>
   
    
+  
   <!-- ********************************************
        ********  info on battle loading *********** 
        ******************************************** -->
@@ -116,12 +138,15 @@
   <battle_loading_string_right><![CDATA[{player_name}  {lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>]]></battle_loading_string_right> <!-- {lang}{player_name} {pr}{wr}{bt}-->
   <battle_loading_string_left><![CDATA[{lang}|<font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></battle_loading_string_left> <!-- {lang}{player_name} {pr}{wr}{bt}  -->
   
+  <!-- pretty number formatting options -->
   <battle_loading_bt_divisor>1000</battle_loading_bt_divisor>
   <battle_loading_bt_decimals>0</battle_loading_bt_decimals>
   <battle_loading_pr_divisor>1</battle_loading_pr_divisor>
   <battle_loading_pr_decimals>0</battle_loading_pr_decimals>
   <battle_loading_wr_decimals>0</battle_loading_wr_decimals>  
   <battle_loading_wr_divisor>1</battle_loading_wr_divisor>
+  
+  
   
   <!-- ********************************************
        *********  info on tab ************ 
@@ -152,6 +177,7 @@
   <!-- html for right tab in case of compatriot(second column) -->  
   <tab_right_c_2>{tank_name}</tab_right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
   
+  <!-- pretty number formatting options -->
   <tab_bt_divisor>1000</tab_bt_divisor>
   <tab_bt_decimals>0</tab_bt_decimals>
   <tab_pr_divisor>1</tab_pr_divisor>
@@ -159,31 +185,65 @@
   <tab_wr_decimals>0</tab_wr_decimals>
   <tab_wr_divisor>1</tab_wr_divisor>
     
+  
+  
   <!-- ********************************************
        *****  win changes on battle loading ******* 
        ******************************************** -->
   <win_chance_enable>true</win_chance_enable>
   <win_chance_text><![CDATA[( Chance for win: <font color='{color}'>{win_chance}%</font> )]]></win_chance_text><!-- {color} {win_chance} -->
   
+  
+  
   <!-- ********************************************
        *********  powerbar ************* 
        ******************************************** -->
   <powerbar_enable>true</powerbar_enable>  
+  
+  <!-- powerbar's background texture,
+       If it is set to an empty string then the component will be invisible -->
   <powerbar_texture>system/maps/col_white.dds</powerbar_texture> 
+  
+  <!-- powerbar's width, in pixel  -->
   <powerbar_width>200</powerbar_width> 
+  
+  <!-- powerbar's height, in pixel  -->
   <powerbar_height>5</powerbar_height>
+  
+  <!--  The first two numbers are the horizontal and vertical positions, the third is the depth sort value. 
+        The depth sort value is used to sort between various GUI components with the same parent. The lower numbered components appear on top of higher numbered components. 
+        Note that depth values should be kept between 0 and 1, since some video cards will automatically clip away triangles with z-values outside this range, even if the z-buffer is disabled.
+        x = screen width
+        y = screen height -->
   <powerbar_position>(x/2-100,y/10 - 50,0.7)</powerbar_position> 
+  
+  <!-- This attribute is the colour of the bar. 
+       This colour is a Vector4, with components ranging between 0 and 255. The components are (Red, Green, Blue, Alpha). 
+       The numbers are scaled to the 0-1 range, and then each pixel's colour (also in the 0-1 range) is multiplied by the colour. 
+       Items are left and right powerbar's portions -->
   <powerbar_colors>
   	<item>(100, 255, 0, 100)</item>
   	<item>(255, 50, 50, 100)</item>
   </powerbar_colors>  
+  
+  <!-- This attribute determines what operation is used to render the icons onto the background.
+        Possible values are ADD, BLEND, BLEND_COLOUR, BLEND_INVERSE_COLOUR, SOLID, MODULATE2X, ALPHA_TEST, BLEND_INVERSE_ALPHA, BLEND2X, ADD_SIGNED 
+        "BLEND", which applies the alpha channel transparency, "SOLID" which ignores the alpha channel and overwrites the background, and "ADD" which just adds the colour to the existing background colour, making the component look like it is transparent -->
+  <powerbar_materialFX>ADD</powerbar_materialFX>
+  
+  <!-- This attribute specifies the path to the font file that is used to render the text. Assigning to it causes the new font file to be loaded. If an invalid file is specified, then a Python Error occurs. 
+        By convention, font files are stored in the fonts subdirectory. They are an xml file describing which image to obtain the characters from, and the size and location of each character. 
+        The default font is default_medium.font". -->
+  <powerbar_font>default_medium.font</powerbar_font>
      
   
   
   <!-- ********************************************
        ******  personal rating color scale ******** 
        ******************************************** -->
-  <!-- add entries(levels) as you wish -->
+  <!-- add entries(levels) as you wish 
+       min = minimum personal rating to be in the current level 
+       color = level's related hexadecimal color code   -->
   <colors_pr>
      <level>
          <min>0</min>
@@ -216,10 +276,13 @@
   </colors_pr>
   
   
+  
   <!-- ********************************************
        ****** win rate color scale ******** 
        ******************************************** -->
-  <!-- add entries(levels) as you wish -->
+  <!-- add entries(levels) as you wish 
+       min = minimum winrate to be in the current level 
+       color = level's related hexadecimal color code -->
   <colors_wr>
      <level>
          <min>0</min>
@@ -252,10 +315,13 @@
   </colors_wr>
   
   
+  
   <!-- ********************************************
        ******  battle amount rating color scale ******** 
        ******************************************** -->
-  <!-- add entries(levels) as you wish -->
+  <!-- add entries(levels) as you wish 
+       min = minimum battles to be in the current level 
+       color = level's related hexadecimal color code -->
   <colors_bt>
      <level>
          <min>0</min>

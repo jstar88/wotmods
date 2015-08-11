@@ -36,3 +36,6 @@ class TextureBar(object):
 
     def setPosition(self,position):
         self.pb.position = position
+        
+    def setMaterialFx(self,type = "ADD"):
+        self.pb.materialFX = type

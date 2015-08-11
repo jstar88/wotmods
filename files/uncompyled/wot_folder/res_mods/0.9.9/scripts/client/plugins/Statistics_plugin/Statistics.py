@@ -56,6 +56,8 @@ class Statistics(Plugin):
               'powerbar_height': 5,
               'powerbar_position': '(x/2-200,y/10 - 50,0.7)',
               'powerbar_colors': ['(100, 255, 0, 100)','(255, 50, 50, 100)'],
+              'powerbar_materialFX':'ADD',
+              'powerbar_font':'default_small.font',
               
               'panels_enable' : True,
               'left' : "<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>",

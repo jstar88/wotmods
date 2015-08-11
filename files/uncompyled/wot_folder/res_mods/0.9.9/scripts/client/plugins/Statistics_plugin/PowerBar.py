@@ -19,6 +19,8 @@ def battleInit(config):
     powerBar.setHeight(config['powerbar_height'])#5
     powerBar.setPosition(eval(config['powerbar_position']))#(pos_x/2-200,pos_y/10 - 50,0.7)
     powerBar.setColor(eval(config['powerbar_colors'][0]),eval(config['powerbar_colors'][1]))#(100, 255, 0, 100),(255, 50, 50, 100))
+    powerBar.setMaterialFx(config['powerbar_materialFX'])
+    powerBar.setFont(config['powerbar_font'])
     powerBar.setVisible(True)
     
 def battleEnd():

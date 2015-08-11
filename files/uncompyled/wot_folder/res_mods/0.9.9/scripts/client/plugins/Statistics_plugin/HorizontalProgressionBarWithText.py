@@ -40,3 +40,6 @@ class HorizontalProgressionBarWithText(HorizontalProgressionBar):
     def delete(self):
         GUI.delRoot(self.text)
         super(HorizontalProgressionBarWithText, self).delete()
+        
+    def setFont(self,type):
+        self.text.font = type
