@@ -559,10 +559,7 @@ class Statistics(Plugin):
     def getFullName(uid):
         vID = g_sessionProvider.getCtx().getVehIDByAccDBID(uid)
         entryVehicle = BigWorld.player().arena.vehicles[vID]
-        fullPlayerName = entryVehicle['name']
-        if entryVehicle['clanAbbrev']:
-            fullPlayerName += '[{clanAbbrev}]'.format(entryVehicle) 
-        return fullPlayerName
+        return entryVehicle['name']
     
     @staticmethod
     def new__onAddToIgnored(self, _, uid, userName):
