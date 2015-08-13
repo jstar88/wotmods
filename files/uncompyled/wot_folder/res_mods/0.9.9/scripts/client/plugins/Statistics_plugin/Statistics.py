@@ -27,6 +27,7 @@ import PowerBar
 import re
 from gui.Scaleform.daapi.view.battle.stats_form import _StatsForm
 from CTFManager import g_ctfManager
+from messenger.gui.Scaleform.BattleEntry import BattleEntry
 
 class Statistics(Plugin):
     
@@ -553,6 +554,23 @@ class Statistics(Plugin):
                 text = Statistics.myConf['win_chance_text'].format(**formatz)
                 arenaDP['winText'] += text
         old_setArenaInfo(self, arenaDP)
+        
+    @staticmethod
+    def getFullName(uid):
+        vID = g_sessionProvider.getCtx().getVehIDByAccDBID(uid)
+        entryVehicle = BigWorld.player().arena.vehicles[vID]
+        fullPlayerName = entryVehicle['name']
+        if entryVehicle['clanAbbrev']:
+            fullPlayerName += '[{clanAbbrev}]'.format(entryVehicle) 
+        return fullPlayerName
+    
+    @staticmethod
+    def new__onAddToIgnored(self, _, uid, userName):
+        old__onAddToIgnored(self, _, uid, Statistics.getFullName(uid))
+    
+    @staticmethod
+    def new__onAddToFriends(self, _, uid, userName):
+        old__onAddToFriends(self, _, uid, Statistics.getFullName(uid))
     
     @staticmethod    
     def stopBattle():
@@ -574,7 +592,7 @@ class Statistics(Plugin):
         cls.cache = {}
         
 def saveOldFuncs():
-    global old__onBecomePlayer,old_createMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old_setArenaInfo,old__setName,old__setNameCommon
+    global old__onBecomePlayer,old_createMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old_setArenaInfo,old__setName,old__setNameCommon,old__onAddToIgnored,old__onAddToFriends
     DecorateUtils.ensureGlobalVarNotExist('old__onBecomePlayer')
     DecorateUtils.ensureGlobalVarNotExist('old_createMarker')
     DecorateUtils.ensureGlobalVarNotExist('old__setName')
@@ -583,6 +601,7 @@ def saveOldFuncs():
     DecorateUtils.ensureGlobalVarNotExist('old_makeItem')
     DecorateUtils.ensureGlobalVarNotExist('old_makeHash')
     DecorateUtils.ensureGlobalVarNotExist('old_setArenaInfo')
+    DecorateUtils.ensureGlobalVarNotExist('old__onAddToIgnored')
         
     old__onBecomePlayer = PlayerAvatar.onBecomePlayer
     old_createMarker = MarkersManager.createMarker
@@ -592,6 +611,8 @@ def saveOldFuncs():
     old_makeItem = BattleLoading._makeItem
     old_makeHash = BattleArenaController._makeHash
     old_setArenaInfo = BattleLoading._setArenaInfo
+    old__onAddToIgnored = BattleEntry._BattleEntry__onAddToIgnored
+    old__onAddToFriends = BattleEntry._BattleEntry__onAddToFriends
         
 def injectNewFuncs():
     
@@ -618,3 +639,7 @@ def injectNewFuncs():
     
     #powerbar
     g_windowsManager.onDestroyBattleGUI += PowerBar.battleEnd
+    
+    #fixing panel actions
+    BattleEntry._BattleEntry__onAddToIgnored = Statistics.new__onAddToIgnored
+    BattleEntry._BattleEntry__onAddToFriends = Statistics.new__onAddToFriends
