@@ -1,2 +1,0 @@
-def k():
-    print 'old'
