@@ -171,9 +171,9 @@ class SpotMessanger(Plugin):
 def saveOldFuncs():
     global oldShowSixthSenseIndicatorFromSpotMessanger
     DecorateUtils.ensureGlobalVarNotExist('oldShowSixthSenseIndicatorFromSpotMessanger')
-    oldShowSixthSenseIndicatorFromSpotMessanger = Battle.showSixthSenseIndicator
+    oldShowSixthSenseIndicatorFromSpotMessanger = Battle._showSixthSenseIndicator
     
 def injectNewFuncs():
-    Battle.showSixthSenseIndicator = SpotMessanger.showSixthSenseIndicator
+    Battle._showSixthSenseIndicator = SpotMessanger.showSixthSenseIndicator
     
     
