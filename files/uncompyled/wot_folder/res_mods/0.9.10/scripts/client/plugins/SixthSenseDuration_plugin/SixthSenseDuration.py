@@ -4,7 +4,8 @@ import BigWorld
 import ResMgr
 import GUI
 from gui.Scaleform.Battle import Battle
-from gui.WindowsManager import g_windowsManager
+from gui.shared import g_eventBus, events
+from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 from functools import partial
 from gui.shared.utils.HangarSpace import _HangarSpace
@@ -242,6 +243,26 @@ class SixthSenseDuration(Plugin):
     def fixPosition(type):
         x, y = GUI.screenResolution()
         SixthSenseDuration.myConf[type] = eval(SixthSenseDuration.myConf[type])
+        
+    @staticmethod
+    def onAppInitializing(event):
+        if event.ns == _SPACE.SF_BATTLE:
+            SixthSenseDuration.initGuiCountDown()
+            SixthSenseDuration.initGuiInactive()
+            SixthSenseDuration.initGuiSpotted()
+            SixthSenseDuration.initGuiUnspotted()
+
+#   @staticmethod
+#   def onAppInitialized(event):
+#      LOG_NOTE("__onAppInitialized(%s)" % event.ns)
+
+    @staticmethod
+    def onAppDestroyed(event):
+        if event.ns == _SPACE.SF_BATTLE:
+            SixthSenseDuration.endGuiCountDown()
+            SixthSenseDuration.endGuiInactive()
+            SixthSenseDuration.endGuiSpotted()
+            SixthSenseDuration.endGuiUnspotted()
     
     @classmethod
     def readConfig(cls):
@@ -267,18 +288,15 @@ def saveOldFuncs():
     global old_showSixthSenseIndicatorFromSixthSenseDuration,old_spaceDoneFromSixthSenseDuration
     DecorateUtils.ensureGlobalVarNotExist('old_showSixthSenseIndicatorFromSixthSenseDuration')
     DecorateUtils.ensureGlobalVarNotExist('old_spaceDoneFromSixthSenseDuration')
-    old_showSixthSenseIndicatorFromSixthSenseDuration = Battle.showSixthSenseIndicator
+    old_showSixthSenseIndicatorFromSixthSenseDuration = Battle._showSixthSenseIndicator
     old_spaceDoneFromSixthSenseDuration = _HangarSpace._HangarSpace__spaceDone
     
 def injectNewFuncs():
-    Battle.showSixthSenseIndicator = SixthSenseDuration.new_showSixthSenseIndicator
+    Battle._showSixthSenseIndicator = SixthSenseDuration.new_showSixthSenseIndicator
     _HangarSpace._HangarSpace__spaceDone = SixthSenseDuration.new_spaceDone
-    g_windowsManager.onInitBattleGUI += SixthSenseDuration.initGuiCountDown
-    g_windowsManager.onInitBattleGUI += SixthSenseDuration.initGuiInactive
-    g_windowsManager.onInitBattleGUI += SixthSenseDuration.initGuiSpotted
-    g_windowsManager.onInitBattleGUI += SixthSenseDuration.initGuiUnspotted
-    g_windowsManager.onDestroyBattleGUI += SixthSenseDuration.endGuiCountDown
-    g_windowsManager.onDestroyBattleGUI += SixthSenseDuration.endGuiInactive
-    g_windowsManager.onDestroyBattleGUI += SixthSenseDuration.endGuiSpotted
-    g_windowsManager.onDestroyBattleGUI += SixthSenseDuration.endGuiUnspotted
+    add = g_eventBus.addListener
+    appEvent = events.AppLifeCycleEvent
+    add(appEvent.INITIALIZING, SixthSenseDuration.onAppInitializing)
+    # add(appEvent.INITIALIZED, SixthSenseDuration.onAppInitialized)
+    add(appEvent.DESTROYED, SixthSenseDuration.onAppDestroyed)
     g_currentVehicle.onChanged += SixthSenseDuration.onChangedVeh

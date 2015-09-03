@@ -789,10 +789,10 @@ def injectNewFuncs():
     BattleLoading._setTipsInfo = Statistics.new_setTipsInfo
     g_appLoader.onGUISpaceChanged += Statistics.onGUISpaceChanged
     
-    g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, Statistics.stopBattle, scope=EVENT_BUS_SCOPE.BATTLE)
+    g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, Statistics.stopBattle)#, scope=EVENT_BUS_SCOPE.BATTLE)
     
     #powerbar
-    g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, PowerBar.battleEnd, scope=EVENT_BUS_SCOPE.BATTLE)
+    g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, PowerBar.battleEnd)#, scope=EVENT_BUS_SCOPE.BATTLE)
     
     #fixing panel actions
     BattleEntry._BattleEntry__onAddToIgnored = Statistics.new__onAddToIgnored
