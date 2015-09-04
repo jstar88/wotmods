@@ -123,6 +123,8 @@ class SixthSenseDuration(Plugin):
     # --------------- icon ------------- #
     @staticmethod
     def onChangedVeh():
+        if g_currentVehicle.item is None:
+            return
         for c in g_currentVehicle.item.crew:
             tankcrew = c[1]
             if tankcrew is None:
@@ -137,8 +139,8 @@ class SixthSenseDuration(Plugin):
     
     
     @staticmethod
-    def new_spaceDone(self):
-        old_spaceDoneFromSixthSenseDuration(self)
+    def new_changeDone(self):
+        old_changeDoneFromSixthSenseDuration(self)
         GUI_SETTINGS._GuiSettings__settings['sixthSenseDuration'] = SixthSenseDuration.myConf['IconRange']
         SixthSenseDuration.onChangedVeh()
     
@@ -285,15 +287,15 @@ class SixthSenseDuration(Plugin):
         injectNewFuncs()
         
 def saveOldFuncs():
-    global old_showSixthSenseIndicatorFromSixthSenseDuration,old_spaceDoneFromSixthSenseDuration
+    global old_showSixthSenseIndicatorFromSixthSenseDuration,old_changeDoneFromSixthSenseDuration
     DecorateUtils.ensureGlobalVarNotExist('old_showSixthSenseIndicatorFromSixthSenseDuration')
-    DecorateUtils.ensureGlobalVarNotExist('old_spaceDoneFromSixthSenseDuration')
+    DecorateUtils.ensureGlobalVarNotExist('old_changeDoneFromSixthSenseDuration')
     old_showSixthSenseIndicatorFromSixthSenseDuration = Battle._showSixthSenseIndicator
-    old_spaceDoneFromSixthSenseDuration = _HangarSpace._HangarSpace__spaceDone
+    old_changeDoneFromSixthSenseDuration = _HangarSpace._HangarSpace__changeDone
     
 def injectNewFuncs():
     Battle._showSixthSenseIndicator = SixthSenseDuration.new_showSixthSenseIndicator
-    _HangarSpace._HangarSpace__spaceDone = SixthSenseDuration.new_spaceDone
+    _HangarSpace._HangarSpace__changeDone = SixthSenseDuration.new_changeDone
     add = g_eventBus.addListener
     appEvent = events.AppLifeCycleEvent
     add(appEvent.INITIALIZING, SixthSenseDuration.onAppInitializing)
