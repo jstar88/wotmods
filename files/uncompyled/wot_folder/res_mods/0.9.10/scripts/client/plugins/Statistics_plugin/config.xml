@@ -4,16 +4,6 @@
   *To correctly render html
        <![CDATA[yourhtmlhere]]> 
        
-  *To use macroes
-       place macro's name sorrounded by {}
-       {color_pr} is something like #FF0000    
-         
-  *To show flags
-       <img src='{flag_url}' width='16' height='12'> 
-  
-  *To change font color and size
-       <font size='17' color='{color_pr}'>your text here</font> 
-       
   *Naming
        pr = personal rating
        bt = battle amount
@@ -25,6 +15,68 @@
        
        lang = client language shortcode
        flag_url = url of the right flag image( based on client language )
+       rating_url_pr = url of the image related to current player's personal rating
+       rating_url_bt = url of the image related to current player's battle amount
+       rating_url_wr = url of the image related to current player's win rate
+       
+       player_name = name of current player, without clan tag
+       clan_name = the tag name of clan, without "[]"
+       tank_name = the short name of current player's tank
+       
+  *To use macroes
+       place macro's name sorrounded by {}
+       {color_pr} is something like #FF0000    
+         
+  *To show flags
+       <img src='{flag_url}' width='16' height='12'>
+       
+  *To show colored marks
+        Related to winrate scale:
+       <img src='{rating_url_wr}' width='16' height='12'>
+        
+        Related to personal rating scale:
+       <img src='{rating_url_pr}' width='16' height='12'>
+        
+        Related to battle amount scale:
+       <img src='{rating_url_bt}' width='16' height='12'>
+  
+  *To change font color
+        Related to winrate scale:
+       <font color='{color_wr}'>your text here</font> 
+        
+        Related to personal rating scale:
+       <font color='{color_pr}'>your text here</font> 
+        
+        Related to battle amount scale:
+       <font color='{color_bt}'>your text here</font> 
+       
+   *Pretty number examples
+       	1)
+       		panels_bt_divisor 1000
+  			panels_bt_decimals 0
+  			panels_pr_divisor 1
+  			panels_pr_decimals 0
+  			panels_wr_decimals 0
+  			panels_wr_divisor 1
+  			
+  			Supposing a player has {bt}=12345 battles, then show "12"
+  			Supposing a player has {pr}=12345 personal rating, then show "12345"
+  			Supposing a player has {wr}=56,74 winrate, then show "56"
+  		
+  		2)	
+  			panels_bt_divisor 100
+  			panels_bt_decimals 1
+  			panels_pr_divisor 1000
+  			panels_pr_decimals 2
+  			panels_wr_decimals 1
+  			panels_wr_divisor 1
+  			
+  			Supposing a player has {bt}=12345 battles, then show "123,4"
+  			Supposing a player has {pr}=12345 personal rating, then show "1,23"
+  			Supposing a player has {wr}=56,78 winrate, then show "56,8"
+  		
+  		
+        
    -->
   
   <pluginEnable>true</pluginEnable>
@@ -66,29 +118,29 @@
        ******************************************** -->
   <panels_enable>true</panels_enable>
   <!-- html for left panel(first column) --> 
-  <left><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>]]></left><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <left><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}[{clan_name}]<br/>]]></left><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right panel(first column) -->   
-  <right><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<br/>]]></right><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <right><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}[{clan_name}]<br/>]]></right><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for left panel in case of compatriot(first column) -->   
-  <left_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>]]></left_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}--> 
+  <left_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}[{clan_name}]<br/>]]></left_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for right panel in case of compatriot(first column) -->  
-  <right_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<br/>]]></right_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <right_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}[{clan_name}]<br/>]]></right_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   
   <!-- html for left panel(second column) --> 
-  <left_2><![CDATA[{tank_name}<br/>]]></left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <left_2><![CDATA[{tank_name}<br/>]]></left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right panel(second column) -->   
-  <right_2><![CDATA[{tank_name}<br/>]]></right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <right_2><![CDATA[{tank_name}<br/>]]></right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for left panel in case of compatriot(second column) -->   
-  <left_c_2><![CDATA[{tank_name}<br/>]]></left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}--> 
+  <left_c_2><![CDATA[{tank_name}<br/>]]></left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for right panel in case of compatriot(second column) -->  
-  <right_c_2><![CDATA[{tank_name}<br/>]]></right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
+  <right_c_2><![CDATA[{tank_name}<br/>]]></right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <panels_bt_divisor>1000</panels_bt_divisor>
@@ -105,7 +157,7 @@
        ******************************************** -->
   <chat_enable>true</chat_enable>
   <!-- html replacing the current player full name --> 
-  <chat><![CDATA[<font color='#{color_wr}'>{wr}%</font><font color='#F2F3F8'>|</font><font color='#{color_pr}'>{pr}</font>  {player_name}]]></chat> <!-- {lang} {player_name} {pr}{wr}{bt} {flag_url}-->
+  <chat><![CDATA[<font color='#{color_wr}'>{wr}%</font><font color='#F2F3F8'>|</font><font color='#{color_pr}'>{pr}</font>  {player_name}[{clan_name}]]]></chat> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <chat_bt_divisor>1000</chat_bt_divisor>
@@ -122,7 +174,7 @@
        ******************************************** -->
   <marker_enable>true</marker_enable> 
   <!-- html replacing the current player full name --> 
-  <marker><![CDATA[<img src='{rating_url_pr}' width='16' height='12'> {player_name}]]></marker> <!-- {lang} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
+  <marker><![CDATA[<img src='{rating_url_pr}' width='16' height='12'> {player_name}]]></marker> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <marker_bt_divisor>1000</marker_bt_divisor>
@@ -138,8 +190,8 @@
        ********  info on battle loading *********** 
        ******************************************** -->
   <battle_loading_enable>true</battle_loading_enable>
-  <battle_loading_string_right>{player_name}</battle_loading_string_right> <!-- {lang}{player_name} {pr}{wr}{bt}-->
-  <battle_loading_string_left>{player_name}</battle_loading_string_left> <!-- {lang}{player_name} {pr}{wr}{bt}  -->
+  <battle_loading_string_right>{player_name}[{clan_name}]</battle_loading_string_right> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
+  <battle_loading_string_left>{player_name}[{clan_name}]</battle_loading_string_left>   <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <battle_loading_bt_divisor>1000</battle_loading_bt_divisor>
@@ -157,28 +209,28 @@
   <tab_enable>true</tab_enable>
   
   <!-- html for left tab panel --> 
-  <tab_left><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}--> 
+  <tab_left><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}[{clan_name}]]]></tab_left><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for right tab panel -->   
-  <tab_right><![CDATA[{player_name}  <font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font><img src='{flag_url}' width='16' height='12'>]]></tab_right><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}--> 
+  <tab_right><![CDATA[{player_name}[{clan_name}]  <font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font><img src='{flag_url}' width='16' height='12'>]]></tab_right><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for left tab panel in case of compatriot -->   
-  <tab_left_c><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}]]></tab_left_c><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}-->  
+  <tab_left_c><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}[{clan_name}]]]></tab_left_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right tab panel in case of compatriot -->  
-  <tab_right_c><![CDATA[{player_name}  <font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font><img src='{flag_url}' width='16' height='12'>]]></tab_right_c><!-- {lang}{player_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url}-->  
+  <tab_right_c><![CDATA[{player_name}[{clan_name}]  <font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font><img src='{flag_url}' width='16' height='12'>]]></tab_right_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for left tab(second column) --> 
-  <tab_left_2>{tank_name}</tab_left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <tab_left_2>{tank_name}</tab_left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right tab(second column) -->   
-  <tab_right_2>{tank_name}</tab_right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->  
+  <tab_right_2>{tank_name}</tab_right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for left tab in case of compatriot(second column) -->   
-  <tab_left_c_2>{tank_name}</tab_left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}--> 
+  <tab_left_c_2>{tank_name}</tab_left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for right tab in case of compatriot(second column) -->  
-  <tab_right_c_2>{tank_name}</tab_right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name} {tank_name} {pr}{wr}{bt} {flag_url}-->
+  <tab_right_c_2>{tank_name}</tab_right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <tab_bt_divisor>1000</tab_bt_divisor>
