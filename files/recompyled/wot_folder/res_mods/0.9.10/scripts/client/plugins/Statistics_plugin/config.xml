@@ -356,7 +356,7 @@
   
   <!-- formula used to calculate win chance.
        original was : ally_balance_weight/enemy_balance_weight -->
-  <win_chance_formula>math.tan(1.5 * ally_balance_weight/enemy_balance_weight - 1.5 )/4 + 0.5</win_chance_formula><!-- must return number between 0 and 1 -->
+  <win_chance_formula>math.tan(2.214 * (ally_balance_weight/(ally_balance_weight+enemy_balance_weight) - 0.5) )/4 + 0.5</win_chance_formula><!-- must return number between 0 and 1 -->
   
   
   

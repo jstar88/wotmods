@@ -22,7 +22,7 @@ class BattleLoadingBarTable(BarTable):
             if amount['enemy'] == 0:
                 perc = 1
             else:
-                perc = amount['ally']*1.0 /amount['enemy'] * 0.5
+                perc = amount['ally']*1.0 /(amount['ally'] + amount['enemy'])
             config['percentage'] = perc
             if config['show_label']:
                 config['label'] = config[vehicleType]
