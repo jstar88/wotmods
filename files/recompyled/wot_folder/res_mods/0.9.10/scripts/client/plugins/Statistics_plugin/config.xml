@@ -50,6 +50,24 @@
         Related to battle amount scale:
        <font color='{color_bt}'>your text here</font> 
        
+   *To change font face
+   		<font face='Consolas'>your text here</font>
+   		
+   		Example fonts are 
+   		
+   		Consolas
+   		Lucida Console
+   		ZurichCond
+   		ZurichCondBold
+   		Tahoma
+   		PartnerCondensed
+   		PartnerLightCondensed
+   		UniversCondC
+   	
+   *To change font size
+   		<font size='10'>your text here</font>
+   		<font size='12'>your text here</font>
+       
    *Pretty number examples
        	1)
        		panels_bt_divisor 1000
@@ -190,8 +208,8 @@
        ********  info on battle loading *********** 
        ******************************************** -->
   <battle_loading_enable>true</battle_loading_enable>
-  <battle_loading_string_right><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>]]></battle_loading_string_right> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
-  <battle_loading_string_left><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>]]></battle_loading_string_left>   <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
+  <battle_loading_string_right><![CDATA[<font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></battle_loading_string_right> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
+  <battle_loading_string_left><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>]]></battle_loading_string_left>   <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <battle_loading_bt_divisor>1000</battle_loading_bt_divisor>
@@ -209,16 +227,16 @@
   <tab_enable>true</tab_enable>
   
   <!-- html for left tab panel --> 
-  <tab_left><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></tab_left><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
+  <tab_left><![CDATA[<img src='{flag_url}' width='16' height='12'><font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></tab_left><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for right tab panel -->   
-  <tab_right><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font><img src='{flag_url}' width='16' height='12'>]]></tab_right><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
+  <tab_right><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font><img src='{flag_url}' width='16' height='12'>]]></tab_right><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
   
   <!-- html for left tab panel in case of compatriot -->   
-  <tab_left_c><![CDATA[<img src='{flag_url}' width='16' height='12'><font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></tab_left_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
+  <tab_left_c><![CDATA[<img src='{flag_url}' width='16' height='12'><font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></tab_left_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right tab panel in case of compatriot -->  
-  <tab_right_c><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font color='#{color_wr}'>{wr}%</font>|<font color='#{color_pr}'>{pr}</font><img src='{flag_url}' width='16' height='12'>]]></tab_right_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
+  <tab_right_c><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font><img src='{flag_url}' width='16' height='12'>]]></tab_right_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for left tab(second column) --> 
   <tab_left_2>{tank_name}</tab_left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
@@ -291,7 +309,7 @@
   <table_bars_delta>40</table_bars_delta>
   
   <!-- font used in bars label -->
-  <table_bars_font>default_small.font</table_bars_font>
+  <table_bars_font>default_small.font</table_bars_font> <!-- verdana_small.font  verdana_mediumverdana_small.font  system_tinyverdana_small.font  system_smallverdana_small.font  system_mediumverdana_small.font  system_large.font  hpmp_panel.font  default_smaller.font  default_small.font  default_medium.font -->
   
   <!-- This attribute determines what operation is used to render the icons onto the background.
         Possible values are ADD, BLEND, BLEND_COLOUR, BLEND_INVERSE_COLOUR, SOLID, MODULATE2X, ALPHA_TEST, BLEND_INVERSE_ALPHA, BLEND2X, ADD_SIGNED 
@@ -399,7 +417,7 @@
   <!-- This attribute specifies the path to the font file that is used to render the text. Assigning to it causes the new font file to be loaded. If an invalid file is specified, then a Python Error occurs. 
         By convention, font files are stored in the fonts subdirectory. They are an xml file describing which image to obtain the characters from, and the size and location of each character. 
         The default font is default_medium.font". -->
-  <powerbar_font>default_medium.font</powerbar_font>
+  <powerbar_font>default_medium.font</powerbar_font> <!-- verdana_small.font  verdana_mediumverdana_small.font  system_tinyverdana_small.font  system_smallverdana_small.font  system_mediumverdana_small.font  system_large.font  hpmp_panel.font  default_smaller.font  default_small.font  default_medium.font -->
      
   
   

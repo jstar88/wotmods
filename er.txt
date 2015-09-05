@@ -1,0 +1,2 @@
+C:\Users\nicola user\wotmods\files\originals\wot_folder\res_mods\0.9.10\scripts\client\plugins\Statistics_plugin\config.xml:Documento XML non valido: Il documento non ha un elemento radice.:   in System.Xml.XmlDocument.Save(String filename)
+   in wottools.MainForm..ctor(String[] args, Boolean gui)

@@ -298,7 +298,7 @@ class Statistics(Plugin):
         formatz = {'player_name':player_name, 'lang':lang, 'tank_name':tank_name, 'clan_name':clan_name}
         couple = {'pr':pr,'wr':wr,'bt':bt }
         formatz = Statistics.updateWithColorDict(formatz, couple)
-        formatz = Statistics.updateWithNumbersDict(formatz, couple,type) 
+        formatz = Statistics.updateWithNumbersDict(formatz, couple,type)
         formatz['flag_url'] = 'img://'+Statistics.myConf['flags_folder']+'/'+lang+'.png'
         return formatz
     
