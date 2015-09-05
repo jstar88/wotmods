@@ -1,4 +1,5 @@
 libs/
 files/originals/
 files/pyd/
+private/
 *.bat
