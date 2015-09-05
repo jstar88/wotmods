@@ -37,6 +37,7 @@ from BattleLoadingBarTable import BattleLoadingBarTable
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 import math
+from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
 
 class Statistics(Plugin):
     
@@ -292,12 +293,14 @@ class Statistics(Plugin):
     
     @staticmethod
     def getFormat(type,pr,wr,bt,lang,player_name='',tank_name='',clan_name=''):
-       formatz = {'player_name':player_name, 'lang':lang, 'tank_name':tank_name, 'clan_name':clan_name}
-       couple = {'pr':pr,'wr':wr,'bt':bt }
-       formatz = Statistics.updateWithColorDict(formatz, couple)
-       formatz = Statistics.updateWithNumbersDict(formatz, couple,type) 
-       formatz['flag_url'] = 'img://'+Statistics.myConf['flags_folder']+'/'+lang+'.png'
-       return formatz
+        if clan_name:
+            clan_name = "["+clan_name+"]"
+        formatz = {'player_name':player_name, 'lang':lang, 'tank_name':tank_name, 'clan_name':clan_name}
+        couple = {'pr':pr,'wr':wr,'bt':bt }
+        formatz = Statistics.updateWithColorDict(formatz, couple)
+        formatz = Statistics.updateWithNumbersDict(formatz, couple,type) 
+        formatz['flag_url'] = 'img://'+Statistics.myConf['flags_folder']+'/'+lang+'.png'
+        return formatz
     
     @staticmethod
     def updateWithColorDict(orig,couples):
@@ -340,8 +343,9 @@ class Statistics(Plugin):
     def new__getFormattedStrings(self, vInfoVO, vStatsVO, viStatsVO, ctx, player_name):
         Statistics.updatePowerBar()
         tmp =  old__getFormattedStrings(self, vInfoVO, vStatsVO, viStatsVO, ctx, player_name)
+        tmp = list(tmp)
         if not Statistics.okCw() or not Statistics.myConf['panels_enable']:
-            return tmp
+            return tuple(tmp)
         uid = vInfoVO.player.accountDBID
         if Statistics.cache.has_key('panels') and Statistics.cache['panels'].has_key(uid):
             fullPlayerName_built, shortName_built = Statistics.cache['panels'][uid]
@@ -374,7 +378,7 @@ class Statistics(Plugin):
         
         tmp[0] = fullPlayerName_built
         tmp[2] = shortName_built
-        return tmp
+        return tuple(tmp)
      
     @staticmethod
     def new__setName(self, dbID, pName = None):
@@ -407,7 +411,8 @@ class Statistics(Plugin):
     
     @staticmethod
     def new_addVehicleMarker(self, vProxy, vInfo, guiProps):
-        if not Statistics.myConf['marker_enable'] or BattleUtils.isCw():
+        curVeh = BigWorld.player().arena.vehicles[vProxy.id]
+        if not Statistics.myConf['marker_enable'] or BattleUtils.isCw() or not curVeh['isAlive']:
             return old_addVehicleMarker(self, vProxy, vInfo, guiProps)
         
         #----------- original code ------------------
@@ -437,7 +442,6 @@ class Statistics(Plugin):
             squadIcon = squadIconTemplate % (squadTeam, teamIdx)
         #----- end -------
         
-        curVeh = BigWorld.player().arena.vehicles[vProxy.id]
         if curVeh is not None:
             curID = curVeh['accountDBID']
             if Statistics.cache.has_key('marker') and Statistics.cache['marker'].has_key(curID):
@@ -703,11 +707,13 @@ class Statistics(Plugin):
         old__onAddToFriends(self, _, uid, Statistics.getFullName(uid))
     
     @staticmethod    
-    def stopBattle():
-        Statistics.t = None
-        Statistics.lastime = 0
-        Statistics.emo = None
-        Statistics.cache = {}
+    def stopBattle(event):
+        if event.ns == _SPACE.SF_BATTLE:
+            PowerBar.battleEnd()
+            Statistics.t = None
+            Statistics.lastime = 0
+            Statistics.emo = None
+            Statistics.cache = {}
     
     @classmethod    
     def run(cls):
@@ -766,9 +772,6 @@ def injectNewFuncs():
     g_appLoader.onGUISpaceChanged += Statistics.onGUISpaceChanged
     
     g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, Statistics.stopBattle)#, scope=EVENT_BUS_SCOPE.BATTLE)
-    
-    #powerbar
-    g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, PowerBar.battleEnd)#, scope=EVENT_BUS_SCOPE.BATTLE)
     
     #fixing panel actions
     BattleEntry._BattleEntry__onAddToIgnored = Statistics.new__onAddToIgnored
