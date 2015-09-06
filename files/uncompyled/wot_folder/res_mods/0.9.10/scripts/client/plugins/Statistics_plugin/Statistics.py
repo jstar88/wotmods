@@ -134,6 +134,7 @@ class Statistics(Plugin):
                'table_bars_label_show':True,
                'table_bars_align':'vertical',
                
+               'stars_enable': True,
                'stars_position':'(x/2-100,y/2+160,0)',
                'stars_delta':40,
                'stars_size':(128,128),

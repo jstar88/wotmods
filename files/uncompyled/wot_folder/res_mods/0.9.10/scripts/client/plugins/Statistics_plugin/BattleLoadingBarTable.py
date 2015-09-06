@@ -45,6 +45,8 @@ class BattleLoadingBarTable(BarTable):
     
     def addStars(self,tiers,currentTier):
         from Statistics import Statistics
+        if not Statistics.myConf['stars_enable']:
+            return
         x, y = GUI.screenResolution()
         n = 5
         maxTierDiff = 2

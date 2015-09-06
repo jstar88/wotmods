@@ -222,7 +222,7 @@
   
   
   <!-- ********************************************
-       *********  info on tab ************ 
+       ***************  info on tab *************** 
        ******************************************** -->
   <tab_enable>true</tab_enable>
   
@@ -261,7 +261,7 @@
   
   
   <!-- ********************************************
-       *****  table on battle loading ******* 
+       *********  table on battle loading ********* 
        ******************************************** -->
   <!-- enable all the bars -->
   <table_enable>true</table_enable> <!-- true false -->
@@ -303,7 +303,7 @@
         Note that depth values should be kept between 0 and 1, since some video cards will automatically clip away triangles with z-values outside this range, even if the z-buffer is disabled.
         x = screen width
         y = screen height -->
-  <table_bars_position>(x/2-35,y/2-80,0)</table_bars_position>
+  <table_bars_position>(x/2-35,y/2-80,0)</table_bars_position> <!-- (x,y,z) -->
   
   <!-- distance between bars -->
   <table_bars_delta>40</table_bars_delta>
@@ -349,7 +349,7 @@
   barZ = z position of bar
   barWidth = bar width
   barHeight = bar height -->
-  <table_bars_label_pos>(barX+barWidth/2-20, barY-barHeight-15, barZ)</table_bars_label_pos>
+  <table_bars_label_pos>(barX+barWidth/2-20, barY-barHeight-15, barZ)</table_bars_label_pos><!-- (x,y,z) -->
   
   <!-- show bars vertically or horizontally aligned -->
   <table_bars_align>vertical</table_bars_align> <!-- horizontal vertical -->
@@ -357,13 +357,27 @@
   
   
   <!-- ********************************************
-       *****  stars on battle loading ******* 
+       *********  stars on battle loading ********* 
        ******************************************** -->
-  <stars_position>(x/2-70,y-20,0)</stars_position>
+  <!-- enable/disable stars on battleloading -->
+  <stars_enable>true</stars_enable><!-- true/false -->
+  
+  <!--  The first two numbers are the horizontal and vertical positions, the third is the depth sort value. 
+        The depth sort value is used to sort between various GUI components with the same parent. The lower numbered components appear on top of higher numbered components. 
+        Note that depth values should be kept between 0 and 1, since some video cards will automatically clip away triangles with z-values outside this range, even if the z-buffer is disabled.
+        x = screen width
+        y = screen height -->
+  <stars_position>(x/2-70,y-20,0)</stars_position><!-- (x,y,z) -->
+  
+  <!-- distance between each star -->
   <stars_delta>30</stars_delta>
+  
+  <!-- stars image size -->
   <stars_size>16 16</stars_size>
+  
   <stars_activePath>scripts/client/plugins/Statistics_plugin/stars/active.dds</stars_activePath>
   <stars_inactivePath>scripts/client/plugins/Statistics_plugin/stars/inactive.dds</stars_inactivePath>
+  
   
   
   <!-- ********************************************
@@ -379,7 +393,7 @@
   
   
   <!-- ********************************************
-       *********  powerbar ************* 
+       ***************  powerbar ****************** 
        ******************************************** -->
   <powerbar_enable>true</powerbar_enable>  
   
@@ -398,7 +412,7 @@
         Note that depth values should be kept between 0 and 1, since some video cards will automatically clip away triangles with z-values outside this range, even if the z-buffer is disabled.
         x = screen width
         y = screen height -->
-  <powerbar_position>(x/2-100,y/10 - 50,0.7)</powerbar_position> 
+  <powerbar_position>(x/2-100,y/10 - 50,0.7)</powerbar_position> <!-- (x,y,z) -->
   
   <!-- This attribute is the colour of the bar. 
        This colour is a Vector4, with components ranging between 0 and 255. The components are (Red, Green, Blue, Alpha). 
@@ -469,7 +483,7 @@
   
   
   <!-- ********************************************
-       ****** win rate color scale ******** 
+       ********** win rate color scale ************ 
        ******************************************** -->
   <!-- add entries(levels) as you wish 
        min = minimum winrate to be in the current level 
@@ -516,7 +530,7 @@
   
   
   <!-- ********************************************
-       ******  battle amount rating color scale ******** 
+       ****  battle amount rating color scale ***** 
        ******************************************** -->
   <!-- add entries(levels) as you wish 
        min = minimum battles to be in the current level 
