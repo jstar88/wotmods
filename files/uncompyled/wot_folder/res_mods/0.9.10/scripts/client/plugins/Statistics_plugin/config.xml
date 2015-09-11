@@ -208,8 +208,8 @@
        ********  info on battle loading *********** 
        ******************************************** -->
   <battle_loading_enable>true</battle_loading_enable>
-  <battle_loading_string_right><![CDATA[<font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></battle_loading_string_right> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
-  <battle_loading_string_left><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>]]></battle_loading_string_left>   <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
+  <battle_loading_string_left><![CDATA[<font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></battle_loading_string_left> <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
+  <battle_loading_string_right><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>]]></battle_loading_string_right>   <!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <battle_loading_bt_divisor>1000</battle_loading_bt_divisor>
@@ -266,28 +266,30 @@
   <!-- enable all the bars -->
   <table_enable>true</table_enable> <!-- true false -->
   
-  <!-- a background path, the image must be .dds with DXT5 (interpolated alpha) and no MIP maps -->
+  <!-- a black background path, the image must be .dds with DXT5 (interpolated alpha) and no MIP maps -->
   <table_texture>scripts/client/plugins/Statistics_plugin/bg.dds</table_texture>
   
-  <!-- the background width -->
-  <table_width>100</table_width>
+  <!-- Background width.
+  	   Default table width is 475px, so we make it a bit larger: 500px -->
+  <table_width>500</table_width>
   
-  <!-- the background height -->
-  <table_height>475</table_height>
+  <!-- the background height
+       Default bar height is 2px, so we make it bigger: 100px -->
+  <table_height>100</table_height>
   
   <!--  The first two numbers are the horizontal and vertical positions, the third is the depth sort value. 
         The depth sort value is used to sort between various GUI components with the same parent. The lower numbered components appear on top of higher numbered components. 
         Note that depth values should be kept between 0 and 1, since some video cards will automatically clip away triangles with z-values outside this range, even if the z-buffer is disabled.
         x = screen width
-        y = screen height -->
-  <table_position>(x/2-50, y/2-250, 1)</table_position> <!-- (x,y,z) -->
+        y = screen height-->
+  <table_position>(x/2-500/2, y/8-100/2, 1)</table_position> <!-- (x,y,z) -->
   
   <!-- This attribute determines what operation is used to render the icons onto the background.
         Possible values are ADD, BLEND, BLEND_COLOUR, BLEND_INVERSE_COLOUR, SOLID, MODULATE2X, ALPHA_TEST, BLEND_INVERSE_ALPHA, BLEND2X, ADD_SIGNED 
         "BLEND", which applies the alpha channel transparency, "SOLID" which ignores the alpha channel and overwrites the background, and "ADD" which just adds the colour to the existing background colour, making the component look like it is transparent -->
-  <table_materialFX>ADD</table_materialFX>
+  <table_materialFX>BLEND</table_materialFX>
   
-  <table_color>(255, 255, 255, 100)</table_color> <!-- (R,G,B,A) -->
+  <table_color>(0, 0, 0, 255)</table_color> <!-- (R,G,B,A) -->
   
   <!-- a background path, the image must be .dds with DXT5 (interpolated alpha) and no MIP maps -->
   <table_bars_texture>system/maps/col_white.dds</table_bars_texture>
@@ -303,10 +305,10 @@
         Note that depth values should be kept between 0 and 1, since some video cards will automatically clip away triangles with z-values outside this range, even if the z-buffer is disabled.
         x = screen width
         y = screen height -->
-  <table_bars_position>(x/2-35,y/2-80,0)</table_bars_position> <!-- (x,y,z) -->
+  <table_bars_position>(x/2-(100*4+70)/2,y/8,0)</table_bars_position> <!-- (x,y,z) -->
   
   <!-- distance between bars -->
-  <table_bars_delta>40</table_bars_delta>
+  <table_bars_delta>100</table_bars_delta>
   
   <!-- font used in bars label -->
   <table_bars_font>default_small.font</table_bars_font> <!-- verdana_small.font  verdana_mediumverdana_small.font  system_tinyverdana_small.font  system_smallverdana_small.font  system_mediumverdana_small.font  system_large.font  hpmp_panel.font  default_smaller.font  default_small.font  default_medium.font -->
@@ -352,7 +354,7 @@
   <table_bars_label_pos>(barX+barWidth/2-20, barY-barHeight-15, barZ)</table_bars_label_pos><!-- (x,y,z) -->
   
   <!-- show bars vertically or horizontally aligned -->
-  <table_bars_align>vertical</table_bars_align> <!-- horizontal vertical -->
+  <table_bars_align>horizontal</table_bars_align> <!-- horizontal vertical -->
   
   
   
