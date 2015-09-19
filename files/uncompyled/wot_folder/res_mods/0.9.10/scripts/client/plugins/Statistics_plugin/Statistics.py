@@ -328,7 +328,6 @@ class Statistics(Plugin):
        if Statistics.okCw() and Statistics.myConf['powerbar_enable']:
             win_chance = Statistics.getWinChance()
             if win_chance:
-                arenaTypeID = getArenaTypeID()
                 color = '#ff0000'
                 if win_chance < 49:
                     color = '#ff0000'
