@@ -107,6 +107,7 @@ class MessageManager():
         self.message = ''
         self.vehiclesIDs = {}
         for vehicleID in vehiclesIDs:
+            vehicleID = fixId(vehicleID)
             self.vehiclesIDs[vehicleID] = vehicleID
     
     def add(self, idV, player, arena, position):
@@ -136,10 +137,8 @@ class MessageManager():
         color = SpotExtended.myConf['color']
         index = 0
         battle = g_appLoader.getDefBattleApp()
-        if battle:
-            markersManager = battle.markersManager
-            if markersManager and panel in ('VehicleErrorsPanel', 'VehicleMessagesPanel', 'PlayerMessagesPanel'):
-                markersManager.call('battle.' + panel + '.ShowMessage', [index, self.message, color])
+        if battle and panel in ('VehicleErrorsPanel', 'VehicleMessagesPanel', 'PlayerMessagesPanel'):
+            battle.call('battle.' + panel + '.ShowMessage', [index, self.message, color])
         self.clean()
         
     def clean(self):
@@ -227,6 +226,7 @@ class SpotExtended(Plugin):
             arena = player.arena
             msgm = MessageManager(vehiclesIDs)
             for idV in vehiclesIDs:
+                idV = fixId(idV)
                 if SpotExtended.myConf['showMarker']:
                     Utils.waitForPosition(idV, arena, partial(mm.addMarker, idV, player)) 
                 if SpotExtended.myConf['showMessage']:
@@ -241,5 +241,13 @@ def saveOldFuncs():
     global old__start
     DecorateUtils.ensureGlobalVarNotExist('old__start')
     old__start = BattleFeedbackAdaptor.setPlayerAssistResult
+    
+# thanks Spoter_ru for this fix
+def fixId(i):
+    if i >> 32 & 4294967295L > 0: 
+        i = i >> 32 & 4294967295L
+    else: 
+        i &= 4294967295L
+    return i
     
 mm = MarkerManager()
