@@ -205,15 +205,13 @@ class SpotExtended(Plugin):
     
     @staticmethod
     def stop(event):
-        if g_appLoader._AppLoader__appFactory.hasApp(event.ns):
-        #if event.ns == _SPACE.SF_BATTLE:
+        if event.ns == _SPACE.SF_BATTLE:
             Utils.inBattle = False
             mm.clean()
     
     @staticmethod
     def start(event):
-        if g_appLoader._AppLoader__appFactory.hasApp(event.ns):
-        #if event.ns == _SPACE.SF_BATTLE:
+        if event.ns == _SPACE.SF_BATTLE:
             Utils.inBattle = True
             mm.clean()
     
