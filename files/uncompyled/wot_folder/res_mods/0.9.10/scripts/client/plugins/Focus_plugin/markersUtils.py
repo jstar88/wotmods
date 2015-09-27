@@ -2,16 +2,17 @@ from MarkersStorage import MarkersStorage
 from DirectionIndicator import DirectionIndicator
 from DirectionIndicatorCtrl import DirectionIndicatorCtrl
 from VehicleMarkers import VehicleMarkers
-from gui.WindowsManager import g_windowsManager
+from gui.app_loader import g_appLoader
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
 
 def showMarker(enemyID,config):
     if enemyID is None or MarkersStorage.hasMarker(enemyID):
         return
-    minimap = g_windowsManager.battleWindow.minimap
-    if minimap is None:
+    battle = g_appLoader.getDefBattleApp()
+    if battle is None:
         return
+    minimap = battle.minimap
     enemyVehicle = BigWorld.entities.get(enemyID)
     if enemyVehicle is None:
         return

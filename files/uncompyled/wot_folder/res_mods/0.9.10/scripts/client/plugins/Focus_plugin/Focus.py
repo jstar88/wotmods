@@ -6,9 +6,11 @@ import BigWorld
 from plugins.Engine.ModUtils import BattleUtils,MinimapUtils,FileUtils,HotKeysUtils,DecorateUtils
 from warnings import catch_warnings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_NOTE
-from gui.WindowsManager import g_windowsManager
 from chat_shared import CHAT_COMMANDS
 from plugins.Engine.Plugin import Plugin
+from gui.app_loader import g_appLoader
+from gui.shared import g_eventBus, events
+from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
 
 class Focus(Plugin):
 
@@ -47,14 +49,15 @@ class Focus(Plugin):
                
     @staticmethod 
     def stopBattle():
-        Focus.inBattle = False
-        MarkersStorage.clear()
-        if Focus.lastCallback is not None:
-            try:
-                BigWorld.cancelCallback(Focus.lastCallback)
-            except:
-                pass
-            Focus.lastCallback = None   
+        if event.ns == _SPACE.SF_BATTLE:
+            Focus.inBattle = False
+            MarkersStorage.clear()
+            if Focus.lastCallback is not None:
+                try:
+                    BigWorld.cancelCallback(Focus.lastCallback)
+                except:
+                    pass
+                Focus.lastCallback = None   
         
     @staticmethod
     def check():
@@ -80,4 +83,6 @@ def saveOldFuncs():
 
 def injectNewFuncs():
     ChatCommandsController._ChatCommandsController__handlePublicCommand = Focus.new_handlePublicCommand
-    g_windowsManager.onDestroyBattleGUI += Focus.stopBattle
+    add = g_eventBus.addListener
+    appEvent = events.AppLifeCycleEvent
+    add(appEvent.INITIALIZING, Focus.stopBattle)
