@@ -14,6 +14,7 @@ class B(object):
 def main(callback):
     callback('some')
 
+
 B()
 # okay decompyling C:\Users\nicola user\wotmods\files\originals\tests\b.pyc 
 # decompiled 1 files: 1 okay, 0 failed, 0 verify failed
