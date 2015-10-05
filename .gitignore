@@ -5,3 +5,4 @@ private/
 *.bat
 *.project
 *.pydevproject
+py.exe
