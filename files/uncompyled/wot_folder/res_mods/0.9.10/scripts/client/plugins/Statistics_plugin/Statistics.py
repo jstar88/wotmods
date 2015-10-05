@@ -493,10 +493,10 @@ class Statistics(Plugin):
                 playerName_template = Statistics.myConf['battle_loading_string_left']
             else:
                 playerName_template = Statistics.myConf['battle_loading_string_right']
-        playerName_built = playerName_template.format(**formatz)
-        tmp['playerName'] = playerName_built
-        tmp['region'] = ''
-        tmp['clanAbbrev'] = ''
+            playerName_built = playerName_template.format(**formatz)
+            tmp['playerName'] = playerName_built
+            tmp['region'] = ''
+            tmp['clanAbbrev'] = ''
         return tmp
     
     @staticmethod

@@ -3,3 +3,5 @@ files/originals/
 files/pyd/
 private/
 *.bat
+*.project
+*.pydevproject
