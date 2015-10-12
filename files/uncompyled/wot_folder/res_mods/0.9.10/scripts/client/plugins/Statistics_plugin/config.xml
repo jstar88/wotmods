@@ -23,9 +23,14 @@
        clan_name = the tag name of clan, sorrounded by "[]"
        tank_name = the short name of current player's tank
        
-  *To use macroes
+  * To use macroes
        place macro's name sorrounded by {}
        {color_pr} is something like #FF0000    
+       
+  * Specials
+  		{ifdeath_color_begin}text{ifdeath_color_end} 
+  				macroes sorrounding text that will be colored to {death_font_color} 
+  				in case of death tanks
          
   *To show flags
        <img src='{flag_url}' width='16' height='12'>
@@ -128,6 +133,9 @@
   
   <!-- folder where you placed rating images -->
   <rating_folder>scripts/client/plugins/Statistics_plugin/ratings</rating_folder>
+  
+  <!-- font color to assign to content between {ifdeath_color_begin}..{ifdeath_color_end} in case of death tanks -->
+  <death_font_color>#2B2323</death_font_color>>
   
   
   
