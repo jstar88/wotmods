@@ -31,6 +31,10 @@
   		{ifdeath_color_begin}text{ifdeath_color_end} 
   				macroes sorrounding text that will be colored to {death_font_color} 
   				in case of death tanks
+  				
+  		{ifcompatriot_color_begin}text{ifcompatriot_color_end} 
+  				macroes sorrounding text that will be colored to {compatriot_font_color} 
+  				in case of compatriots
          
   *To show flags
        <img src='{flag_url}' width='16' height='12'>
@@ -135,7 +139,10 @@
   <rating_folder>scripts/client/plugins/Statistics_plugin/ratings</rating_folder>
   
   <!-- font color to assign to content between {ifdeath_color_begin}..{ifdeath_color_end} in case of death tanks -->
-  <death_font_color>#2B2323</death_font_color>>
+  <death_font_color>#2B2323</death_font_color>
+  
+  <!-- font color to assign to content between {ifcompatriot_color_begin}..{ifcompatriot_color_end} in case of compatriots -->
+  <compatriot_font_color>#2B2323</compatriot_font_color>
   
   
   
@@ -147,14 +154,7 @@
   <left><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<font color='#877f7f'>{clan_name}</font><br/>]]></left><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right panel(first column) -->   
-  <right><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<font color='#877f7f'>{clan_name}</font><br/>]]></right><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
-  
-  <!-- html for left panel in case of compatriot(first column) -->   
-  <left_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<font color='#877f7f'>{clan_name}</font><br/>]]></left_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
-  
-  <!-- html for right panel in case of compatriot(first column) -->  
-  <right_c><![CDATA[<font size='17' color='#{color_pr}'>«</font><font color='#{color_pr}'>{lang}</font><font size='17' color='#{color_pr}'>»</font>  {player_name}<font color='#877f7f'>{clan_name}</font><br/>]]></right_c><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
-  
+  <right><![CDATA[<font color='#{color_pr}'>{lang}</font>  {player_name}<font color='#877f7f'>{clan_name}</font><br/>]]></right><!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->     
   
   <!-- html for left panel(second column) --> 
   <left_2><![CDATA[{tank_name}<br/>]]></left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
@@ -162,11 +162,6 @@
   <!-- html for right panel(second column) -->   
   <right_2><![CDATA[{tank_name}<br/>]]></right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
-  <!-- html for left panel in case of compatriot(second column) -->   
-  <left_c_2><![CDATA[{tank_name}<br/>]]></left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
-  
-  <!-- html for right panel in case of compatriot(second column) -->  
-  <right_c_2><![CDATA[{tank_name}<br/>]]></right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
   
   <!-- pretty number formatting options -->
   <panels_bt_divisor>1000</panels_bt_divisor>
@@ -239,25 +234,13 @@
   
   <!-- html for right tab panel -->   
   <tab_right><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font><img src='{flag_url}' width='16' height='12'>]]></tab_right><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
-  
-  <!-- html for left tab panel in case of compatriot -->   
-  <tab_left_c><![CDATA[<img src='{flag_url}' width='16' height='12'><font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font>  {player_name}<font color='#877f7f'>{clan_name}</font>]]></tab_left_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
-  
-  <!-- html for right tab panel in case of compatriot -->  
-  <tab_right_c><![CDATA[{player_name}<font color='#877f7f'>{clan_name}</font>  <font face='Consolas' size='10'><font color='#{color_wr}'>{wr}%</font> <font color='#{color_pr}'>{pr}</font></font><img src='{flag_url}' width='16' height='12'>]]></tab_right_c><!-- {lang} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {color_pr}{color_bt}{color_wr} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
-  
+   
   <!-- html for left tab(second column) --> 
   <tab_left_2>{tank_name}</tab_left_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
   
   <!-- html for right tab(second column) -->   
   <tab_right_2>{tank_name}</tab_right_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->  
-  
-  <!-- html for left tab in case of compatriot(second column) -->   
-  <tab_left_c_2>{tank_name}</tab_left_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}--> 
-  
-  <!-- html for right tab in case of compatriot(second column) -->  
-  <tab_right_c_2>{tank_name}</tab_right_c_2>  <!-- {lang} {color_pr}{color_bt}{color_wr} {player_name}{clan_name}{tank_name} {pr}{wr}{bt} {flag_url} {rating_url_pr}{rating_url_wr}{rating_url_bt}-->
-  
+   
   <!-- pretty number formatting options -->
   <tab_bt_divisor>1000</tab_bt_divisor>
   <tab_bt_decimals>0</tab_bt_decimals>
