@@ -392,7 +392,7 @@ class Statistics(Plugin):
         vID = arenaDP.getVehIDByAccDBID(dbID)
         vInfo = arenaDP.getVehicleInfo(vID)
         isAlive = vInfo.isAlive()
-        cacheId = str(uid) + str(isAlive)
+        cacheId = str(dbID) + str(isAlive)
         if Statistics.cache.has_key('chat') and Statistics.cache['chat'].has_key(cacheId):
             self._ctx['playerName'] = Statistics.cache['chat'][cacheId]
         else:
@@ -445,12 +445,12 @@ class Statistics(Plugin):
             squadIcon = squadIconTemplate % (squadTeam, teamIdx)
         #----- end -------
         isAlive = vInfo.isAlive()
-        curID = vInfo.player.accountDBID
-        cacheId = str(curID) + str(isAlive)
+        dbID = vInfo.player.accountDBID
+        cacheId = str(dbID) + str(isAlive)
         if Statistics.cache.has_key('marker') and Statistics.cache['marker'].has_key(cacheId):
             pName_built = Statistics.cache['marker'][cacheId]
         else:
-            pr, lang, wr, bt = Statistics.getInfos(curID)
+            pr, lang, wr, bt = Statistics.getInfos(dbID)
             player_name = pName
             tank_name = vehShortName
             clan_name = clanAbbrev
@@ -580,23 +580,6 @@ class Statistics(Plugin):
         return max(0,min(f,100))
         #return max(0, min(100, int(round(ally_balance_weight / enemy_balance_weight * 50))))        
 
-#     @staticmethod    
-#     def new_setArenaInfo(self, arenaDP):
-#         if Statistics.myConf['win_chance_enable'] and Statistics.okCw():
-#             win_chance = Statistics.getWinChance()
-#             if win_chance:
-#                 arenaTypeID = getArenaTypeID()
-#                 colour = '#ff0000'
-#                 if win_chance < 49:
-#                     colour = '#ff0000'
-#                 elif win_chance >= 49 and win_chance <= 51:
-#                     colour = '#ffff00'
-#                 elif win_chance > 51:
-#                     colour = '#00ff00'
-#                 formatz = {'win_chance':win_chance,'color':colour}
-#                 text = Statistics.myConf['win_chance_text'].format(**formatz)
-#                 arenaDP['winText'] += text
-#         old_setArenaInfo(self, arenaDP)
     
  
     @staticmethod
@@ -731,14 +714,13 @@ class Statistics(Plugin):
         cls.cache = {}
         
 def saveOldFuncs():
-    global old_addVehicleMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old_setArenaInfo,old__setName,old__setNameCommon,old__onAddToIgnored,old__onAddToFriends
+    global old_addVehicleMarker,old__getFormattedStrings,old_makeItem,old_makeHash,old__setName,old__setNameCommon,old__onAddToIgnored,old__onAddToFriends
     DecorateUtils.ensureGlobalVarNotExist('old_addVehicleMarker')
     DecorateUtils.ensureGlobalVarNotExist('old__setName')
     DecorateUtils.ensureGlobalVarNotExist('old__setNameCommon')
     DecorateUtils.ensureGlobalVarNotExist('old__getFormattedStrings')
     DecorateUtils.ensureGlobalVarNotExist('old_makeItem')
     DecorateUtils.ensureGlobalVarNotExist('old_makeHash')
-    DecorateUtils.ensureGlobalVarNotExist('old_setArenaInfo')
     DecorateUtils.ensureGlobalVarNotExist('old__onAddToIgnored')
         
     old_addVehicleMarker = MarkersManager.addVehicleMarker
@@ -747,7 +729,6 @@ def saveOldFuncs():
     old__getFormattedStrings = _StatsForm.getFormattedStrings
     old_makeItem = BattleLoading._makeItem
     old_makeHash = BattleArenaController._makeHash
-    old_setArenaInfo = BattleLoading._setArenaInfo
     old__onAddToIgnored = BattleEntry._BattleEntry__onAddToIgnored
     old__onAddToFriends = BattleEntry._BattleEntry__onAddToFriends
         
@@ -766,8 +747,6 @@ def injectNewFuncs():
     _BattleMessageBuilder.setName= Statistics.new__setName
     CommonMessageBuilder.setName= Statistics.new__setNameCommon
     
-    #winchance
-    #BattleLoading._setArenaInfo = Statistics.new_setArenaInfo
     
     #battleloading
     BattleLoading._makeItem = Statistics.new_makeItem
